@@ -1,31 +1,27 @@
 package com.example.gobitecustomer.ui.login
 
-
 import android.app.ProgressDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.food.ordering.zinger.R
-import com.food.ordering.zinger.data.local.PreferencesHelper
-import com.food.ordering.zinger.data.local.Resource
-import com.food.ordering.zinger.data.modelNew.LoginRequestNew
-import com.food.ordering.zinger.data.modelNew.OTPRequest
-import com.food.ordering.zinger.databinding.ActivityLoginBinding
-import com.food.ordering.zinger.ui.home.HomeActivity
-import com.food.ordering.zinger.ui.signup.SignUpActivity
-import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
+import com.example.gobitecustomer.R
+import com.example.gobitecustomer.data.local.PreferencesHelper
+import com.example.gobitecustomer.data.local.Resource
+import com.example.gobitecustomer.data.modelNew.LoginRequestNew
+import com.example.gobitecustomer.data.modelNew.OTPRequest
+import com.example.gobitecustomer.databinding.ActivityLoginBinding
+import com.example.gobitecustomer.ui.home.HomeActivity
 import java.lang.NullPointerException
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private val preferencesHelper: PreferencesHelper by inject()
-    private val viewModel: LoginViewModel by viewModel()
+    private var viewModel: LoginViewModel by viewModel()
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,16 +1,17 @@
 package com.example.gobitecustomer.ui.login
 
-import androidx.lifecycle.*
-import com.food.ordering.zinger.data.local.Resource
-import com.food.ordering.zinger.data.modelNew.LoginRequestNew
-import com.food.ordering.zinger.data.modelNew.LoginResponse
-import com.food.ordering.zinger.data.modelNew.OTP
-import com.food.ordering.zinger.data.modelNew.OTPRequest
-import com.food.ordering.zinger.data.retrofit.UserRepository
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.gobitecustomer.data.local.Resource
+import com.example.gobitecustomer.data.modelNew.LoginRequestNew
+import com.example.gobitecustomer.data.modelNew.LoginResponse
+import com.example.gobitecustomer.data.retrofit.UserRepository
+import com.example.gobitecustomer.data.modelNew.OTP
+import com.example.gobitecustomer.data.modelNew.OTPRequest
 import kotlinx.coroutines.launch
-
 import java.net.UnknownHostException
-
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 
