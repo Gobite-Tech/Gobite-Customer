@@ -15,6 +15,7 @@ import com.example.gobitecustomer.data.modelNew.LoginRequestNew
 import com.example.gobitecustomer.data.modelNew.OTPRequest
 import com.example.gobitecustomer.databinding.ActivityLoginBinding
 import com.example.gobitecustomer.ui.home.HomeActivity
+import org.koin.android.ext.android.inject
 import java.lang.NullPointerException
 
 class LoginActivity : AppCompatActivity() {

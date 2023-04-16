@@ -31,7 +31,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -46,7 +45,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityHomeBinding
     private val viewModel: HomeViewModel by viewModel
-    private lateinit var profileViewModel: ProfileViewModel
+//    private lateinit var profileViewModel: ProfileViewModel
     private  lateinit var preferencesHelper: PreferencesHelper
     private lateinit var headerLayout: HeaderLayoutBinding
     private lateinit var drawer: Drawer
@@ -61,7 +60,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferencesHelper= PreferencesHelper(this)
-        initView()
+//        initView()
         setupMaterialDrawer()
         setObservers()
         placeId = preferencesHelper.getPlace()?.id.toString()
@@ -73,26 +72,26 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 //        binding.swipeRefreshLayout.setOnRefreshListener {
 //                viewModel.getShops(placeId)
 //        }
-        getFCMToken()
-        FcmUtils.subscribeToTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
+//        getFCMToken()
+//        FcmUtils.subscribeToTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
     }
 
-    private fun initView() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-        headerLayout = DataBindingUtil.inflate(LayoutInflater.from(applicationContext), R.layout.header_layout, null, false)
-        cartSnackBar = Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
-        cartSnackBar.setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.green))
-        errorSnackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
-        val snackButton: Button = errorSnackbar.view.findViewById(R.id.snackbar_action)
-        snackButton.setCompoundDrawables(null, null, null, null)
-        snackButton.background = null
-        snackButton.setTextColor(ContextCompat.getColor(applicationContext, R.color.colorAccent))
-        binding.imageMenu.setOnClickListener(this)
-        binding.textSearch.setOnClickListener(this)
-        progressDialog = ProgressDialog(this)
-        setStatusBarHeight()
-        setupShopRecyclerView()
-    }
+//    private fun initView() {
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
+//        headerLayout = DataBindingUtil.inflate(LayoutInflater.from(applicationContext), R.layout.header_layout, null, false)
+//        cartSnackBar = Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
+//        cartSnackBar.setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.green))
+//        errorSnackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
+//        val snackButton: Button = errorSnackbar.view.findViewById(R.id.snackbar_action)
+//        snackButton.setCompoundDrawables(null, null, null, null)
+//        snackButton.background = null
+//        snackButton.setTextColor(ContextCompat.getColor(applicationContext, R.color.colorAccent))
+//        binding.imageMenu.setOnClickListener(this)
+//        binding.textSearch.setOnClickListener(this)
+//        progressDialog = ProgressDialog(this)
+//        setStatusBarHeight()
+//        setupShopRecyclerView()
+//    }
 
     private fun setStatusBarHeight() {
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(object :
@@ -169,7 +168,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                                 .setTitle("Confirm Sign Out")
                                 .setMessage("Are you sure want to sign out?")
                                 .setPositiveButton("Yes") { _, _ ->
-                                    FcmUtils.unsubscribeFromTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
+//                                    FcmUtils.unsubscribeFromTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
                                     FirebaseAuth.getInstance().signOut()
                                     preferencesHelper.clearPreferences()
                                     startActivity(Intent(applicationContext, LoginActivity::class.java))
