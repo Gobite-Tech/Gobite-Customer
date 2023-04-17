@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.gobitecustomer"
-        minSdk 21
-        targetSdk 32
+        minSdk 22
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -27,20 +27,29 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding true
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    namespace 'com.example.gobitecustomer'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
     }
 }
 
 dependencies {
 
-    implementation "androidx.core:core-ktx:1.7.0"
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.core:core-ktx:1.10.0"
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+    implementation "androidx.recyclerview:recyclerview:1.3.0"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -51,10 +60,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
-    def lifecycle_version = '2.4.0'
+    def lifecycle_version = '2.5.0'
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     // LiveData
@@ -74,7 +83,7 @@ dependencies {
 
     //Koin
     implementation "io.insert-koin:koin-android:3.4.0"
-    implementation "io.insert-koin:koin-android-viewmodel:2.2.3"
+//    implementation "io.insert-koin:koin-android-viewmodel:2.2.3"
 
 
 
@@ -95,16 +104,13 @@ dependencies {
 //    api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha01'
 //    implementation 'com.google.firebase:firebase-auth:19.3.0'
 //    implementation 'com.github.sujithkanna:smileyrating:2.0.0'
-//    implementation 'com.airbnb.android:lottie:3.4.0'
+    implementation 'com.airbnb.android:lottie:3.4.0'
 //    implementation 'com.daimajia.easing:library:2.0@aar'
 //    implementation 'com.daimajia.androidanimations:library:2.3@aar'
-//    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 //    implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
 //    implementation 'com.ss.bannerslider:bannerslider:2.0.0'
 //    implementation 'com.google.firebase:firebase-analytics:17.4.0'
 //    implementation 'com.google.firebase:firebase-messaging:20.1.6'
-
-
-
 
 }

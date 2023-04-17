@@ -1,59 +1,58 @@
 package com.example.gobitecustomer.ui.login
 
 import android.app.ProgressDialog
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.LoginRequestNew
 import com.example.gobitecustomer.data.modelNew.OTPRequest
 import com.example.gobitecustomer.databinding.ActivityLoginBinding
-import com.example.gobitecustomer.ui.home.HomeActivity
 import org.koin.android.ext.android.inject
 import java.lang.NullPointerException
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding : ActivityLoginBinding
     private val preferencesHelper: PreferencesHelper by inject()
-    private var viewModel: LoginViewModel by viewModel()
+    private val viewModel by viewModel<LoginViewModel>()
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initView()
-        setListener()
-        setObservers()
-        if (!preferencesHelper.oauthId.isNullOrEmpty() && preferencesHelper.userId != -1) {
-            startActivity(Intent(applicationContext, HomeActivity::class.java))
-            finish()
-        }
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        initView()
+//        setListener()
+//        setObservers()
+//        if (!preferencesHelper.oauthId.isNullOrEmpty() && preferencesHelper.userId != -1) {
+//            startActivity(Intent(applicationContext, HomeActivity::class.java))
+//            finish()
+//        }
     }
 
     private fun initView() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         progressDialog = ProgressDialog(this)
         progressDialog.setCancelable(false)
     }
 
     private fun setListener() {
-        binding.buttonLogin.setOnClickListener {
-            val phoneNo = binding.editPhone.text.toString()
-            preferencesHelper.mobile = phoneNo
-            if (phoneNo.isNotEmpty() && phoneNo.length == 10) {
-                Log.e("LoginAvt" , " - Request Login$phoneNo")
-                viewModel.getOTP(OTPRequest("LOGIN", phoneNo))
-            } else {
-                Toast.makeText(applicationContext, "Invalid Phone Number!", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
+//        binding.buttonLogin.setOnClickListener {
+//            val phoneNo = binding.editPhone.text.toString()
+//            preferencesHelper.mobile = phoneNo
+//            if (phoneNo.isNotEmpty() && phoneNo.length == 10) {
+//                Log.e("LoginAvt" , " - Request Login$phoneNo")
+//                viewModel.getOTP(OTPRequest("LOGIN", phoneNo))
+//            } else {
+//                Toast.makeText(applicationContext, "Invalid Phone Number!", Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+//        }
     }
 
 
@@ -154,9 +153,9 @@ class LoginActivity : AppCompatActivity() {
                                 " Result - ${resource.data} and ${resource.data.success} and ${resource.data.message}"
                             )
 
-                            preferencesHelper.oauthId = loginresult.data.auth_token
-                            startActivity(Intent(applicationContext, SignUpActivity::class.java))
-                            finish()
+//                            preferencesHelper.oauthId = loginresult.data.auth_token
+//                            startActivity(Intent(applicationContext, SignUpActivity::class.java))
+//                            finish()
 
                             progressDialog.dismiss()
 
@@ -205,8 +204,8 @@ class LoginActivity : AppCompatActivity() {
 
                             preferencesHelper.jwtToken = loginresult.data.token
 
-                            startActivity(Intent(applicationContext, HomeActivity::class.java))
-                            finish()
+//                            startActivity(Intent(applicationContext, HomeActivity::class.java))
+//                            finish()
 
                             progressDialog.dismiss()
 

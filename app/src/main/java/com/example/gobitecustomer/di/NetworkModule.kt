@@ -1,13 +1,11 @@
 package com.example.gobitecustomer.di
 
-import androidx.databinding.library.BuildConfig
+import com.example.gobitecustomer.BuildConfig
 import com.example.gobitecustomer.data.retrofit.AuthInterceptor
 import com.example.gobitecustomer.data.retrofit.ShopRepository
 import com.example.gobitecustomer.data.retrofit.UserRepository
 import com.example.gobitecustomer.utils.AppConstants
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.core.scope.get
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -43,8 +41,8 @@ fun provideOkHttpClient(
 //        .addInterceptor(authInterceptor)
 
     if (BuildConfig.DEBUG) {
-        val requestInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-        builder.addNetworkInterceptor(requestInterceptor)
+//        val requestInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+//        builder.addNetworkInterceptor(requestInterceptor)
     }
     return builder.build()
 }
