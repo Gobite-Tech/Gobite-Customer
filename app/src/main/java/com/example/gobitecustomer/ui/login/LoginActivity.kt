@@ -12,6 +12,7 @@ import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.LoginRequestNew
 import com.example.gobitecustomer.data.modelNew.OTPRequest
 import com.example.gobitecustomer.databinding.ActivityLoginBinding
+import com.example.gobitecustomer.ui.signup.SignUpActivity
 import org.koin.android.ext.android.inject
 import java.lang.NullPointerException
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -123,11 +124,11 @@ class LoginActivity : AppCompatActivity() {
                                 " Result - ${resource.data} and ${resource.data.success} and ${resource.data.message}"
                             )
 
-                            Toast.makeText(applicationContext,"Welcome!!",Toast.LENGTH_SHORT).show()
 
-//                            preferencesHelper.oauthId = loginresult.data.auth_token
-//                            startActivity(Intent(applicationContext, SignUpActivity::class.java))
-//                            finish()
+
+                            preferencesHelper.oauthId = loginresult.data.auth_token
+                            startActivity(Intent(applicationContext, SignUpActivity::class.java))
+                            finish()
 
                             progressDialog.dismiss()
 
@@ -176,6 +177,7 @@ class LoginActivity : AppCompatActivity() {
 
                             preferencesHelper.jwtToken = loginresult.data.token
 
+                            Toast.makeText(applicationContext,"Welcome!!",Toast.LENGTH_SHORT).show()
 //                            startActivity(Intent(applicationContext, HomeActivity::class.java))
 //                            finish()
 
