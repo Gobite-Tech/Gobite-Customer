@@ -29,6 +29,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
     kotlinOptions {
         jvmTarget = '18'
@@ -51,6 +52,10 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.3.0"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.core:core-ktx:+'
+    implementation 'androidx.core:core-ktx:+'
+    implementation 'androidx.core:core-ktx:+'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.3.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -84,6 +89,11 @@ dependencies {
 
     //Koin
     implementation "io.insert-koin:koin-android:3.4.0"
+
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    //drawer
+    implementation "com.mikepenz:materialdrawer:6.1.2"
 //    implementation "io.insert-koin:koin-android-viewmodel:2.2.3"
 
 
@@ -103,7 +113,7 @@ dependencies {
 //    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
 //    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2'
 //    api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha01'
-//    implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.0'
 //    implementation 'com.github.sujithkanna:smileyrating:2.0.0'
     implementation 'com.airbnb.android:lottie:3.4.0'
 //    implementation 'com.daimajia.easing:library:2.0@aar'
@@ -111,7 +121,7 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 //    implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
 //    implementation 'com.ss.bannerslider:bannerslider:2.0.0'
-//    implementation 'com.google.firebase:firebase-analytics:17.4.0'
-//    implementation 'com.google.firebase:firebase-messaging:20.1.6'
+    implementation 'com.google.firebase:firebase-analytics:17.4.0'
+    implementation 'com.google.firebase:firebase-messaging:20.1.6'
 
 }
