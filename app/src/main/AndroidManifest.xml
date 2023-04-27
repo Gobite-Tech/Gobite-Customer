@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar"
         tools:targetApi="31">
+        <activity android:name=".ui.home.HomeActivity" />
+        <activity android:name=".ui.order.OrdersActivity" />
+        <activity android:name=".ui.profile.ProfileActivity" />
+        <activity android:name=".ui.contactus.ContactUsActivity" />
+        <activity android:name=".ui.contributors.ContributorsActivity" />
+        <activity android:name=".ui.restaurant.RestaurantActivity" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true">
