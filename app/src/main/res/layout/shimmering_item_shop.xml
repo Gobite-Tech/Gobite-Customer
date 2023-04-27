@@ -6,6 +6,7 @@
     android:focusable="true"
     app:cardCornerRadius="0dp"
     app:cardElevation="0dp"
+    android:theme="@style/Theme.MaterialComponents.DayNight"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
         android:layout_width="match_parent"

@@ -56,19 +56,48 @@
 					android:textColor="@android:color/tab_indicator_text"
 					android:textSize="12sp"
 					tools:text="Opens at 7AM" />
-
-				<TextView
-					android:id="@+id/text_shop_rating"
-					android:layout_width="wrap_content"
+				<LinearLayout
+					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:drawableStart="@drawable/ic_star"
-					android:drawablePadding="4dp"
-					android:fontFamily="@font/open_sans_semibold"
-					android:gravity="center"
-					android:text=" 4.5"
-					android:textColor="@android:color/tab_indicator_text"
-					android:textSize="11dp"
-					android:textStyle="bold" />
+					android:orientation="horizontal"
+					android:weightSum="1"
+					>
+					<TextView
+						android:id="@+id/text_shop_rating"
+						android:layout_width="0dp"
+						android:layout_weight="0.3"
+						android:layout_height="match_parent"
+						android:drawableStart="@drawable/ic_star"
+						android:drawablePadding="4dp"
+						android:fontFamily="@font/open_sans_semibold"
+						android:gravity="center"
+						android:text=" 4.5"
+						android:textColor="@android:color/tab_indicator_text"
+						android:textSize="11dp"
+						android:textStyle="bold" />
+					<View
+						android:layout_width="0dp"
+						android:layout_height="match_parent"
+						android:layout_weight="0.4"
+						/>
+					<TextView
+						android:id="@+id/tv_timeShop"
+						android:layout_width="0dp"
+						android:layout_weight="0.3"
+						android:layout_height="wrap_content"
+						android:drawableStart="@drawable/baseline_timer_24"
+						android:drawablePadding="4dp"
+						android:fontFamily="@font/open_sans_semibold"
+						android:gravity="center"
+						android:text=" 15 mins"
+						android:textColor="@android:color/tab_indicator_text"
+						android:textSize="11dp"
+						android:textStyle="bold" />
+
+
+				</LinearLayout>
+
+
 
 			</LinearLayout>
 		</LinearLayout>

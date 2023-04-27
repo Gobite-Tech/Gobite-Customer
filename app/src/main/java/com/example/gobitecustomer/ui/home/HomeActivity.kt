@@ -3,15 +3,19 @@ package com.example.gobitecustomer.ui.home
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Rect
+import android.icu.lang.UCharacter.IndicPositionalCategory.RIGHT
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,7 +56,7 @@ import java.util.Timer
 class HomeActivity: AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityHomeBinding
-    private val viewModel by viewModel<HomeViewModel>()
+    private val viewModel:HomeViewModel by viewModel()
     private val profileViewModel: ProfileViewModel by viewModel()
     private val preferencesHelper: PreferencesHelper by inject()
     private lateinit var headerLayout: HeaderLayoutBinding
@@ -81,8 +85,9 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
 //        binding.swipeRefreshLayout.setOnRefreshListener {
 //                viewModel.getShops(placeId)
 //        }
-        getFCMToken()
-        FcmUtils.subscribeToTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
+
+//        getFCMToken()
+//        FcmUtils.subscribeToTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
     }
 
     private fun getFCMToken() {
@@ -169,7 +174,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         binding.swipeRefreshLayout.isRefreshing = false
                         //progressDialog.dismiss()
                         binding.layoutStates.visibility = View.GONE
-                        binding.animationView.visibility = View.VISIBLE
+//                        binding.animationView.visibility = View.VISIBLE
                         binding.animationView.loop(true)
                         binding.animationView.setAnimation("order_failed_animation.json")
                         binding.animationView.playAnimation()
@@ -243,7 +248,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         .show()
                 }
                 true
-            }
+            }.withDrawerGravity(GravityCompat.END)
             .build()
 
     }
@@ -258,6 +263,15 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         snackButton.setCompoundDrawables(null, null, null, null)
         snackButton.background = null
         snackButton.setTextColor(ContextCompat.getColor(applicationContext, R.color.accent))
+
+        val spinner: Spinner=binding.spinner
+        val items = resources.getStringArray(R.array.campus)
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+
         binding.imageMenu.setOnClickListener(this)
         binding.textSearch.setOnClickListener(this)
         progressDialog = ProgressDialog(this)
@@ -347,11 +361,14 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         val timeOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         var message = ""
         when (timeOfDay) {
-            in 0..11 -> message = "Good Morning,\n"
-            in 12..15 -> message = "Good Afternoon,\n"
-            in 16..23 -> message = "Good Evening,\n"
+            in 0..11 -> message = "hey,\n"
+            in 12..15 -> message = "hey,\n"
+            in 16..23 -> message = "hey,\n"
         }
         var temp = preferencesHelper.name
+        if(temp==null){
+            temp="praneki"
+        }
         var tempList = temp?.split(" ")
         message += if(!tempList.isNullOrEmpty()){
             tempList[0]
