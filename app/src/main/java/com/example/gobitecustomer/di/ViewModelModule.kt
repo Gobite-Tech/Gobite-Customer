@@ -1,6 +1,7 @@
 package com.example.gobitecustomer.di
 
 import com.example.gobitecustomer.ui.login.LoginViewModel
+import com.example.gobitecustomer.ui.signup.SignUpViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -9,7 +10,9 @@ val viewModelModule = module {
     viewModel { LoginViewModel(get()) }
 //    viewModel { OtpViewModel(get()) }
 //    viewModel { RestaurantViewModel(get()) }
-//    viewModel { SignUpViewModel(get(), get()) }
+    viewModel { SignUpViewModel(get()
+//        , get()
+    ) }
 //    viewModel { ProfileViewModel(get(), get(),get()) }
 //    viewModel { SearchViewModel(get(), get()) }
 //    viewModel { OrderViewModel(get()) }

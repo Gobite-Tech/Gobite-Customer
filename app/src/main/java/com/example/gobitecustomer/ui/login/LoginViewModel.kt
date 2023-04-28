@@ -1,5 +1,6 @@
 package com.example.gobitecustomer.ui.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,7 +29,7 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
                 performGetOTP.value = Resource.success(response.body()!!)
 
             } catch (e: Exception) {
-                println("login failed ${e.message}")
+                Log.e("Login viewmodel" , " ${e.message}")
                 if (e is UnknownHostException) {
                     performGetOTP.value = Resource.offlineError()
                 } else {
