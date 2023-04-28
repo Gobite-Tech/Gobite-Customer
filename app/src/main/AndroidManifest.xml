@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.restaurant.RestaurantActivity"
             android:exported="false" />
         <activity
@@ -33,11 +36,9 @@
         </activity>
         <activity
             android:name=".ui.home.HomeActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity android:name=".ui.order.OrdersActivity" />
-        <activity android:name=".ui.profile.ProfileActivity" />
         <activity android:name=".ui.contactus.ContactUsActivity" />
-        <activity android:name=".ui.contributors.ContributorsActivity" />
     </application>
 
 </manifest>

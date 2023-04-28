@@ -3,10 +3,7 @@ package com.example.gobitecustomer.data.local
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import com.example.gobitecustomer.data.model.MenuItemModel
-import com.example.gobitecustomer.data.model.PlaceModel
-import com.example.gobitecustomer.data.model.ShopConfigurationModel
-import com.example.gobitecustomer.data.model.UserModel
+import com.example.gobitecustomer.data.modelNew.Item
 import com.example.gobitecustomer.utils.AppConstants
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -108,26 +105,26 @@ class PreferencesHelper(context: Context) : AppPreferencesHelper {
         cartPreferences.edit().clear().apply()
     }
 
-    fun getPlace(): PlaceModel? {
-        return Gson().fromJson(place, PlaceModel::class.java)
-    }
+//    fun getPlace(): PlaceModel? {
+//        return Gson().fromJson(place, PlaceModel::class.java)
+//    }
 
-    fun getUser(): UserModel? {
-        return UserModel(userId, email, mobile, name, oauthId, role)
-    }
+//    fun getUser(): UserModel? {
+//        return UserModel(userId, email, mobile, name, oauthId, role)
+//    }
 
-    fun getCart(): List<MenuItemModel>? {
-        val listType = object : TypeToken<List<MenuItemModel?>?>() {}.type
+    fun getCart(): List<Item>? {
+        val listType = object : TypeToken<List<Item?>?>() {}.type
         return Gson().fromJson(cart, listType)
     }
 
-    fun getShopList(): List<ShopConfigurationModel>? {
-        val listType = object : TypeToken<List<ShopConfigurationModel?>?>() {}.type
-        return Gson().fromJson(shopList, listType)
-    }
+//    fun getShopList(): List<ShopConfigurationModel>? {
+//        val listType = object : TypeToken<List<ShopConfigurationModel?>?>() {}.type
+//        return Gson().fromJson(shopList, listType)
+//    }
 
-    fun getCartShop(): ShopConfigurationModel? {
-        return Gson().fromJson(cartShop, ShopConfigurationModel::class.java)
-    }
+//    fun getCartShop(): ShopConfigurationModel? {
+//        return Gson().fromJson(cartShop, ShopConfigurationModel::class.java)
+//    }
 
 }

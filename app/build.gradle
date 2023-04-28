@@ -24,7 +24,7 @@ android {
         }
 
         debug{
-            buildConfigField "String", "CUSTOM_BASE_URL", '"http://192.168.0.102"'
+            buildConfigField "String", "CUSTOM_BASE_URL", '"http://192.168.137.173"'
         }
 
 

@@ -1,10 +1,9 @@
 package com.example.gobitecustomer.data.retrofit
 
-import com.example.gobitecustomer.data.model.NotificationTokenUpdate
-import com.example.gobitecustomer.data.model.UpdateUserRequest
 import com.example.gobitecustomer.data.modelNew.LoginRequestNew
 import com.example.gobitecustomer.data.modelNew.OTPRequest
 import com.example.gobitecustomer.data.modelNew.SignUpRequestNew
+import com.example.gobitecustomer.data.modelNew.UpdateUserRequest
 import retrofit2.Retrofit
 
 class UserRepository(retrofit: Retrofit) {
@@ -12,6 +11,6 @@ class UserRepository(retrofit: Retrofit) {
     suspend fun getOTP(OTPRequest: OTPRequest) = services.getOTP(OTPRequest)
     suspend fun LoginUser(loginRequestNew: LoginRequestNew) = services.LoginUser(loginRequestNew)
     suspend fun registerUser(signUpRequestNew: SignUpRequestNew) = services.registerUser(signUpRequestNew)
-    suspend fun updateUser(updateUserRequest: UpdateUserRequest) = services.updateUser(updateUserRequest)
-    suspend fun updateFcmToken(notificationTokenUpdate: NotificationTokenUpdate) = services.updateFcmToken(notificationTokenUpdate)
+
+    suspend fun updateUser(userRequest: UpdateUserRequest) = services.updateUser(userRequest)
 }

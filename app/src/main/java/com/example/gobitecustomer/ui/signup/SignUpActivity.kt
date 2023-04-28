@@ -6,10 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
-import com.example.gobitecustomer.data.model.PlaceModel
 import com.example.gobitecustomer.data.modelNew.SignUpRequestNew
 import com.example.gobitecustomer.databinding.ActivitySignUpBinding
 import com.example.gobitecustomer.ui.login.LoginActivity
@@ -23,8 +21,8 @@ class SignUpActivity : AppCompatActivity() {
     private val viewModel by viewModel<SignUpViewModel>()
     private val preferencesHelper: PreferencesHelper by inject()
     private lateinit var progressDialog: ProgressDialog
-    private var places: ArrayList<PlaceModel> = ArrayList()
-    private var selectedPlace: PlaceModel? = null
+//    private var places: ArrayList<PlaceModel> = ArrayList()
+//    private var selectedPlace: PlaceModel? = null
     private var number: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

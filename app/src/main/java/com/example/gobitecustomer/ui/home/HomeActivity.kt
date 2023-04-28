@@ -24,13 +24,11 @@ import com.amulyakhare.textdrawable.TextDrawable
 import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
-import com.example.gobitecustomer.data.model.MenuItemModel
-import com.example.gobitecustomer.data.model.NotificationTokenUpdate
+import com.example.gobitecustomer.data.modelNew.Item
 import com.example.gobitecustomer.data.modelNew.shops
 import com.example.gobitecustomer.databinding.ActivityHomeBinding
 import com.example.gobitecustomer.databinding.HeaderLayoutBinding
 import com.example.gobitecustomer.ui.contactus.ContactUsActivity
-import com.example.gobitecustomer.ui.contributors.ContributorsActivity
 import com.example.gobitecustomer.ui.login.LoginActivity
 import com.example.gobitecustomer.ui.order.OrdersActivity
 import com.example.gobitecustomer.ui.profile.ProfileActivity
@@ -64,7 +62,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
     private lateinit var shopAdapter: ShopAdapter
     private lateinit var progressDialog: ProgressDialog
     private var shopList: ArrayList<shops> = ArrayList()
-    private var cartList: ArrayList<MenuItemModel> = ArrayList()
+    private var cartList: ArrayList<Item> = ArrayList()
     private lateinit var cartSnackBar: Snackbar
     private lateinit var errorSnackbar: Snackbar
     private var placeId = ""
@@ -76,7 +74,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         initView()
         setupMaterialDrawer()
         setObservers()
-        placeId = preferencesHelper.getPlace()?.id.toString()
+//        placeId = preferencesHelper.getPlace()?.id.toString()
 //        viewModel.getShops(placeId)
 //        cartSnackBar.setAction("View Cart") { startActivity(Intent(applicationContext, CartActivity::class.java)) }
 //        errorSnackbar.setAction("Try again") {
@@ -203,8 +201,8 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
             .withIcon(R.drawable.ic_drawer_mail)
         val signOutItem = PrimaryDrawerItem().withIdentifier(++identifier).withName("Sign out")
             .withIcon(R.drawable.ic_drawer_log_out)
-        val contributorsItem = PrimaryDrawerItem().withIdentifier(++identifier).withName("Contributors")
-            .withIcon(R.drawable.ic_drawer_info)
+//        val contributorsItem = PrimaryDrawerItem().withIdentifier(++identifier).withName("Contributors")
+//            .withIcon(R.drawable.ic_drawer_info)
         drawer = DrawerBuilder()
             .withActivity(this)
             .withDisplayBelowStatusBar(false)
@@ -216,7 +214,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                 profileItem,
                 ordersItem,
                 contactUsItem,
-                contributorsItem,
+//                contributorsItem,
                 DividerDrawerItem(),
                 signOutItem
             )
@@ -227,9 +225,9 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                 if (ordersItem.identifier == drawerItem.identifier) {
                     startActivity(Intent(applicationContext, OrdersActivity::class.java))
                 }
-                if (contributorsItem.identifier == drawerItem.identifier) {
-                    startActivity(Intent(applicationContext, ContributorsActivity::class.java))
-                }
+//                if (contributorsItem.identifier == drawerItem.identifier) {
+//                    startActivity(Intent(applicationContext, ContributorsActivity::class.java))
+//                }
                 if (contactUsItem.identifier == drawerItem.identifier) {
                     startActivity(Intent(applicationContext, ContactUsActivity::class.java))
                 }
@@ -348,8 +346,8 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    fun getCart(): ArrayList<MenuItemModel> {
-        val items: ArrayList<MenuItemModel> = ArrayList()
+    fun getCart(): ArrayList<Item> {
+        val items: ArrayList<Item> = ArrayList()
         val temp = preferencesHelper.getCart()
         if (!temp.isNullOrEmpty()) {
             items.addAll(temp)
@@ -379,11 +377,11 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
     }
 
     private fun updateCartUI() {
-        var total = 0
+        var total = 0.0
         var totalItems = 0
         if (cartList.size > 0) {
             for (i in cartList.indices) {
-                total += cartList[i].price * cartList[i].quantity
+                total += cartList[i].variants[0].price * cartList[i].quantity
                 totalItems += 1
             }
             if (totalItems == 1) {

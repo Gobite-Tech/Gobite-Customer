@@ -107,7 +107,7 @@ class SignUpViewModel(private val userRepository: UserRepository
 
                 var response = userRepository.registerUser(signUpRequestNew)
 
-                performSignUp.value = Resource.success(response.data!!)
+                performSignUp.value = Resource.success(response.body()!!)
 
             } catch (e: Exception) {
                 println("login failed ${e.message}")

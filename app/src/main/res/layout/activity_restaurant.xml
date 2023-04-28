@@ -34,15 +34,6 @@
                     app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
                     app:title="Sathyasaaaaaaaaaaaaaaaaasasd">
 
-
-                    <ss.com.bannerslider.Slider
-                        android:id="@+id/cover_slider"
-                        android:layout_width="match_parent"
-                        app:slider_interval="5000"
-                        app:slider_hideIndicators="true"
-                        app:slider_loopSlides="true"
-                        android:layout_height="200dp" />
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
