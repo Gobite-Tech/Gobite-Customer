@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -41,7 +42,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -90,27 +90,27 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
 //        FcmUtils.subscribeToTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
     }
 
-    private fun getFCMToken() {
-        FirebaseInstanceId.getInstance().instanceId
-            .addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Log.w("FCM", "getInstanceId failed", task.exception)
-                    return@OnCompleteListener
-                }
-                // Get new Instance ID token
-                val token = task.result?.token
-                if(preferencesHelper.fcmToken!=token){
-                    preferencesHelper.fcmToken = token
-                    preferencesHelper.fcmToken?.let {
-                        profileViewModel.updateFcmToken(NotificationTokenUpdate(it,preferencesHelper.userId.toString()))
-                    }
-                }else{
-                    //FCM token is same. No need to update
-                }
-                val msg = "FCM TOKEN "+token
-                Log.d("FCM", msg)
-            })
-    }
+//    private fun getFCMToken() {
+//        FirebaseInstanceId.getInstance().instanceId
+//            .addOnCompleteListener(OnCompleteListener { task ->
+//                if (!task.isSuccessful) {
+//                    Log.w("FCM", "getInstanceId failed", task.exception)
+//                    return@OnCompleteListener
+//                }
+//                // Get new Instance ID token
+//                val token = task.result?.token
+//                if(preferencesHelper.fcmToken!=token){
+//                    preferencesHelper.fcmToken = token
+//                    preferencesHelper.fcmToken?.let {
+//                        profileViewModel.updateFcmToken(NotificationTokenUpdate(it,preferencesHelper.userId.toString()))
+//                    }
+//                }else{
+//                    //FCM token is same. No need to update
+//                }
+//                val msg = "FCM TOKEN "+token
+//                Log.d("FCM", msg)
+//            })
+//    }
 
     private fun setObservers() {
 

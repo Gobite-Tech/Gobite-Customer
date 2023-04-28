@@ -57,9 +57,9 @@ class ShopAdapter(private val context: Context, private val shopList: List<shops
 //                } else {
 //                    //binding.textShopDesc.text = "Opens at "+shop.shopModel.openingTime.substring(0,5)
 //                    binding.textShopDesc.text = "Not taking orders"
-            binding.textShopName.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
-            binding.textShopDesc.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
-            binding.textShopRating.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
+            binding.textShopName.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.black))
+            binding.textShopDesc.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.tab_indicator_text))
+            binding.textShopRating.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.tab_indicator_text))
             binding.textShopRating.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star_disabled, 0, 0, 0)
             val colorMatrix = ColorMatrix()
             colorMatrix.setSaturation(0f)
