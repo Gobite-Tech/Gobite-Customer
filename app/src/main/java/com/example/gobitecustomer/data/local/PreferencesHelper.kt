@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.example.gobitecustomer.data.modelNew.Item
+import com.example.gobitecustomer.data.modelNew.shops
 import com.example.gobitecustomer.utils.AppConstants
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -123,8 +124,8 @@ class PreferencesHelper(context: Context) : AppPreferencesHelper {
 //        return Gson().fromJson(shopList, listType)
 //    }
 
-//    fun getCartShop(): ShopConfigurationModel? {
-//        return Gson().fromJson(cartShop, ShopConfigurationModel::class.java)
-//    }
+    fun getCartShop(): shops? {
+        return Gson().fromJson(cartShop, shops::class.java)
+    }
 
 }

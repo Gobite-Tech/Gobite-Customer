@@ -28,6 +28,7 @@ import com.example.gobitecustomer.data.modelNew.Item
 import com.example.gobitecustomer.data.modelNew.shops
 import com.example.gobitecustomer.databinding.ActivityHomeBinding
 import com.example.gobitecustomer.databinding.HeaderLayoutBinding
+import com.example.gobitecustomer.ui.cart.CartActivity
 import com.example.gobitecustomer.ui.contactus.ContactUsActivity
 import com.example.gobitecustomer.ui.login.LoginActivity
 import com.example.gobitecustomer.ui.order.OrdersActivity
@@ -76,7 +77,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         setObservers()
 //        placeId = preferencesHelper.getPlace()?.id.toString()
 //        viewModel.getShops(placeId)
-//        cartSnackBar.setAction("View Cart") { startActivity(Intent(applicationContext, CartActivity::class.java)) }
+        cartSnackBar.setAction("View Cart") { startActivity(Intent(applicationContext, CartActivity::class.java)) }
 //        errorSnackbar.setAction("Try again") {
 //            viewModel.getShops(preferencesHelper.getPlace()?.id.toString())
 //        }
