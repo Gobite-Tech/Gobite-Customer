@@ -6,6 +6,7 @@ import com.example.gobitecustomer.data.retrofit.ShopRepository
 import com.example.gobitecustomer.data.retrofit.UserRepository
 import com.example.gobitecustomer.utils.AppConstants
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -25,24 +26,24 @@ fun provideRetrofit(
     authInterceptor: AuthInterceptor
 ): Retrofit {
     return Retrofit.Builder()
-        .baseUrl(AppConstants.BASE_URL)
-//        .client(provideOkHttpClient(authInterceptor))
+        .baseUrl(BuildConfig.CUSTOM_BASE_URL)
+        .client(provideOkHttpClient(authInterceptor))
         .addConverterFactory(GsonConverterFactory.create()).build()
 }
 
 fun provideOkHttpClient(
-//    authInterceptor: AuthInterceptor
+    authInterceptor: AuthInterceptor
 ): OkHttpClient {
     val builder = OkHttpClient()
         .newBuilder()
-        .connectTimeout(60, TimeUnit.SECONDS)
+        .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .writeTimeout(60, TimeUnit.SECONDS)
-//        .addInterceptor(authInterceptor)
+        .addInterceptor(authInterceptor)
 
     if (BuildConfig.DEBUG) {
-//        val requestInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-//        builder.addNetworkInterceptor(requestInterceptor)
+        val requestInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        builder.addNetworkInterceptor(requestInterceptor)
     }
     return builder.build()
 }
