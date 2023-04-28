@@ -2,7 +2,7 @@ package com.example.gobitecustomer.utils
 
 object AppConstants {
 
-    const val BASE_URL = "https://192.168.0.102/"
+    const val BASE_URL = "http://192.168.0.102/"
 
     //SHARED PREFERENCE NAMES
     const val LOGIN_PREFS = "login_prefs"

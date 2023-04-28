@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".gobiteapp"
@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.restaurant.RestaurantActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.signup.SignUpActivity"
             android:exported="false" />
         <activity
@@ -28,6 +31,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.home.HomeActivity"
+            android:exported="true"></activity>
+        <activity android:name=".ui.order.OrdersActivity" />
+        <activity android:name=".ui.profile.ProfileActivity" />
+        <activity android:name=".ui.contactus.ContactUsActivity" />
+        <activity android:name=".ui.contributors.ContributorsActivity" />
     </application>
 
 </manifest>

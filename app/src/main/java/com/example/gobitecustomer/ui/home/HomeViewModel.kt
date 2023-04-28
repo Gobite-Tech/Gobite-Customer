@@ -1,5 +1,6 @@
 package com.example.gobitecustomer.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -28,7 +29,7 @@ class HomeViewModel(private val shopRepository: ShopRepository):ViewModel() {
                     performFetchShops.value = Resource.empty()
                 }
             } catch (e: Exception) {
-                println("fetch shops failed ${e.message}")
+                Log.e("Home viewmodel" , " ${e.message}")
                 if (e is UnknownHostException) {
                     performFetchShops.value = Resource.offlineError()
                 } else {
