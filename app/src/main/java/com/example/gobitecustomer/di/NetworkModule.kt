@@ -3,6 +3,8 @@ package com.example.gobitecustomer.di
 import com.example.gobitecustomer.BuildConfig
 import com.example.gobitecustomer.data.retrofit.AuthInterceptor
 import com.example.gobitecustomer.data.retrofit.ItemRepository
+import com.example.gobitecustomer.data.retrofit.OrderRepository
+import com.example.gobitecustomer.data.retrofit.PlaceRepository
 import com.example.gobitecustomer.data.retrofit.ShopRepository
 import com.example.gobitecustomer.data.retrofit.UserRepository
 import com.example.gobitecustomer.utils.AppConstants
@@ -18,8 +20,8 @@ val networkModule = module {
     single { provideRetrofit(get()) }
     single { UserRepository(get()) }
     single { ShopRepository(get()) }
-//    single { PlaceRepository(get()) }
-//    single { OrderRepository(get()) }
+    single { PlaceRepository(get()) }
+    single { OrderRepository(get()) }
     single { ItemRepository(get()) }
 }
 

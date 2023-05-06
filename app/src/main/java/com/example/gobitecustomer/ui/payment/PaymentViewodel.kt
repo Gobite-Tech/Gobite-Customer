@@ -1,6 +1,5 @@
-package com.example.gobitecustomer.ui.cart
+package com.example.gobitecustomer.ui.payment
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,29 +11,27 @@ import com.example.gobitecustomer.data.retrofit.OrderRepository
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
-class CartViewModel(
-    private val orderRepository: OrderRepository
-    ) : ViewModel() {
+class PaymentViewModel(private val orderRepository: OrderRepository) : ViewModel() {
 
-    //verify cart items
+    //verify order
     private val insertOrder = MutableLiveData<Resource<VerifyOrderResponse>>()
     val insertOrderStatus: LiveData<Resource<VerifyOrderResponse>>
         get() = insertOrder
 
-    fun verifyOrder(placeOrderRequest: PlaceOrderRequest) {
+    fun placeOrder(placeOrderRequest: PlaceOrderRequest) {
         viewModelScope.launch {
             try {
                 insertOrder.value = Resource.loading()
                 val response = orderRepository.insertOrder(placeOrderRequest)
-                if (response != null) {
-                    if (response.isSuccessful) {
+                if(response!=null){
+                    if(response.isSuccessful){
                         insertOrder.value = Resource.success(response.body()!!)
-                    } else {
-                        insertOrder.value = Resource.error(null, response.message())
+                    }else{
+                        insertOrder.value = Resource.error(null,response.message())
                     }
                 }
             } catch (e: Exception) {
-                Log.e("verify order failed", "${e.message}")
+                println("verify order failed ${e.message}")
                 if (e is UnknownHostException) {
                     insertOrder.value = Resource.offlineError()
                 } else {

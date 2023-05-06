@@ -18,9 +18,13 @@ import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.Item
+import com.example.gobitecustomer.data.modelNew.PlaceOrderRequest
+import com.example.gobitecustomer.data.modelNew.cartItem
 import com.example.gobitecustomer.data.modelNew.shops
 import com.example.gobitecustomer.databinding.ActivityCartBinding
 import com.example.gobitecustomer.databinding.BottomSheetShopInfoBinding
+import com.example.gobitecustomer.ui.payment.PaymentActivity
+import com.example.gobitecustomer.utils.AppConstants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -45,7 +49,8 @@ class CartActivity : AppCompatActivity() {
     private lateinit var snackBar: Snackbar
     private lateinit var errorSnackBar: Snackbar
     private var isPickup = true
-//    private lateinit var placeOrderRequest: PlaceOrderRequest
+
+    private lateinit var placeOrderRequest: PlaceOrderRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +58,7 @@ class CartActivity : AppCompatActivity() {
         getArgs()
         initView()
         setListeners()
-//        setObservers()
+        setObservers()
     }
 
     private fun getArgs() {
@@ -100,14 +105,14 @@ class CartActivity : AppCompatActivity() {
                     if(cart.isEmpty()){
                         Toast.makeText(applicationContext,"Cart is empty", Toast.LENGTH_SHORT).show()
                     }else{
-//                        showOrderConfirmation()
+                        showOrderConfirmation()
                     }
                 }
             }else{
                 if(cart.isEmpty()){
                     Toast.makeText(applicationContext,"Cart is empty", Toast.LENGTH_SHORT).show()
                 }else{
-//                    showOrderConfirmation()
+                    showOrderConfirmation()
                 }
             }
         }
@@ -174,37 +179,37 @@ class CartActivity : AppCompatActivity() {
                 } */
     }
 
-//    private fun setObservers(){
-//        viewModel.insertOrderStatus.observe(this, Observer {
-//            when(it.status){
-//                Resource.Status.LOADING -> {
-//                    errorSnackBar.dismiss()
-//                    progressDialog.setMessage("Verifying cart items...")
-//                    progressDialog.show()
-//                }
-//                Resource.Status.SUCCESS -> {
-//                    progressDialog.dismiss()
-//                    errorSnackBar.dismiss()
+    private fun setObservers(){
+        viewModel.insertOrderStatus.observe(this, Observer {
+            when(it.status){
+                Resource.Status.LOADING -> {
+                    errorSnackBar.dismiss()
+                    progressDialog.setMessage("Verifying cart items...")
+                    progressDialog.show()
+                }
+                Resource.Status.SUCCESS -> {
+                    progressDialog.dismiss()
+                    errorSnackBar.dismiss()
 //                    initiatePayment(it.data?.data?.transactionToken,it.data?.data?.orderId.toString())
-//                }
-//                Resource.Status.OFFLINE_ERROR -> {
-//                    progressDialog.dismiss()
-//                    errorSnackBar.setText("No Internet Connection")
-//                    errorSnackBar.show()
-//                }
-//                Resource.Status.ERROR -> {
-//                    progressDialog.dismiss()
-//                    if(!it.message.isNullOrEmpty()){
-//                        errorSnackBar.setText(it.message.toString())
-//                    }else{
-//                        errorSnackBar.setText("Cart verify failed")
-//                    }
-//                    errorSnackBar.show()
-//                }
-//                else -> {}
-//            }
-//        })
-//    }
+                }
+                Resource.Status.OFFLINE_ERROR -> {
+                    progressDialog.dismiss()
+                    errorSnackBar.setText("No Internet Connection")
+                    errorSnackBar.show()
+                }
+                Resource.Status.ERROR -> {
+                    progressDialog.dismiss()
+                    if(!it.message.isNullOrEmpty()){
+                        errorSnackBar.setText(it.message.toString())
+                    }else{
+                        errorSnackBar.setText("Cart verify failed")
+                    }
+                    errorSnackBar.show()
+                }
+                else -> {}
+            }
+        })
+    }
 
     @SuppressLint("SetTextI18n")
     private fun updateShopUI() {
@@ -327,56 +332,48 @@ class CartActivity : AppCompatActivity() {
             return items
         }
 
-//    private fun initiatePayment(token: String?, orderId: String){
-//        val intent = Intent(applicationContext,PaymentActivity::class.java)
-//        intent.putExtra(AppConstants.TRANSACTION_TOKEN,token)
-//        intent.putExtra(AppConstants.ORDER_ID,orderId)
-//        startActivity(intent)
-//        finish()
-//    }
+    private fun initiatePayment(token: String?, orderId: String){
+        val intent = Intent(applicationContext, PaymentActivity::class.java)
+        intent.putExtra(AppConstants.TRANSACTION_TOKEN,token)
+        intent.putExtra(AppConstants.ORDER_ID,orderId)
+        startActivity(intent)
+        finish()
+    }
 
-//    private fun verifyOrder(){
-//        var cookingInfo:String? = null
-////        var deliveryLocation = ""
-//        if(!preferencesHelper.cartShopInfo.isNullOrEmpty()){
-//            cookingInfo = preferencesHelper.cartShopInfo
+    private fun verifyOrder(){
+        var cookingInfo:String? = null
+//        var deliveryLocation = ""
+        if(!preferencesHelper.cartShopInfo.isNullOrEmpty()){
+            cookingInfo = preferencesHelper.cartShopInfo
+        }
+//        if(!preferencesHelper.cartDeliveryLocation.isNullOrEmpty()){
+//            deliveryLocation = preferencesHelper.cartDeliveryLocation!!
 //        }
-////        if(!preferencesHelper.cartDeliveryLocation.isNullOrEmpty()){
-////            deliveryLocation = preferencesHelper.cartDeliveryLocation!!
-////        }
-//        val cartOrderModel = CartOrderModel(
-//            cookingInfo,
-//            null,
-//            null,
-//            cartTotalPrice,
-//            CartShopModel(shop?.shopModel?.id),
-//            CartUserModel(preferencesHelper.userId)
-//        )
-//        val cartTransactionModel = CartTransactionModel(cartOrderModel)
-//        val listCartOrderItems:ArrayList<CartOrderItems> = ArrayList()
-//        cart.forEach {
-//            listCartOrderItems.add(CartOrderItems(FoodItem(it.id), it.price, it.quantity))
-//        }
-//        placeOrderRequest = PlaceOrderRequest(listCartOrderItems,cartTransactionModel)
-//        viewModel.verifyOrder(placeOrderRequest)
-//    }
 
-//    private fun showOrderConfirmation(){
-//        MaterialAlertDialogBuilder(this@CartActivity)
-//            .setTitle("Place order")
-//            .setCancelable(false)
-//            .setMessage("Are you sure want to place this order?")
-//            .setPositiveButton("Yes") { _, _ ->
-//                verifyOrder()
-//            }
-//            .setNegativeButton("No") { dialog, _ ->
-//                dialog.dismiss()
-//                Handler().postDelayed({
-//                    snackBar.show()
-//                },500)
-//            }
-//            .show()
-//    }
+        val listCartOrderItems:ArrayList<cartItem> = ArrayList()
+        cart.forEach {
+            listCartOrderItems.add(cartItem(it.id, it.variants[0].id, it.quantity))
+        }
+        placeOrderRequest = PlaceOrderRequest(listCartOrderItems)
+        viewModel.verifyOrder(placeOrderRequest)
+    }
+
+    private fun showOrderConfirmation(){
+        MaterialAlertDialogBuilder(this@CartActivity)
+            .setTitle("Place order")
+            .setCancelable(false)
+            .setMessage("Are you sure want to place this order?")
+            .setPositiveButton("Yes") { _, _ ->
+                verifyOrder()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+                Handler().postDelayed({
+                    snackBar.show()
+                },500)
+            }
+            .show()
+    }
 
     override fun onResume() {
         super.onResume()

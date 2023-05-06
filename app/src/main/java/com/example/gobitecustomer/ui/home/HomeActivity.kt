@@ -3,7 +3,6 @@ package com.example.gobitecustomer.ui.home
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Rect
-import android.icu.lang.UCharacter.IndicPositionalCategory.RIGHT
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -13,7 +12,6 @@ import android.view.ViewTreeObserver
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -31,16 +29,12 @@ import com.example.gobitecustomer.databinding.HeaderLayoutBinding
 import com.example.gobitecustomer.ui.cart.CartActivity
 import com.example.gobitecustomer.ui.contactus.ContactUsActivity
 import com.example.gobitecustomer.ui.login.LoginActivity
-import com.example.gobitecustomer.ui.order.OrdersActivity
 import com.example.gobitecustomer.ui.profile.ProfileActivity
 import com.example.gobitecustomer.ui.profile.ProfileViewModel
 import com.example.gobitecustomer.ui.restaurant.RestaurantActivity
 import com.example.gobitecustomer.utils.AppConstants
-import com.example.gobitecustomer.utils.FcmUtils
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -50,7 +44,6 @@ import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar
-import java.util.Timer
 
 class HomeActivity: AppCompatActivity(), View.OnClickListener {
 
@@ -237,8 +230,10 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         .setTitle("Confirm Sign Out")
                         .setMessage("Are you sure want to sign out?")
                         .setPositiveButton("Yes") { _, _ ->
-                            FcmUtils.unsubscribeFromTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
-                            FirebaseAuth.getInstance().signOut()
+
+                            //TODO FireBase Notificstions
+//                            FcmUtils.unsubscribeFromTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
+//                            FirebaseAuth.getInstance().signOut()
                             preferencesHelper.clearPreferences()
                             startActivity(Intent(applicationContext, LoginActivity::class.java))
                             finish()

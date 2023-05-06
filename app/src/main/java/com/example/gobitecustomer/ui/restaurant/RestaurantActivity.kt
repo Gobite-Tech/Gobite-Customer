@@ -20,6 +20,7 @@ import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.Item
 import com.example.gobitecustomer.data.modelNew.shops
 import com.example.gobitecustomer.databinding.ActivityRestaurantBinding
+import com.example.gobitecustomer.ui.cart.CartActivity
 import com.example.gobitecustomer.utils.AppConstants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -53,14 +54,15 @@ class RestaurantActivity : AppCompatActivity() {
         getArgs()
         initView()
         setObservers()
-//        cartSnackBar.setAction("View Cart") {
-//            startActivity(
-//                Intent(
-//                    applicationContext,
-//                    CartActivity::class.java
-//                )
-//            )
-//        }
+        cartSnackBar.setAction("View Cart") {
+            startActivity(
+                Intent(
+                    applicationContext,
+                    CartActivity::class.java
+                )
+            )
+        }
+
 
         binding.imageCall.setOnClickListener {
             //TODO - Implement Mobile No of shops
@@ -363,7 +365,7 @@ class RestaurantActivity : AppCompatActivity() {
                 cartSnackBar.setText("₹$total | $totalItems items")
             }
 //            if (shop?.configurationModel?.isOrderTaken == 1)   //Code Commented Due to unavailable fields in response
-//                cartSnackBar.show()
+                cartSnackBar.show()
         } else {
             preferencesHelper.clearCartPreferences()
             cartSnackBar.dismiss()

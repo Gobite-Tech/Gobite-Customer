@@ -16,15 +16,28 @@ interface CustomApi {
     @POST("/v2/auth/login")
     suspend fun LoginUser(@Body loginRequestNew: LoginRequestNew) : Response<LoginResponse>
 
+    @PUT("/v2/user_profile/modify")
+    suspend fun updateUser(@Body userRequest: UpdateUserRequest) : Response<UserUpdateResponse>
+
+
+    // SHOP REPO
     @GET("/v2/shop/list")
     suspend fun getShopsList(): Response<shopsList>
-
 
     @GET("/v2/shop/{shopId}/list_items")
     suspend fun getMenu(@Path("shopId") shopId : String) : Response<MenuItem>
 
-    @PUT("/v2/user_profile/modify")
-    suspend fun updateUser(@Body userRequest: UpdateUserRequest) : Response<UserUpdateResponse>
+
+    // ORDER REPO
+
+    @POST("/v2/order")
+    suspend fun insertOrder(@Body placeOrderRequest: PlaceOrderRequest) : Response<VerifyOrderResponse>
+
+    @POST("/v2/order/{orderId}")
+    suspend fun placeOrder(@Path("orderId") orderId: String): Response<VerifyOrderResponse>
+
+    @GET("/v2/order")
+    suspend fun getOrder() : Response<OrderItemListModel>
 
 
 
