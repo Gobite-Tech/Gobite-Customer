@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -70,7 +71,8 @@ class CartActivity : AppCompatActivity() {
         snackBar = Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
         snackBar.setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.green))
         errorSnackBar = Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
-        val snackButton: Button = errorSnackBar.view.findViewById(com.mikepenz.materialize.R.id.snackbar_action)
+        val snackButton: Button =
+            errorSnackBar.view.findViewById(com.mikepenz.materialize.R.id.snackbar_action)
         snackButton.setCompoundDrawables(null, null, null, null)
         snackButton.background = null
         snackButton.setTextColor(ContextCompat.getColor(applicationContext, R.color.accent))
@@ -79,8 +81,18 @@ class CartActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp)
-        binding.toolbarLayout.setExpandedTitleColor(ContextCompat.getColor(applicationContext, android.R.color.white))
-        binding.toolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(applicationContext, android.R.color.black))
+        binding.toolbarLayout.setExpandedTitleColor(
+            ContextCompat.getColor(
+                applicationContext,
+                android.R.color.white
+            )
+        )
+        binding.toolbarLayout.setCollapsedTitleTextColor(
+            ContextCompat.getColor(
+                applicationContext,
+                android.R.color.black
+            )
+        )
         binding.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) { //Collapsed
                 supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
@@ -93,119 +105,74 @@ class CartActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setListeners(){
+    private fun setListeners() {
         snackBar.setAction("Place Order") {
-            if(!isPickup && false){
-                if(preferencesHelper.cartDeliveryLocation.isNullOrEmpty()){
-                    Handler().postDelayed({
-                        snackBar.show()
-                    },500)
-                    Toast.makeText(applicationContext,"Please choose a delivery location", Toast.LENGTH_SHORT).show()
-                }else{
-                    if(cart.isEmpty()){
-                        Toast.makeText(applicationContext,"Cart is empty", Toast.LENGTH_SHORT).show()
-                    }else{
-                        showOrderConfirmation()
-                    }
-                }
-            }else{
-                if(cart.isEmpty()){
-                    Toast.makeText(applicationContext,"Cart is empty", Toast.LENGTH_SHORT).show()
-                }else{
-                    showOrderConfirmation()
-                }
+            if (cart.isEmpty()) {
+                Toast.makeText(applicationContext, "Cart is empty", Toast.LENGTH_SHORT).show()
+            } else {
+                showOrderConfirmation()
             }
         }
         errorSnackBar.setAction("Try again") {
 //            viewModel.verifyOrder(placeOrderRequest)
         }
 
-        preferencesHelper.cartDeliveryPref = ""
-        //Radio Buttons - Not Needed
-        /*        binding.radioPickup.setOnClickListener {
-                    binding.radioPickup.isChecked = true
-                    binding.radioDelivery.isChecked = false
-                    binding.textDeliveryPrice.text = "₹0"
-                    isPickup = true
-                    binding.textDeliveryLocation.visibility = View.GONE
-                    preferencesHelper.cartDeliveryPref = ""
-                    updateCartUI()
-                }
-                binding.radioDelivery.setOnClickListener {
-                    binding.radioDelivery.isChecked = true
-                    binding.radioPickup.isChecked = false
-                    binding.textDeliveryPrice.text = "₹"+deliveryPrice.toInt().toString()
-                    isPickup = false
-                    binding.textDeliveryLocation.visibility = View.VISIBLE
-                    updateCartUI()
-                }   */
-
-
         binding.textInfo.setOnClickListener {
             val dialogBinding: BottomSheetShopInfoBinding =
-                DataBindingUtil.inflate(layoutInflater, R.layout.bottom_sheet_shop_info, null, false)
+                DataBindingUtil.inflate(
+                    layoutInflater,
+                    R.layout.bottom_sheet_shop_info,
+                    null,
+                    false
+                )
             val dialog = BottomSheetDialog(this)
             dialog.setContentView(dialogBinding.root)
             dialog.show()
             dialogBinding.editTextInfo.setText(preferencesHelper.cartShopInfo)
             dialogBinding.buttonSaveTextInfo.setOnClickListener {
                 preferencesHelper.cartShopInfo = dialogBinding.editTextInfo.text.toString()
-                if(!preferencesHelper.cartShopInfo.isNullOrEmpty()){
+                if (!preferencesHelper.cartShopInfo.isNullOrEmpty()) {
                     binding.textInfo.text = preferencesHelper.cartShopInfo
-                }else{
+                } else {
                     binding.textInfo.text = "Any information to convey to " + shop?.name + "?"
                 }
                 dialog.dismiss()
             }
         }
 
-        // Delivery Location code - Not Needed
-        /*        binding.textDeliveryLocation.setOnClickListener {
-                    val dialogBinding: BottomSheetDeliveryLocationBinding =
-                            DataBindingUtil.inflate(layoutInflater, R.layout.bottom_sheet_delivery_location, null, false)
-                    val dialog = BottomSheetDialog(this)
-                    dialog.setContentView(dialogBinding.root)
-                    dialog.show()
-                    dialogBinding.editLocation.setText(preferencesHelper.cartDeliveryLocation)
-                    dialogBinding.buttonSaveLocation.setOnClickListener {
-                        preferencesHelper.cartDeliveryLocation = dialogBinding.editLocation.text.toString()
-                        if(!preferencesHelper.cartDeliveryLocation.isNullOrEmpty()){
-                            binding.textDeliveryLocation.text = preferencesHelper.cartDeliveryLocation
-                        }else{
-                            binding.textDeliveryLocation.text = "Enter delivery location"
-                        }
-                        dialog.dismiss()
-                    }
-                } */
     }
 
-    private fun setObservers(){
+    private fun setObservers() {
         viewModel.insertOrderStatus.observe(this, Observer {
-            when(it.status){
+            when (it.status) {
                 Resource.Status.LOADING -> {
                     errorSnackBar.dismiss()
                     progressDialog.setMessage("Verifying cart items...")
                     progressDialog.show()
                 }
+
                 Resource.Status.SUCCESS -> {
                     progressDialog.dismiss()
                     errorSnackBar.dismiss()
 //                    initiatePayment(it.data?.data?.transactionToken,it.data?.data?.orderId.toString())
                 }
+
                 Resource.Status.OFFLINE_ERROR -> {
                     progressDialog.dismiss()
                     errorSnackBar.setText("No Internet Connection")
                     errorSnackBar.show()
                 }
+
                 Resource.Status.ERROR -> {
                     progressDialog.dismiss()
-                    if(!it.message.isNullOrEmpty()){
+                    if (!it.message.isNullOrEmpty()) {
                         errorSnackBar.setText(it.message.toString())
-                    }else{
+                    } else {
                         errorSnackBar.setText("Cart verify failed")
                     }
                     errorSnackBar.show()
                 }
+
                 else -> {}
             }
         })
@@ -217,73 +184,56 @@ class CartActivity : AppCompatActivity() {
 //        Picasso.get().load(shop?.shopModel?.coverUrls?.get(0)).placeholder(R.drawable.shop_placeholder).into(binding.imageExpanded)
         binding.layoutShop.textShopName.text = shop?.name
 //        binding.layoutShop.textShopRating.text = shop?.ratingModel?.rating.toString()
-        if(!preferencesHelper.cartShopInfo.isNullOrEmpty()){
+        if (!preferencesHelper.cartShopInfo.isNullOrEmpty()) {
             binding.textInfo.text = preferencesHelper.cartShopInfo
-        }else{
+        } else {
             binding.textInfo.text = "Any information to convey to " + shop?.name + "?"
         }
 
-        // Delivery Location Data - Not Needed
-        /*        if(!preferencesHelper.cartDeliveryLocation.isNullOrEmpty()){
-                    binding.textDeliveryLocation.text = preferencesHelper.cartDeliveryLocation
-                }else{
-                    binding.textDeliveryLocation.text = "Enter delivery location"
-                }
-                if(!preferencesHelper.cartDeliveryPref.isNullOrEmpty()){
-                    if(preferencesHelper.cartDeliveryPref=="delivery") {
-                        binding.radioDelivery.isChecked = true
-                        binding.radioPickup.isChecked = false
-                        binding.textDeliveryPrice.text = "₹" + deliveryPrice.toInt().toString()
-                        isPickup = false
-                        updateCartUI()
-                        binding.textDeliveryLocation.visibility = View.VISIBLE
-                    }else{
-                        binding.textDeliveryLocation.visibility = View.GONE
-                    }
-                }else{
-                    binding.textDeliveryLocation.visibility = View.GONE
-                }     */
     }
 
     private fun setupMenuRecyclerView() {
         cartList.clear()
         cartList.addAll(cart)
         updateCartUI()
-        cartAdapter = CartAdapter(applicationContext, cartList, object : CartAdapter.OnItemClickListener {
+        cartAdapter =
+            CartAdapter(applicationContext, cartList, object : CartAdapter.OnItemClickListener {
 
-            override fun onItemClick(item: Item?, position: Int) {
-                //TODO navigate to restaurant activity
-            }
+                override fun onItemClick(item: Item?, position: Int) {
+                    //TODO navigate to restaurant activity
+                }
 
-            override fun onQuantityAdd(position: Int) {
-                println("quantity add clicked $position")
-                cartList[position].quantity = cartList[position].quantity + 1
-                cartAdapter.notifyItemChanged(position)
-                updateCartUI()
-                saveCart(cartList)
-            }
-
-            override fun onQuantitySub(position: Int) {
-                println("quantity sub clicked $position")
-                if (cartList[position].quantity - 1 >= 0) {
-                    cartList[position].quantity = cartList[position].quantity - 1
-                    if (cartList[position].quantity == 0) {
-                        cartList.removeAt(position)
-                        cartAdapter.notifyDataSetChanged()
-                    } else {
-                        cartAdapter.notifyDataSetChanged()
-                    }
+                override fun onQuantityAdd(position: Int) {
+                    println("quantity add clicked $position")
+                    cartList[position].quantity = cartList[position].quantity + 1
+                    cartAdapter.notifyItemChanged(position)
                     updateCartUI()
                     saveCart(cartList)
                 }
-            }
-        })
-        binding.recyclerFoodItems.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+                override fun onQuantitySub(position: Int) {
+                    println("quantity sub clicked $position")
+                    if (cartList[position].quantity - 1 >= 0) {
+                        cartList[position].quantity = cartList[position].quantity - 1
+                        if (cartList[position].quantity == 0) {
+                            cartList.removeAt(position)
+                            cartAdapter.notifyDataSetChanged()
+                        } else {
+                            cartAdapter.notifyDataSetChanged()
+                        }
+                        updateCartUI()
+                        saveCart(cartList)
+                    }
+                }
+            })
+        binding.recyclerFoodItems.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerFoodItems.adapter = cartAdapter
     }
 
     private var deliveryPrice = 0.0
     private var cartTotalPrice = 0.0
+
     @SuppressLint("SetTextI18n")
     private fun updateCartUI() {
         var total = 0.0
@@ -332,25 +282,28 @@ class CartActivity : AppCompatActivity() {
             return items
         }
 
-    private fun initiatePayment(token: String?, orderId: String){
+    private fun initiatePayment(token: String?, orderId: String) {
         val intent = Intent(applicationContext, PaymentActivity::class.java)
-        intent.putExtra(AppConstants.TRANSACTION_TOKEN,token)
-        intent.putExtra(AppConstants.ORDER_ID,orderId)
+        intent.putExtra(AppConstants.TRANSACTION_TOKEN, token)
+        intent.putExtra(AppConstants.ORDER_ID, orderId)
         startActivity(intent)
         finish()
     }
 
-    private fun verifyOrder(){
-        var cookingInfo:String? = null
+    private fun verifyOrder() {
+        var cookingInfo: String? = null
 //        var deliveryLocation = ""
-        if(!preferencesHelper.cartShopInfo.isNullOrEmpty()){
+        if (!preferencesHelper.cartShopInfo.isNullOrEmpty()) {
             cookingInfo = preferencesHelper.cartShopInfo
         }
 //        if(!preferencesHelper.cartDeliveryLocation.isNullOrEmpty()){
 //            deliveryLocation = preferencesHelper.cartDeliveryLocation!!
 //        }
 
-        val listCartOrderItems:ArrayList<cartItem> = ArrayList()
+        val listCartOrderItems: ArrayList<cartItem> = ArrayList()
+        for (i in cart) {
+            Log.e("cart", i.toString())
+        }
         cart.forEach {
             listCartOrderItems.add(cartItem(it.id, it.variants[0].id, it.quantity))
         }
@@ -358,7 +311,7 @@ class CartActivity : AppCompatActivity() {
         viewModel.verifyOrder(placeOrderRequest)
     }
 
-    private fun showOrderConfirmation(){
+    private fun showOrderConfirmation() {
         MaterialAlertDialogBuilder(this@CartActivity)
             .setTitle("Place order")
             .setCancelable(false)
@@ -370,7 +323,7 @@ class CartActivity : AppCompatActivity() {
                 dialog.dismiss()
                 Handler().postDelayed({
                     snackBar.show()
-                },500)
+                }, 500)
             }
             .show()
     }
@@ -380,11 +333,12 @@ class CartActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
+        return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 true
             }
+
             else -> {
                 super.onOptionsItemSelected(item)
             }

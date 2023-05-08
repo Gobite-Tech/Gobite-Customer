@@ -29,6 +29,7 @@ import com.example.gobitecustomer.databinding.HeaderLayoutBinding
 import com.example.gobitecustomer.ui.cart.CartActivity
 import com.example.gobitecustomer.ui.contactus.ContactUsActivity
 import com.example.gobitecustomer.ui.login.LoginActivity
+import com.example.gobitecustomer.ui.order.OrdersActivity
 import com.example.gobitecustomer.ui.profile.ProfileActivity
 import com.example.gobitecustomer.ui.profile.ProfileViewModel
 import com.example.gobitecustomer.ui.restaurant.RestaurantActivity

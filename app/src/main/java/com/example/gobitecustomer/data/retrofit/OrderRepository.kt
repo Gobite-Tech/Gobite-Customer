@@ -8,4 +8,8 @@ class OrderRepository(retrofit: Retrofit) {
     suspend fun insertOrder(placeOrderRequest: PlaceOrderRequest) = services.insertOrder(placeOrderRequest)
     suspend fun placeOrder(orderId: String) = services.placeOrder(orderId)
     suspend fun getOrder() = services.getOrder()
+
+    suspend fun getOrderById(id: String) = services.getOrderById(id)
+
+    suspend fun cancelOrder(orderId: String) = services.cancelOrder(orderId)
 }

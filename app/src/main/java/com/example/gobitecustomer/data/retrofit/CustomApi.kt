@@ -39,6 +39,12 @@ interface CustomApi {
     @GET("/v2/order")
     suspend fun getOrder() : Response<OrderItemListModel>
 
+    @GET("/v2/order/{orderId}")
+    suspend fun getOrderById(@Path("orderId") orderId: String): Response<OrderItemByIDModel>
+
+    @DELETE("/v2/order/{orderId}")
+    suspend fun cancelOrder(@Body OrderId: String): Response<String>
+
 
 
     //OLD WORK

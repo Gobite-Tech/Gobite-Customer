@@ -22,9 +22,14 @@ import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.OrderX
 import com.example.gobitecustomer.databinding.ActivityOrdersBinding
 import com.example.gobitecustomer.utils.AppConstants
+import com.example.gobitecustomer.utils.EventBus
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Timer
@@ -266,52 +271,6 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
         })
     }
 
-//    private fun showRatingDialog(orderData: OrderItemListModel?) {
-//        val dialogBinding: BottomSheetRateFoodBinding =
-//            DataBindingUtil.inflate(layoutInflater, R.layout.bottom_sheet_rate_food, null, false)
-//        val dialog = BottomSheetDialog(this)
-//        dialog.setContentView(dialogBinding.root)
-//        dialog.show()
-//        Handler().postDelayed({
-//            dialogBinding.smileyRating.setRating(SmileyRating.Type.GOOD, true)
-//        }, 200)
-//        dialogBinding.buttonRate.setOnClickListener {
-//            var smiley = dialogBinding.smileyRating.selectedSmiley
-//            var rating = 0.0
-//            when (smiley) {
-//                SmileyRating.Type.TERRIBLE -> {
-//                    rating = 1.0
-//                }
-//                SmileyRating.Type.BAD -> {
-//                    rating = 2.0
-//                }
-//                SmileyRating.Type.OKAY -> {
-//                    rating = 3.0
-//                }
-//                SmileyRating.Type.GOOD -> {
-//                    rating = 4.0
-//                }
-//                SmileyRating.Type.GREAT -> {
-//                    rating = 5.0
-//                }
-//
-//                else -> {}
-//            }
-//            val orderId = orderData?.transactionModel?.orderModel?.id
-//            val shopId = orderData?.transactionModel?.orderModel?.shopModel?.id
-//            val feedback = dialogBinding.editFeedback.text.toString()
-//            viewModel.rateOrder(
-//                RatingRequest(
-//                    orderId?.toInt(),
-//                    rating,
-//                    feedback,
-//                    RatingShopModel(shopId?.toInt())
-//
-//                )
-//            )
-//            dialog.dismiss()
-//        }
-//    }
 
     private fun getOrders() {
         orderList.clear()

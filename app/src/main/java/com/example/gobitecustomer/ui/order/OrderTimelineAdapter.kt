@@ -8,6 +8,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gobitecustomer.R
+import com.example.gobitecustomer.databinding.ItemOrderStatusBinding
+import com.example.gobitecustomer.utils.AppConstants
+import com.example.gobitecustomer.utils.StatusHelper
 import java.lang.Exception
 import java.text.SimpleDateFormat
 
@@ -38,25 +42,21 @@ class OrderTimelineAdapter(private val context: Context, private val orderStatus
                 binding.viewLineTop.visibility = View.VISIBLE
                 binding.viewLineBottom.visibility = View.VISIBLE
             }
-            val orderStatusModel = orderStatus.orderStatusList.firstOrNull {
-                StatusHelper.getStatusMessage(it.orderStatus)==orderStatus.name
+
+            try {
+                val apiDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                val appDateFormat = SimpleDateFormat("hh:mm aaa")
+                val date = apiDateFormat.parse(orderStatus.is_updated)
+                val dateString = appDateFormat.format(date)
+                binding.textTime.text = dateString
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            if(orderStatusModel!=null){
-                try {
-                    val apiDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-                    val appDateFormat = SimpleDateFormat("hh:mm aaa")
-                    val date = apiDateFormat.parse(orderStatusModel.updatedTime)
-                    val dateString = appDateFormat.format(date)
-                    binding.textTime.text = dateString
-                    //binding.textTimeNew.text = dateString
-                }catch (e: Exception){
-                    e.printStackTrace()
-                }
-            }
+
+
             if (orderStatus.isCurrent) {
                 when (orderStatus.name) {
-                    StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CANCELLED_BY_SELLER),
-                    StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CANCELLED_BY_USER) -> {
+                    StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CANCELLED) -> {
                         binding.textTime.visibility = View.VISIBLE
                         //binding.textTimeNew.visibility = View.VISIBLE
                         binding.textStatusDesc.visibility = View.VISIBLE
@@ -70,9 +70,7 @@ class OrderTimelineAdapter(private val context: Context, private val orderStatus
                         binding.textStatus.setTextColor(ContextCompat.getColor(binding.textStatus.context, android.R.color.black))
                         binding.textTime.setTextColor(ContextCompat.getColor(binding.textStatus.context, android.R.color.tab_indicator_text))
                     }
-                    StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_COMPLETED),
-                    StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_DELIVERED),
-                    StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_REFUND_COMPLETED) -> {
+                    StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED) -> {
                         binding.textTime.visibility = View.VISIBLE
                         //binding.textTimeNew.visibility = View.VISIBLE
                         binding.textStatusDesc.visibility = View.VISIBLE
@@ -104,8 +102,7 @@ class OrderTimelineAdapter(private val context: Context, private val orderStatus
             } else {
                 if (orderStatus.isDone) {
                     when (orderStatus.name) {
-                        StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CANCELLED_BY_SELLER),
-                        StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CANCELLED_BY_USER) -> {
+                        StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CANCELLED) -> {
                             binding.textTime.visibility = View.GONE
                             //binding.textTimeNew.visibility = View.GONE
                             binding.textStatusDesc.visibility = View.GONE

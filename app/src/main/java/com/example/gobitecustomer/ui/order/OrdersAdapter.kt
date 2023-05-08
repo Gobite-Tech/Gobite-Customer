@@ -69,9 +69,7 @@ class OrdersAdapter(private val orderList: ArrayList<OrderX>, private val listen
 
             when (orderStatus) {
 
-                AppConstants.ORDER_STATUS_COMPLETED,
-                AppConstants.ORDER_STATUS_DELIVERED,
-                AppConstants.ORDER_STATUS_REFUND_COMPLETED -> {
+                AppConstants.ORDER_STATUS_PREPARED, -> {
                     binding.buttonTrackRate.text = "Completed"
                     binding.textOrderStatus.setCompoundDrawablesWithIntrinsicBounds(
                         binding.textOrderStatus.context.getDrawable(R.drawable.ic_checked),
@@ -80,9 +78,7 @@ class OrdersAdapter(private val orderList: ArrayList<OrderX>, private val listen
                         null)
                 }
 
-                AppConstants.ORDER_STATUS_CANCELLED_BY_SELLER,
-                AppConstants.ORDER_STATUS_CANCELLED_BY_USER,
-                AppConstants.ORDER_STATUS_TXN_FAILURE -> {
+                AppConstants.ORDER_STATUS_CANCELLED -> {
                     binding.buttonTrackRate.text = "Ccancelled"
                     binding.textOrderStatus.setCompoundDrawablesWithIntrinsicBounds(
                         binding.textOrderStatus.context.getDrawable(R.drawable.ic_cancelled),

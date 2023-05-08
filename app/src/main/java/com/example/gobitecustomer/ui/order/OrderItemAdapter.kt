@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gobitecustomer.R
+import com.example.gobitecustomer.data.modelNew.ItemXX
+import com.example.gobitecustomer.databinding.ItemOrderProductBinding
 
-class OrderItemAdapter(private val context: Context, private val foodItemList: List<OrderItems>, private val listener: OnItemClickListener) : RecyclerView.Adapter<OrderItemAdapter.OrderItemViewHolder>() {
+class OrderItemAdapter(private val context: Context, private val foodItemList: List<ItemXX>, private val listener: OnItemClickListener) : RecyclerView.Adapter<OrderItemAdapter.OrderItemViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): OrderItemViewHolder {
         val binding: ItemOrderProductBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_order_product, parent, false)
@@ -22,21 +25,15 @@ class OrderItemAdapter(private val context: Context, private val foodItemList: L
     }
 
     class OrderItemViewHolder(var binding: ItemOrderProductBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(food: OrderItems, position: Int, listener: OnItemClickListener) {
-            binding.textFoodName.text = food.quantity.toString()+" x "+food.itemModel.name
-            binding.textFoodPrice.text = "₹" + food.itemModel.price.toInt() * food.quantity
+        fun bind(food: ItemXX, position: Int, listener: OnItemClickListener) {
+            binding.textFoodName.text = food.quantity.toString()+" x "+food.item_name
+            binding.textFoodPrice.text = "₹" + food.actual_price * food.quantity
             binding.layoutRoot.setOnClickListener { listener.onItemClick(food, position) }
-            if (food.itemModel.isVeg==1) {
-                binding.imageVeg.setImageDrawable(binding.root.context.getDrawable(R.drawable.ic_veg))
-            } else {
-                binding.imageVeg.setImageDrawable(binding.root.context.getDrawable(R.drawable.ic_non_veg))
-            }
-
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClick(item: OrderItems?, position: Int)
+        fun onItemClick(item: ItemXX?, position: Int)
     }
 
 }

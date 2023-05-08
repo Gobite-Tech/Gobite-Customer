@@ -12,6 +12,7 @@ import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.UpdateUserRequest
 import com.example.gobitecustomer.databinding.ActivityProfileBinding
+import com.example.gobitecustomer.ui.order.OrdersActivity
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

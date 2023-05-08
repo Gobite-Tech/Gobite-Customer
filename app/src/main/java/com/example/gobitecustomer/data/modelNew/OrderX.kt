@@ -8,7 +8,7 @@ data class OrderX(
     val items: List<ItemXX>,
     val meta: MetaXX,
     val order_placed_time: String,
-    val order_status: String,
+    var order_status: String,
     val payment_status: String,
     val price: Double,
     val rating: Int,

@@ -20,7 +20,7 @@
             android:name=".ui.order.OrdersActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.OrderDetailsActivity"
+            android:name=".ui.order.OrderDetailActivity"
             android:exported="false" />
         <activity
             android:name=".ui.placeorder.PlaceOrderActivity"
@@ -52,7 +52,6 @@
         <activity
             android:name=".ui.home.HomeActivity"
             android:exported="true" />
-        <activity android:name=".ui.order.OrdersActivity" />
         <activity android:name=".ui.contactus.ContactUsActivity" />
     </application>
 

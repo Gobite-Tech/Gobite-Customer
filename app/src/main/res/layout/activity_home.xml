@@ -109,7 +109,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/text_search"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
                         android:paddingBottom="6dp"
                         android:text="@string/label_search_outlets_or_dish"
                         android:textSize="18sp"
-                        app:drawableEndCompat="@drawable/ic_drawer_search_small" />
+                        app:drawableEndCompat="@drawable/ic_drawer_search_small"/>
                 </LinearLayout>
 
 
