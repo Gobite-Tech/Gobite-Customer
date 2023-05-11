@@ -15,5 +15,6 @@ data class OrderX(
     val shop_id: Int,
     val tax: Int,
     val transactions: List<Any>,
-    val updated_at: String
+    val updated_at: String,
+    var shop_name : String
 )

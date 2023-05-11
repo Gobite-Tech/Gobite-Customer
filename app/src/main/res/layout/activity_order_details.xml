@@ -187,7 +187,7 @@
 
                     <TextView
                         android:id="@+id/text_secret_key"
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:fontFamily="@font/open_sans_bold"
@@ -603,7 +603,7 @@
                         android:textColor="@android:color/white"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/text_cancel_reorder"
                         app:layout_constraintHorizontal_bias="1.0"

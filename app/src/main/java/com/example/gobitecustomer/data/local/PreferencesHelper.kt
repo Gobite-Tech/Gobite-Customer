@@ -120,8 +120,8 @@ class PreferencesHelper(context: Context) : AppPreferencesHelper {
         return Gson().fromJson(cart, listType)
     }
 
-    fun getShopList(): allShops? {
-        val listType = object : TypeToken<allShops?>() {}.type
+    fun getShopList(): List<shops>? {
+        val listType = object : TypeToken<List<shops>?>() {}.type
         return Gson().fromJson(shopList, listType)
     }
 

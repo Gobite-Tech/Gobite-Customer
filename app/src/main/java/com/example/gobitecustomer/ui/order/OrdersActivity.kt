@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
+import com.example.gobitecustomer.data.modelNew.NotificationModel
 import com.example.gobitecustomer.data.modelNew.OrderX
 import com.example.gobitecustomer.databinding.ActivityOrdersBinding
 import com.example.gobitecustomer.utils.AppConstants
@@ -63,7 +64,7 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
             isLastPage = false
             getOrders()
         }
-//        subscribeToOrderStatus()
+        subscribeToOrderStatus()
     }
 
     private fun initView() {
@@ -109,7 +110,7 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
 
     var isFirstTime = true
     private fun setObservers() {
-        viewModel.performFetchOrdersStatus.observe(this, Observer {
+        viewModel.performFetchOrdersStatus.observe(this, Observer { it ->
             if (it != null) {
                 when (it.status) {
                     Resource.Status.LOADING -> {
@@ -159,6 +160,17 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
                             isLastPage = it.data.size < 10
                             if(!isLastPage) page += 1
                         }
+                        val list = preferencesHelper.getShopList()
+                        orderList.forEach {or ->
+                            if (list != null) {
+                                for (shop in list){
+                                    if(shop.id == or.shop_id){
+                                        or.shop_name = shop.name
+                                    }
+                                }
+                            }
+                            }
+
                         orderAdapter.notifyDataSetChanged()
                         isFirstTime = false
                         //binding.appBarLayout.setExpanded(false, true)
@@ -299,18 +311,18 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
         getOrders()
     }
 
-//    @ExperimentalCoroutinesApi
-//    private fun subscribeToOrderStatus() {
-//        val subscription = EventBus.asChannel<NotificationModel>()
-//        CoroutineScope(Dispatchers.Main).launch {
-//            subscription.consumeEach {
-//                println("Received order status event")
-//                page = 1
-//                isFirstTime = true
-//                isLoading = false
-//                isLastPage = false
-//                getOrders()
-//            }
-//        }
-//    }
+
+    private fun subscribeToOrderStatus() {
+        val subscription = EventBus.asFlow<NotificationModel>()
+        CoroutineScope(Dispatchers.Main).launch {
+            subscription.collect{
+                println("Received order status event")
+                page = 1
+                isFirstTime = true
+                isLoading = false
+                isLastPage = false
+                getOrders()
+            }
+        }
+    }
 }

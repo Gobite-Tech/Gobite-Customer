@@ -5,5 +5,8 @@ data class shops(
     val name : String,
     val icon : String,
     val tags : ArrayList<String>,
-    val area : String
+    val area : String,
+    val open_at : String,
+    val close_at : String,
+    val open_now : Boolean,
 )

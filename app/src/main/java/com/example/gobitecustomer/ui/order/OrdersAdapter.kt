@@ -29,7 +29,7 @@ class OrdersAdapter(private val orderList: ArrayList<OrderX>, private val listen
     class OrderViewHolder(var binding: ItemOrderBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(order: OrderX, position: Int, listener: OnItemClickListener) {
             //Picasso.get().load(menuItem.photoUrl).into(binding.imageShop)
-            binding.textShopName.text = order.shop_id.toString()
+            binding.textShopName.text = order.shop_name
             var cnt = 0
             var price = 0.0
             for (item in order.items) {

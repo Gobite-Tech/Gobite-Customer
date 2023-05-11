@@ -3,6 +3,7 @@ package com.example.gobitecustomer.di
 import com.example.gobitecustomer.ui.cart.CartViewModel
 import com.example.gobitecustomer.ui.home.HomeViewModel
 import com.example.gobitecustomer.ui.login.LoginViewModel
+import com.example.gobitecustomer.ui.order.OrderViewModel
 import com.example.gobitecustomer.ui.payment.PaymentViewModel
 import com.example.gobitecustomer.ui.placeorder.PlaceOrderViewModel
 import com.example.gobitecustomer.ui.profile.ProfileViewModel
@@ -24,7 +25,7 @@ val viewModelModule = module {
         //,get())
     }
 //    viewModel { SearchViewModel(get(), get()) }
-//    viewModel { OrderViewModel(get()) }
+    viewModel { OrderViewModel(get()) }
     viewModel { CartViewModel(get()) }
     viewModel { PlaceOrderViewModel(get()) }
     viewModel { PaymentViewModel(get()) }

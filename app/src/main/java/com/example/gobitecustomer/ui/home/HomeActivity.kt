@@ -33,9 +33,13 @@ import com.example.gobitecustomer.ui.order.OrdersActivity
 import com.example.gobitecustomer.ui.profile.ProfileActivity
 import com.example.gobitecustomer.ui.profile.ProfileViewModel
 import com.example.gobitecustomer.ui.restaurant.RestaurantActivity
+import com.example.gobitecustomer.ui.search.SearchActivity
 import com.example.gobitecustomer.utils.AppConstants
+import com.example.gobitecustomer.utils.FcmUtils
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -69,29 +73,27 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         initView()
         setupMaterialDrawer()
         setObservers()
-//        placeId = preferencesHelper.getPlace()?.id.toString()
-//        viewModel.getShops(placeId)
+        viewModel.getShops()
         cartSnackBar.setAction("View Cart") { startActivity(Intent(applicationContext, CartActivity::class.java)) }
-//        errorSnackbar.setAction("Try again") {
-//            viewModel.getShops(preferencesHelper.getPlace()?.id.toString())
-//        }
-//        binding.swipeRefreshLayout.setOnRefreshListener {
-//                viewModel.getShops(placeId)
-//        }
+        errorSnackbar.setAction("Try again") {
+            viewModel.getShops()
+        }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+                viewModel.getShops()
+        }
 
-//        getFCMToken()
-//        FcmUtils.subscribeToTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
+        FcmUtils.subscribeToTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
     }
 
 //    private fun getFCMToken() {
-//        FirebaseInstanceId.getInstance().instanceId
+//        FirebaseMessaging.getInstance().token
 //            .addOnCompleteListener(OnCompleteListener { task ->
 //                if (!task.isSuccessful) {
 //                    Log.w("FCM", "getInstanceId failed", task.exception)
 //                    return@OnCompleteListener
 //                }
 //                // Get new Instance ID token
-//                val token = task.result?.token
+//                val token = task.result
 //                if(preferencesHelper.fcmToken!=token){
 //                    preferencesHelper.fcmToken = token
 //                    preferencesHelper.fcmToken?.let {
@@ -112,14 +114,15 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         isError = false
-                        if(!binding.swipeRefreshLayout.isRefreshing) {
+                        if (!binding.swipeRefreshLayout.isRefreshing) {
                             binding.layoutStates.visibility = View.VISIBLE
                             binding.animationView.visibility = View.GONE
                         }
                         errorSnackbar.dismiss()
-                        //progressDialog.setMessage("Getting Outlets")
-                        //progressDialog.show()
+                        progressDialog.setMessage("Getting Outlets")
+                        progressDialog.show()
                     }
+
                     Resource.Status.EMPTY -> {
                         isError = true
                         binding.swipeRefreshLayout.isRefreshing = false
@@ -128,19 +131,20 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         binding.animationView.loop(true)
                         binding.animationView.setAnimation("empty_animation.json")
                         binding.animationView.playAnimation()
-                        //progressDialog.dismiss()
+                        progressDialog.dismiss()
                         shopList.clear()
                         shopAdapter.notifyDataSetChanged()
                         errorSnackbar.setText("No Outlets in this place")
-                        Handler().postDelayed({errorSnackbar.show()},500)
+                        Handler().postDelayed({ errorSnackbar.show() }, 500)
                     }
+
                     Resource.Status.SUCCESS -> {
                         binding.swipeRefreshLayout.isRefreshing = false
                         isError = false
                         binding.layoutStates.visibility = View.GONE
                         binding.animationView.visibility = View.GONE
                         binding.animationView.cancelAnimation()
-                        //progressDialog.dismiss()
+                        progressDialog.dismiss()
                         errorSnackbar.dismiss()
                         shopList.clear()
                         it.data?.let { it1 -> shopList = it1.data.shops }
@@ -148,6 +152,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         preferencesHelper.shopList = Gson().toJson(shopList)
                         updateCartUI()
                     }
+
                     Resource.Status.OFFLINE_ERROR -> {
                         isError = true
                         binding.swipeRefreshLayout.isRefreshing = false
@@ -156,25 +161,26 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         binding.animationView.loop(true)
                         binding.animationView.setAnimation("no_internet_connection_animation.json")
                         binding.animationView.playAnimation()
-                        //progressDialog.dismiss()
+                        progressDialog.dismiss()
                         errorSnackbar.setText("No Internet Connection")
                         shopList.clear()
                         shopAdapter.notifyDataSetChanged()
-                        Handler().postDelayed({errorSnackbar.show()},500)
+                        Handler().postDelayed({ errorSnackbar.show() }, 500)
                     }
+
                     Resource.Status.ERROR -> {
                         isError = true
                         binding.swipeRefreshLayout.isRefreshing = false
-                        //progressDialog.dismiss()
+                        progressDialog.dismiss()
                         binding.layoutStates.visibility = View.GONE
-//                        binding.animationView.visibility = View.VISIBLE
+                        binding.animationView.visibility = View.VISIBLE
                         binding.animationView.loop(true)
                         binding.animationView.setAnimation("order_failed_animation.json")
                         binding.animationView.playAnimation()
                         errorSnackbar.setText("Something went wrong")
                         shopList.clear()
                         shopAdapter.notifyDataSetChanged()
-                        Handler().postDelayed({errorSnackbar.show()},500)
+                        Handler().postDelayed({ errorSnackbar.show() }, 500)
                     }
                 }
             }
@@ -196,8 +202,6 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
             .withIcon(R.drawable.ic_drawer_mail)
         val signOutItem = PrimaryDrawerItem().withIdentifier(++identifier).withName("Sign out")
             .withIcon(R.drawable.ic_drawer_log_out)
-//        val contributorsItem = PrimaryDrawerItem().withIdentifier(++identifier).withName("Contributors")
-//            .withIcon(R.drawable.ic_drawer_info)
         drawer = DrawerBuilder()
             .withActivity(this)
             .withDisplayBelowStatusBar(false)
@@ -209,7 +213,6 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                 profileItem,
                 ordersItem,
                 contactUsItem,
-//                contributorsItem,
                 DividerDrawerItem(),
                 signOutItem
             )
@@ -220,9 +223,6 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                 if (ordersItem.identifier == drawerItem.identifier) {
                     startActivity(Intent(applicationContext, OrdersActivity::class.java))
                 }
-//                if (contributorsItem.identifier == drawerItem.identifier) {
-//                    startActivity(Intent(applicationContext, ContributorsActivity::class.java))
-//                }
                 if (contactUsItem.identifier == drawerItem.identifier) {
                     startActivity(Intent(applicationContext, ContactUsActivity::class.java))
                 }
@@ -232,10 +232,13 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         .setMessage("Are you sure want to sign out?")
                         .setPositiveButton("Yes") { _, _ ->
 
-                            //TODO FireBase Notificstions
-//                            FcmUtils.unsubscribeFromTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
-//                            FirebaseAuth.getInstance().signOut()
+                            //TODO FireBase Notifications
+                            FcmUtils.unsubscribeFromTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
+                            val name = preferencesHelper.name
+                            val email = preferencesHelper.email
                             preferencesHelper.clearPreferences()
+                            preferencesHelper.name = name
+                            preferencesHelper.email = email
                             startActivity(Intent(applicationContext, LoginActivity::class.java))
                             finish()
                         }
@@ -310,9 +313,9 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                 R.id.image_menu -> {
                     drawer.openDrawer()
                 }
-//                R.id.text_search -> {
-//                    startActivity(Intent(applicationContext, SearchActivity::class.java))
-//                }
+                R.id.text_search -> {
+                    startActivity(Intent(applicationContext, SearchActivity::class.java))
+                }
             }
         }
     }
@@ -362,7 +365,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         }
         var temp = preferencesHelper.name
         if(temp==null){
-            temp="praneki"
+            temp="Sir"
         }
         var tempList = temp?.split(" ")
         message += if(!tempList.isNullOrEmpty()){
@@ -382,13 +385,13 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                 totalItems += 1
             }
             if (totalItems == 1) {
-                cartSnackBar!!.setText("₹$total | $totalItems item")
+                cartSnackBar.setText("₹$total | $totalItems item")
             } else {
-                cartSnackBar!!.setText("₹$total | $totalItems items")
+                cartSnackBar.setText("₹$total | $totalItems items")
             }
-            cartSnackBar!!.show()
+            cartSnackBar.show()
         } else {
-            cartSnackBar!!.dismiss()
+            cartSnackBar.dismiss()
         }
     }
 
@@ -399,6 +402,5 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         val textDrawable = TextDrawable.builder()
             .buildRound(letter, ContextCompat.getColor(this, R.color.accent))
         headerLayout.imageProfilePic.setImageDrawable(textDrawable)
-        //binding.imageMenu.setImageDrawable(textDrawable);
     }
 }

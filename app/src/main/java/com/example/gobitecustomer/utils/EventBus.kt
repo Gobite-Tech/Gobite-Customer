@@ -3,24 +3,25 @@ package com.example.gobitecustomer.utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 
 object EventBus {
-    @ExperimentalCoroutinesApi
-    val bus: BroadcastChannel<Any> = BroadcastChannel(1)
+    val flow = MutableSharedFlow<Any>(replay = 1)
 
-    @ExperimentalCoroutinesApi
-    fun send(o: Any) {
-        CoroutineScope(Dispatchers.IO).launch {
-            bus.send(o)
+    fun send(event: Any) {
+        GlobalScope.launch(Dispatchers.IO) {
+            flow.emit(event)
         }
     }
 
-//    @ExperimentalCoroutinesApi
-//    inline fun <reified T> asChannel(): ReceiveChannel<T> {
-//        return bus.openSubscription().filter { it is T }.map { it as T }
-//    }
+    inline fun <reified T> asFlow(): Flow<T> {
+        return flow.filterIsInstance<T>()
+    }
 }

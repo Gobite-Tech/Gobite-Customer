@@ -61,11 +61,11 @@ object AppConstants {
     const val NOTIFICATION_MESSAGE = "NOTIFICATION_MESSAGE"
 
     //NEW ORDER STATUS
-    const val ORDER_STATUS_CREATED = " CREATED"
-    const val ORDER_STATUS_ACCEPTED = " ACCEPTED"
-    const val ORDER_STATUS_CANCELLED = " CANCELLED"
-    const val ORDER_STATUS_BEING_PREPARED = "BEING_PREPARED"
-    const val ORDER_STATUS_PREPARED = "PREPARED"
+    const val ORDER_STATUS_CREATED = "created"
+    const val ORDER_STATUS_PLACED = "placed"
+    const val ORDER_STATUS_CANCELLED = "cancelled"
+    const val ORDER_STATUS_BEING_PREPARED = "being_prepared"
+    const val ORDER_STATUS_PREPARED = "prepared"
 
 
 }

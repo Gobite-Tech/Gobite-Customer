@@ -2,10 +2,9 @@ package com.example.gobitecustomer.ui.order
 
 import android.app.ProgressDialog
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.core.content.ContextCompat
@@ -17,20 +16,18 @@ import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.Item
 import com.example.gobitecustomer.data.modelNew.ItemXX
-import com.example.gobitecustomer.data.modelNew.OrderItemListModel
+import com.example.gobitecustomer.data.modelNew.NotificationModel
 import com.example.gobitecustomer.data.modelNew.OrderX
 import com.example.gobitecustomer.data.modelNew.variantsItem
 import com.example.gobitecustomer.databinding.ActivityOrderDetailsBinding
 import com.example.gobitecustomer.ui.cart.CartActivity
+import com.example.gobitecustomer.ui.restaurant.RestaurantActivity
 import com.example.gobitecustomer.utils.AppConstants
 import com.example.gobitecustomer.utils.EventBus
 import com.example.gobitecustomer.utils.StatusHelper
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import com.hsalf.smileyrating.SmileyRating
-import com.squareup.picasso.Picasso
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +37,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.Exception
 import java.text.SimpleDateFormat
-import java.util.Date
 
 class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
 
@@ -64,7 +60,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
         initView()
         setListeners()
         setObservers()
-//        subscribeToOrderStatus()
+        subscribeToOrderStatus()
     }
 
     private fun getArgs() {
@@ -88,20 +84,26 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
         snackButton.setTextColor(ContextCompat.getColor(applicationContext, R.color.accent))
         setupShopRecyclerView()
         setupOrderStatusRecyclerView()
-        if (orderId.isNullOrEmpty()) {
-            updateUI()
-        }
+        updateUI()
+
     }
 
     private fun updateUI() {
-        binding.textShopName.text = order.shop_id.toString()
+
+        preferencesHelper.getShopList()?.forEach { shop ->
+            if (shop.id == order.shop_id) {
+                binding.textShopName.text = shop.name
+            }
+        }
         try {
-            val apiDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+            val apiDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             val appDateFormat = SimpleDateFormat("dd MMMM yyyy, hh:mm aaa")
             val date = apiDateFormat.parse(order.order_placed_time)
             val dateString = appDateFormat.format(date)
             binding.textOrderTime.text = dateString
+            Log.e("OrderDetailActivity", "Done parsing date - $dateString")
         } catch (e: Exception) {
+            Log.e("OrderDetailActivity", "Error parsing date - $e")
             e.printStackTrace()
         }
         //binding.textOrderPrice.text = "₹ " + order.transactionModel.orderModel.price.toInt().toString()
@@ -132,11 +134,9 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
 //        val orderStatusModel = order.orderStatusModel.lastOrNull()
         when (orderStatus) {
             AppConstants.ORDER_STATUS_PREPARED-> {
-                binding.textRate.visibility = View.VISIBLE
                 binding.textCancelReorder.visibility = View.VISIBLE
                 binding.textRate.isEnabled = true
                 binding.textCancelReorder.isEnabled = true
-                binding.textRate.text = "RATE FOOD"
                 binding.textCancelReorder.text = "REORDER"
             }
 
@@ -145,7 +145,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
                 binding.textCancelReorder.isEnabled = false
                 binding.textRate.visibility = View.VISIBLE
                 binding.textCancelReorder.visibility = View.GONE
-                binding.textRate.text = "RATE ORDER"
+                binding.textRate.text = "REORDER"
             }
 
             AppConstants.ORDER_STATUS_CREATED -> {
@@ -181,11 +181,12 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
 //        }else{
 //            binding.textRatingFeedback.visibility = View.GONE
 //        }
+
         when (orderStatus) {
             AppConstants.ORDER_STATUS_CREATED -> {
                 orderStatusList.clear()
                 orderStatusList.add(OrderStatus(isCurrent = true, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CREATED), is_updated = order.updated_at))
-                orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_ACCEPTED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PLACED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_BEING_PREPARED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED), is_updated = order.updated_at))
 
@@ -194,14 +195,14 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
             AppConstants.ORDER_STATUS_CANCELLED -> {
                 orderStatusList.clear()
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CREATED), is_updated = order.updated_at))
-                orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_ACCEPTED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PLACED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = true, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CANCELLED), is_updated = order.updated_at))
                 orderTimelineAdapter.notifyDataSetChanged()
             }
-            AppConstants.ORDER_STATUS_ACCEPTED -> {
+            AppConstants.ORDER_STATUS_PLACED -> {
                 orderStatusList.clear()
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CREATED), is_updated = order.updated_at))
-                orderStatusList.add(OrderStatus(isCurrent = true, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_ACCEPTED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = true, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PLACED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_BEING_PREPARED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED), is_updated = order.updated_at))
 
@@ -210,7 +211,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
             AppConstants.ORDER_STATUS_BEING_PREPARED -> {
                 orderStatusList.clear()
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CREATED), is_updated = order.updated_at))
-                orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_ACCEPTED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PLACED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = true, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_BEING_PREPARED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED), is_updated = order.updated_at))
 
@@ -219,13 +220,15 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
             AppConstants.ORDER_STATUS_PREPARED -> {
                 orderStatusList.clear()
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CREATED), is_updated = order.updated_at))
-                orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_ACCEPTED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PLACED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_BEING_PREPARED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = true, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED), is_updated = order.updated_at))
 
                 orderTimelineAdapter.notifyDataSetChanged()
             }
+
         }
+        Log.e("OrderDetailActivity", orderStatusList.toString())
     }
 
     private fun setListeners() {
@@ -352,7 +355,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
         var cartShop = ""
         val shopList = preferencesHelper.getShopList()
         if (shopList != null) {
-            for (i in shopList.shops) {
+            for (i in shopList) {
                 if (i.id == order.shop_id) {
                     cartShop = Gson().toJson(i)
                 }
@@ -403,9 +406,9 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
         }
         orderAdapter = OrderItemAdapter(applicationContext, orderList, object : OrderItemAdapter.OnItemClickListener {
             override fun onItemClick(item: ItemXX?, position: Int) {
-                //val intent = Intent(applicationContext, RestaurantActivity::class.java)
-                //intent.putExtra("shop", item)
-                //startActivity(intent)
+                val intent = Intent(applicationContext, RestaurantActivity::class.java)
+                intent.putExtra(AppConstants.SHOP, Gson().toJson(item))
+                startActivity(intent)
             }
         })
         binding.recyclerOrderItems.layoutManager = LinearLayoutManager(this@OrderDetailActivity, LinearLayoutManager.VERTICAL, false)
@@ -434,21 +437,21 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
         super.onResume()
     }
 
-//    @ExperimentalCoroutinesApi
-//    private fun subscribeToOrderStatus() {
-//        val subscription = EventBus.asChannel<NotificationModel>()
-//        CoroutineScope(Dispatchers.Main).launch {
-//            subscription.consumeEach {
-//                println("Received order status event")
-//                val payload = it.payload
-//                if (payload.has("orderId")) {
-//                    val orderItemId = payload.getInt("orderId")
-//                    if(order.transactionModel.orderModel.id.toInt()== orderItemId){
-//                        viewModel.getOrderById(orderItemId,true)
-//                    }
-//                }
-//            }
-//        }
-//    }
+    @ExperimentalCoroutinesApi
+    private fun subscribeToOrderStatus() {
+        val subscription = EventBus.asFlow<NotificationModel>()
+        CoroutineScope(Dispatchers.Main).launch {
+            subscription.collect {
+                println("Received order status event")
+                val payload = it.payload
+                if (payload.has("orderId")) {
+                    val orderItemId = payload.getString("orderId")
+                    if(order.id== orderItemId){
+                        viewModel.getOrderById(orderItemId,true)
+                    }
+                }
+            }
+        }
+    }
 
 }
