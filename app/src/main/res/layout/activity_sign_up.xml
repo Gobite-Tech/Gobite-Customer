@@ -88,7 +88,7 @@
                 android:paddingTop="8dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="8dp"
-                android:text="Select your campus"
+                android:text="IIT Kanpur"
                 android:textSize="16sp" />
         </LinearLayout>
 

@@ -38,7 +38,6 @@ class PaymentActivity : AppCompatActivity(),View.OnClickListener {
 
     private fun getArgs() {
         orderId = intent.getStringExtra(AppConstants.ORDER_ID)
-        token = intent.getStringExtra(AppConstants.TRANSACTION_TOKEN)
     }
 
     private fun initView() {

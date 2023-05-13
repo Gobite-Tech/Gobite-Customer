@@ -114,7 +114,7 @@ class CartActivity : AppCompatActivity() {
             }
         }
         errorSnackBar.setAction("Try again") {
-//            viewModel.verifyOrder(placeOrderRequest)
+            viewModel.verifyOrder(placeOrderRequest)
         }
 
         binding.textInfo.setOnClickListener {
@@ -154,7 +154,10 @@ class CartActivity : AppCompatActivity() {
                 Resource.Status.SUCCESS -> {
                     progressDialog.dismiss()
                     errorSnackBar.dismiss()
-//                    initiatePayment(it.data?.data?.transactionToken,it.data?.data?.orderId.toString())
+                    Toast.makeText(applicationContext, "Successfully Placed", Toast.LENGTH_SHORT).show()
+                    snackBar.dismiss()
+                    preferencesHelper.clearCartPreferences()
+                    initiatePayment(it.data?.data?.order?.id.toString())
                 }
 
                 Resource.Status.OFFLINE_ERROR -> {
@@ -180,8 +183,8 @@ class CartActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateShopUI() {
-//        Picasso.get().load(shop?.shopModel?.photoUrl).placeholder(R.drawable.ic_shop).into(binding.layoutShop.imageShop)
-//        Picasso.get().load(shop?.shopModel?.coverUrls?.get(0)).placeholder(R.drawable.shop_placeholder).into(binding.imageExpanded)
+        Picasso.get().load(shop?.coverurl).placeholder(R.drawable.ic_shop).into(binding.layoutShop.imageShop)
+        Picasso.get().load(shop?.icon).placeholder(R.drawable.shop_placeholder).into(binding.imageExpanded)
         binding.layoutShop.textShopName.text = shop?.name
 //        binding.layoutShop.textShopRating.text = shop?.ratingModel?.rating.toString()
         if (!preferencesHelper.cartShopInfo.isNullOrEmpty()) {
@@ -282,9 +285,8 @@ class CartActivity : AppCompatActivity() {
             return items
         }
 
-    private fun initiatePayment(token: String?, orderId: String) {
+    private fun initiatePayment(orderId: String) {
         val intent = Intent(applicationContext, PaymentActivity::class.java)
-        intent.putExtra(AppConstants.TRANSACTION_TOKEN, token)
         intent.putExtra(AppConstants.ORDER_ID, orderId)
         startActivity(intent)
         finish()

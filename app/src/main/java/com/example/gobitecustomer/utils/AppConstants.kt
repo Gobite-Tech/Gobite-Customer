@@ -66,6 +66,7 @@ object AppConstants {
     const val ORDER_STATUS_CANCELLED = "cancelled"
     const val ORDER_STATUS_BEING_PREPARED = "being_prepared"
     const val ORDER_STATUS_PREPARED = "prepared"
+    const val ORDER_STATUS_COMPLETED = "completed"
 
 
 }

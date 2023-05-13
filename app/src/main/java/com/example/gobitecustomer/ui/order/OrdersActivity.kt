@@ -170,7 +170,7 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
                                 }
                             }
                             }
-
+                        orderList.reverse()
                         orderAdapter.notifyDataSetChanged()
                         isFirstTime = false
                         //binding.appBarLayout.setExpanded(false, true)

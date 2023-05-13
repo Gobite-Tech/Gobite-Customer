@@ -33,8 +33,8 @@ interface CustomApi {
     @POST("/v2/order")
     suspend fun insertOrder(@Body placeOrderRequest: PlaceOrderRequest) : Response<VerifyOrderResponse>
 
-    @POST("/v2/order/{orderId}")
-    suspend fun placeOrder(@Path("orderId") orderId: String): Response<VerifyOrderResponse>
+    @PUT("/v2/order/{orderId}")
+    suspend fun placeOrder(@Path("orderId") orderId: String , @Body updateStatusModel: UpdateStatusModel): Response<VerifyOrderResponse>
 
     @GET("/v2/order")
     suspend fun getOrder() : Response<OrderItemListModel>
@@ -43,7 +43,7 @@ interface CustomApi {
     suspend fun getOrderById(@Path("orderId") orderId: String): Response<OrderItemByIDModel>
 
     @DELETE("/v2/order/{orderId}")
-    suspend fun cancelOrder(@Body OrderId: String): Response<String>
+    suspend fun cancelOrder(@Path("orderId") OrderId: String): Response<CancelOrderResponse>
 
 
 

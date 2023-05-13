@@ -1,10 +1,12 @@
 package com.example.gobitecustomer.ui.placeorder
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gobitecustomer.data.local.Resource
+import com.example.gobitecustomer.data.modelNew.UpdateStatusModel
 import com.example.gobitecustomer.data.modelNew.VerifyOrderResponse
 import com.example.gobitecustomer.data.retrofit.OrderRepository
 import kotlinx.coroutines.launch
@@ -17,11 +19,11 @@ class PlaceOrderViewModel(private val orderRepository: OrderRepository) : ViewMo
     val placeOrderStatus: LiveData<Resource<VerifyOrderResponse>>
         get() = placeOrder
 
-    fun placeOrder(orderId: String) {
+    fun placeOrder(orderId: String , updatestatus : UpdateStatusModel) {
         viewModelScope.launch {
             try {
                 placeOrder.value = Resource.loading()
-                val response = orderRepository.placeOrder(orderId)
+                val response = orderRepository.placeOrder(orderId, updatestatus)
                 if(response!=null){
                     if(response.isSuccessful){
                         placeOrder.value = Resource.success(response.body()!!)
@@ -30,7 +32,7 @@ class PlaceOrderViewModel(private val orderRepository: OrderRepository) : ViewMo
                     }
                 }
             } catch (e: Exception) {
-                println("place order failed ${e.message}")
+                Log.e("place order failed"," ${e.message}")
                 if (e is UnknownHostException) {
                     placeOrder.value = Resource.offlineError()
                 } else {

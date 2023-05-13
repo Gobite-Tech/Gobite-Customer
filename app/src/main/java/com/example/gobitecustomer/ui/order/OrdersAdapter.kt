@@ -28,7 +28,7 @@ class OrdersAdapter(private val orderList: ArrayList<OrderX>, private val listen
 
     class OrderViewHolder(var binding: ItemOrderBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(order: OrderX, position: Int, listener: OnItemClickListener) {
-            //Picasso.get().load(menuItem.photoUrl).into(binding.imageShop)
+//            Picasso.get().load(menuItem.photoUrl).into(binding.imageShop)
             binding.textShopName.text = order.shop_name
             var cnt = 0
             var price = 0.0
@@ -69,7 +69,7 @@ class OrdersAdapter(private val orderList: ArrayList<OrderX>, private val listen
 
             when (orderStatus) {
 
-                AppConstants.ORDER_STATUS_PREPARED, -> {
+                AppConstants.ORDER_STATUS_COMPLETED, -> {
                     binding.buttonTrackRate.text = "Completed"
                     binding.textOrderStatus.setCompoundDrawablesWithIntrinsicBounds(
                         binding.textOrderStatus.context.getDrawable(R.drawable.ic_checked),
@@ -79,7 +79,7 @@ class OrdersAdapter(private val orderList: ArrayList<OrderX>, private val listen
                 }
 
                 AppConstants.ORDER_STATUS_CANCELLED -> {
-                    binding.buttonTrackRate.text = "Ccancelled"
+                    binding.buttonTrackRate.text = "Cancelled"
                     binding.textOrderStatus.setCompoundDrawablesWithIntrinsicBounds(
                         binding.textOrderStatus.context.getDrawable(R.drawable.ic_cancelled),
                         null,
@@ -97,7 +97,7 @@ class OrdersAdapter(private val orderList: ArrayList<OrderX>, private val listen
                 }
 
             }
-            binding.layoutRoot.setOnClickListener { listener.onItemClick(order, position) }
+            binding.buttonTrackRate.setOnClickListener { listener.onItemClick(order, position) }
 
 //            Rate Order
 //            binding.buttonTrackRate.setOnClickListener {

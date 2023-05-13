@@ -21,6 +21,7 @@ import com.example.gobitecustomer.data.modelNew.OrderX
 import com.example.gobitecustomer.data.modelNew.variantsItem
 import com.example.gobitecustomer.databinding.ActivityOrderDetailsBinding
 import com.example.gobitecustomer.ui.cart.CartActivity
+import com.example.gobitecustomer.ui.payment.PaymentActivity
 import com.example.gobitecustomer.ui.restaurant.RestaurantActivity
 import com.example.gobitecustomer.utils.AppConstants
 import com.example.gobitecustomer.utils.EventBus
@@ -90,9 +91,11 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
 
     private fun updateUI() {
 
-        preferencesHelper.getShopList()?.forEach { shop ->
-            if (shop.id == order.shop_id) {
-                binding.textShopName.text = shop.name
+        if (orderId.isNullOrEmpty()){
+            preferencesHelper.getShopList()?.forEach { shop ->
+                if (shop.id == order.shop_id) {
+                    binding.textShopName.text = shop.name
+                }
             }
         }
         try {
@@ -114,7 +117,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
 //        binding.textOrderId.text = "#" + order.transactionModel.orderModel.id
 //        binding.textTransactionId.text = "#" + order.transactionModel.transactionId
         binding.textTotalPrice.text = "₹" + order.price.toInt().toString()
-        binding.textPaymentMode.text = "Paid via Cash"
+        binding.textPaymentMode.text = "Paid"
 //        if (!order.transactionModel.orderModel.cookingInfo.isNullOrEmpty()) {
 //            binding.textInfo.text = order.transactionModel.orderModel.cookingInfo
 //        } else {
@@ -133,31 +136,32 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
         val orderStatus = order.order_status
 //        val orderStatusModel = order.orderStatusModel.lastOrNull()
         when (orderStatus) {
-            AppConstants.ORDER_STATUS_PREPARED-> {
+            AppConstants.ORDER_STATUS_COMPLETED-> {
                 binding.textCancelReorder.visibility = View.VISIBLE
-                binding.textRate.isEnabled = true
+                binding.textPay.visibility = View.GONE
+                binding.textPay.isEnabled = false
                 binding.textCancelReorder.isEnabled = true
                 binding.textCancelReorder.text = "REORDER"
             }
 
             AppConstants.ORDER_STATUS_CANCELLED -> {
-                binding.textRate.isEnabled = true
-                binding.textCancelReorder.isEnabled = false
-                binding.textRate.visibility = View.VISIBLE
-                binding.textCancelReorder.visibility = View.GONE
-                binding.textRate.text = "REORDER"
+                binding.textPay.isEnabled = false
+                binding.textCancelReorder.isEnabled = true
+                binding.textPay.visibility = View.GONE
+                binding.textCancelReorder.visibility = View.VISIBLE
+                binding.textCancelReorder.text = "REORDER"
             }
 
             AppConstants.ORDER_STATUS_CREATED -> {
-                binding.textRate.visibility = View.GONE
-                binding.textRate.isEnabled = false
+                binding.textPay.visibility = View.VISIBLE
+                binding.textPay.isEnabled = true
                 binding.textCancelReorder.visibility = View.VISIBLE
                 binding.textCancelReorder.isEnabled = true
                 binding.textCancelReorder.text = "CANCEL"
             }
 
             else -> {
-                binding.textRate.visibility = View.GONE
+                binding.textPay.visibility = View.GONE
                 binding.textCancelReorder.visibility = View.GONE
             }
         }
@@ -189,6 +193,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PLACED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_BEING_PREPARED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_COMPLETED), is_updated = order.updated_at))
 
                 orderTimelineAdapter.notifyDataSetChanged()
             }
@@ -205,6 +210,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
                 orderStatusList.add(OrderStatus(isCurrent = true, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PLACED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_BEING_PREPARED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_COMPLETED), is_updated = order.updated_at))
 
                 orderTimelineAdapter.notifyDataSetChanged()
             }
@@ -214,6 +220,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PLACED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = true, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_BEING_PREPARED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_COMPLETED), is_updated = order.updated_at))
 
                 orderTimelineAdapter.notifyDataSetChanged()
             }
@@ -223,6 +230,18 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PLACED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_BEING_PREPARED), is_updated = order.updated_at))
                 orderStatusList.add(OrderStatus(isCurrent = true, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_COMPLETED), is_updated = order.updated_at))
+
+                orderTimelineAdapter.notifyDataSetChanged()
+            }
+
+            AppConstants.ORDER_STATUS_COMPLETED -> {
+                orderStatusList.clear()
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_CREATED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PLACED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_BEING_PREPARED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = false, isDone = true, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED), is_updated = order.updated_at))
+                orderStatusList.add(OrderStatus(isCurrent = true, isDone = false, name = StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_COMPLETED), is_updated = order.updated_at))
 
                 orderTimelineAdapter.notifyDataSetChanged()
             }
@@ -262,6 +281,12 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
 
             }
         }
+
+        binding.textPay.setOnClickListener {
+            val intent = Intent(this, PaymentActivity::class.java)
+            intent.putExtra("order_id", order.id)
+            startActivity(intent)
+        }
     }
 
     private fun setObservers() {
@@ -287,6 +312,11 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
                         }
                         binding.layoutContent.visibility = View.VISIBLE
                         binding.layoutShop.visibility = View.VISIBLE
+                        preferencesHelper.getShopList()?.forEach { shop ->
+                            if (shop.id == order.shop_id) {
+                                binding.textShopName.text = shop.name
+                            }
+                        }
                     }
                     Resource.Status.OFFLINE_ERROR -> {
                         progressDialog.dismiss()
@@ -366,7 +396,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
         order.items.forEach {
             cartList.add(
                 Item(
-                    id = it.id,
+                    id = it.item_id,
                     created_at = order.created_at,
                     quantity = it.quantity,
                     name = it.item_name,

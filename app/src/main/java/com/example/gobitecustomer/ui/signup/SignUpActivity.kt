@@ -21,8 +21,6 @@ class SignUpActivity : AppCompatActivity() {
     private val viewModel by viewModel<SignUpViewModel>()
     private val preferencesHelper: PreferencesHelper by inject()
     private lateinit var progressDialog: ProgressDialog
-//    private var places: ArrayList<PlaceModel> = ArrayList()
-//    private var selectedPlace: PlaceModel? = null
     private var number: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -131,6 +129,7 @@ class SignUpActivity : AppCompatActivity() {
                         progressDialog.dismiss()
                         if (resource.data != null) {
                             Toast.makeText(applicationContext, "Registration Successful! Login Now", Toast.LENGTH_SHORT).show()
+                            preferencesHelper.oauthId = null
                             startActivity(Intent(applicationContext, LoginActivity::class.java))
                             finish()
                         } else {
@@ -150,7 +149,7 @@ class SignUpActivity : AppCompatActivity() {
                         }
                     }
                     Resource.Status.LOADING -> {
-                        progressDialog.setMessage("Logging in...")
+                        progressDialog.setMessage("Registering...")
                         progressDialog.show()
                     }
 

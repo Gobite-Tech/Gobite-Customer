@@ -589,7 +589,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/text_rate"
+                        android:id="@+id/text_pay"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -598,12 +598,12 @@
                         android:fontFamily="@font/open_sans_bold"
                         android:gravity="center"
                         android:padding="16dp"
-                        android:text="RATE FOOD"
+                        android:text="PAY NOW"
                         android:textAllCaps="true"
                         android:textColor="@android:color/white"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/text_cancel_reorder"
                         app:layout_constraintHorizontal_bias="1.0"
@@ -629,7 +629,7 @@
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/text_rate"
+                        app:layout_constraintStart_toEndOf="@+id/text_pay"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

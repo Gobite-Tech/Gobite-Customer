@@ -36,10 +36,8 @@ import com.example.gobitecustomer.ui.restaurant.RestaurantActivity
 import com.example.gobitecustomer.ui.search.SearchActivity
 import com.example.gobitecustomer.utils.AppConstants
 import com.example.gobitecustomer.utils.FcmUtils
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -262,12 +260,12 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         snackButton.background = null
         snackButton.setTextColor(ContextCompat.getColor(applicationContext, R.color.accent))
 
-        val spinner: Spinner=binding.spinner
-        val items = resources.getStringArray(R.array.campus)
+//        val spinner: Spinner=binding.spinner
+//        val items = resources.getStringArray(R.array.campus)
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+//        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        spinner.adapter = adapter
 
 
         binding.imageMenu.setOnClickListener(this)

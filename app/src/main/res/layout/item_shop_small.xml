@@ -28,7 +28,7 @@
 				android:layout_margin="16dp"
 				android:background="#f2f2f2"
 				android:scaleType="centerCrop"
-				android:visibility="gone" />
+				android:visibility="visible" />
 
 			<LinearLayout
 				android:layout_width="match_parent"

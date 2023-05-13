@@ -217,7 +217,7 @@
                     android:id="@+id/text_campus_name"
                     android:paddingEnd="8dp"
                     android:paddingBottom="8dp"
-                    android:text="SSN College"
+                    android:text="IIT Kanpur"
                     android:textSize="16sp" />
             </LinearLayout>
 

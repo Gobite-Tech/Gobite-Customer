@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
+import com.example.gobitecustomer.data.modelNew.UpdateStatusModel
 import com.example.gobitecustomer.databinding.ActivityPlaceOrderBinding
 import com.example.gobitecustomer.ui.order.OrderDetailActivity
 import com.example.gobitecustomer.ui.home.HomeActivity
@@ -34,7 +35,7 @@ class PlaceOrderActivity : AppCompatActivity() {
         setListener()
         setObservers()
         orderId?.let {
-            viewModel.placeOrder(it)
+            viewModel.placeOrder(it , UpdateStatusModel("placed"))
         } ?: run {
             binding.animationView.loop(false)
             binding.animationView.setAnimation("order_failed_animation.json")

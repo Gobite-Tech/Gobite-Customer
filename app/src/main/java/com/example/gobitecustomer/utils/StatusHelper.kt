@@ -3,6 +3,7 @@ package com.example.gobitecustomer.utils
 import com.example.gobitecustomer.utils.AppConstants.ORDER_STATUS_PLACED
 import com.example.gobitecustomer.utils.AppConstants.ORDER_STATUS_BEING_PREPARED
 import com.example.gobitecustomer.utils.AppConstants.ORDER_STATUS_CANCELLED
+import com.example.gobitecustomer.utils.AppConstants.ORDER_STATUS_COMPLETED
 import com.example.gobitecustomer.utils.AppConstants.ORDER_STATUS_CREATED
 import com.example.gobitecustomer.utils.AppConstants.ORDER_STATUS_PREPARED
 
@@ -11,17 +12,11 @@ object StatusHelper{
     fun getMessageDetail(status: String?): String{
         return when(status){
             "Pending" -> getStatusDetailedMessage(ORDER_STATUS_CREATED)
-            "Transaction failed"  -> getStatusDetailedMessage(ORDER_STATUS_CANCELLED)
+            "Cancelled"  -> getStatusDetailedMessage(ORDER_STATUS_CANCELLED)
             "Placed"  -> getStatusDetailedMessage(ORDER_STATUS_PLACED)
-            "Cancelled by you"  -> getStatusDetailedMessage(ORDER_STATUS_CANCELLED)
-            "Accepted"  -> getStatusDetailedMessage(ORDER_STATUS_PLACED)
-            "Cancelled by shop"  -> getStatusDetailedMessage(ORDER_STATUS_CANCELLED)
-            "Ready"  -> getStatusDetailedMessage(ORDER_STATUS_CANCELLED)
-//            "Out for delivery"  -> getStatusDetailedMessage(ORDER_STATUS_OUT_FOR_DELIVERY)
-//            "Completed"  -> getStatusDetailedMessage(ORDER_STATUS_COMPLETED)
-//            "Delivered"  -> getStatusDetailedMessage(ORDER_STATUS_DELIVERED)
-//            "Refund initiated"  -> getStatusDetailedMessage(ORDER_STATUS_REFUND_INITIATED)
-//            "Refunded"  -> getStatusDetailedMessage(ORDER_STATUS_REFUND_COMPLETED)
+            "Prepared"  -> getStatusDetailedMessage(ORDER_STATUS_PREPARED)
+            "Completed"  -> getStatusDetailedMessage(ORDER_STATUS_COMPLETED)
+            "Being Prepared"  -> getStatusDetailedMessage(ORDER_STATUS_BEING_PREPARED)
             else -> status.toString()
         }
     }
@@ -29,10 +24,10 @@ object StatusHelper{
         return when(status){
             ORDER_STATUS_CREATED -> "Pending"
             ORDER_STATUS_PLACED -> "Placed"
-            ORDER_STATUS_CANCELLED -> "Cancelled by you"
-            ORDER_STATUS_PLACED -> "Accepted"
-            ORDER_STATUS_CANCELLED -> "Cancelled by shop"
-            ORDER_STATUS_PREPARED -> "Ready"
+            ORDER_STATUS_CANCELLED -> "Cancelled"
+            ORDER_STATUS_PREPARED -> "Prepared"
+            ORDER_STATUS_COMPLETED -> "Completed"
+            ORDER_STATUS_BEING_PREPARED -> "Being Prepared"
             else -> status.toString()
         }
     }
@@ -43,6 +38,7 @@ object StatusHelper{
             ORDER_STATUS_PLACED -> "Order has been successfully placed. Waiting for restaurant response"
             ORDER_STATUS_CANCELLED -> "Order Cancelled"
             ORDER_STATUS_PREPARED -> "Your order is ready."
+            ORDER_STATUS_COMPLETED -> "Order completed"
             else -> status
         }
     }

@@ -9,6 +9,7 @@ import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.OrderItemByIDModel
 import com.example.gobitecustomer.data.modelNew.OrderItemListModel
 import com.example.gobitecustomer.data.modelNew.OrderX
+import com.example.gobitecustomer.data.modelNew.UpdateStatusModel
 import com.example.gobitecustomer.data.retrofit.OrderRepository
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
@@ -54,7 +55,11 @@ class OrderViewModel(private val orderRepository: OrderRepository) : ViewModel()
                 performFetchOrders.value = Resource.loading()
                 val response = orderRepository.getOrder()
                 if (response.isSuccessful) {
-                    performFetchOrders.value = Resource.success(response.body()?.data?.orders!!)
+                    if (response.body()?.data?.orders?.size!! > 0) {
+                        performFetchOrders.value = Resource.success(response.body()?.data?.orders!!)
+                    } else {
+                        performFetchOrders.value = Resource.empty()
+                    }
                 } else {
                     performFetchOrders.value = Resource.empty()
                 }
@@ -106,9 +111,9 @@ class OrderViewModel(private val orderRepository: OrderRepository) : ViewModel()
         viewModelScope.launch {
             try {
                 cancelOrder.value = Resource.loading()
-                val response = orderRepository.cancelOrder(orderId)
+                val response = orderRepository.placeOrder(orderId , UpdateStatusModel("cancelled"))
                 if (response.isSuccessful) {
-                    cancelOrder.value = Resource.success(response.body()!!)
+                    cancelOrder.value = Resource.success("Order Removed")
                 } else {
                     cancelOrder.value = Resource.error(null, response.message())
                 }

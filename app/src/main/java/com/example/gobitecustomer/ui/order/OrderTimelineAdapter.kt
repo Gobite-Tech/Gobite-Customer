@@ -69,6 +69,7 @@ class OrderTimelineAdapter(private val context: Context, private val orderStatus
                         binding.textStatus.setTextSize(TypedValue.COMPLEX_UNIT_PX, binding.textStatus.context.resources.getDimension(R.dimen.status_normal_size))
                         binding.textStatus.setTextColor(ContextCompat.getColor(binding.textStatus.context, android.R.color.black))
                         binding.textTime.setTextColor(ContextCompat.getColor(binding.textStatus.context, android.R.color.tab_indicator_text))
+                        binding.textTime.text = orderStatus.is_updated
                     }
                     StatusHelper.getStatusMessage(AppConstants.ORDER_STATUS_PREPARED) -> {
                         binding.textTime.visibility = View.VISIBLE
@@ -83,6 +84,7 @@ class OrderTimelineAdapter(private val context: Context, private val orderStatus
                         binding.textStatus.setTextSize(TypedValue.COMPLEX_UNIT_PX, binding.textStatus.context.resources.getDimension(R.dimen.status_normal_size))
                         binding.textStatus.setTextColor(ContextCompat.getColor(binding.textStatus.context,android.R.color.black))
                         binding.textTime.setTextColor(ContextCompat.getColor(binding.textStatus.context,android.R.color.tab_indicator_text))
+                        binding.textTime.text = orderStatus.is_updated
                     }
                     else -> {
                         binding.textTime.visibility = View.VISIBLE
@@ -97,6 +99,7 @@ class OrderTimelineAdapter(private val context: Context, private val orderStatus
                         binding.textStatus.setTextSize(TypedValue.COMPLEX_UNIT_PX, binding.textStatus.context.resources.getDimension(R.dimen.status_normal_size))
                         binding.textStatus.setTextColor(ContextCompat.getColor(binding.textStatus.context, android.R.color.black))
                         binding.textTime.setTextColor(ContextCompat.getColor(binding.textStatus.context, android.R.color.tab_indicator_text))
+                        binding.textTime.text = orderStatus.is_updated
                     }
                 }
             } else {

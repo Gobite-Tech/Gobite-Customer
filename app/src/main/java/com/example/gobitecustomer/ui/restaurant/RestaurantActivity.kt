@@ -27,6 +27,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.squareup.picasso.Picasso
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -49,7 +50,7 @@ class RestaurantActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRestaurantBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+        setContentView(binding.root)
 
         getArgs()
         initView()
@@ -63,10 +64,16 @@ class RestaurantActivity : AppCompatActivity() {
             )
         }
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            shop?.let {
+                viewModel.getMenu(shop?.id.toString())
+            }
+        }
 
         binding.imageCall.setOnClickListener {
-            //TODO - Implement Mobile No of shops
-            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "8965231478", null))
+
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:${shop?.mobile}")
             startActivity(intent)
         }
     }
@@ -144,13 +151,6 @@ class RestaurantActivity : AppCompatActivity() {
                 }
             }
         })
-//        val openingTime = viewModel.getTime(shop?.shopModel?.openingTime)
-//        val closingTime = viewModel.getTime(shop?.shopModel?.closingTime)
-//        val currentTime = Date()
-//        isShopOpen = currentTime.before(closingTime) && currentTime.after(openingTime)
-//        if(isShopOpen){
-//            isShopOpen = shop?.configurationModel?.isOrderTaken == 1
-//        }
         setupMenuRecyclerView()
         updateShopUI()
     }
@@ -178,7 +178,6 @@ class RestaurantActivity : AppCompatActivity() {
                             foodItemList.add(item)
                         }
                     }
-                    Toast.makeText(applicationContext, "${foodItemList}", Toast.LENGTH_SHORT).show()
                     if (cartList.size > 0) {
                         if (cartList[0].shop_id == shop?.id) {
                             var i = 0
@@ -373,7 +372,7 @@ class RestaurantActivity : AppCompatActivity() {
 
 
         //Code Commented Due to unavailable fields in response
-//        if (shop?.configurationModel?.isOrderTaken == 1) {
+        if (shop?.open_now == true) {
 //            if (shop?.configurationModel?.isDeliveryAvailable == 1) {
 //                //supportActionBar?.subtitle = "Open now"
 //                //binding.textPickupOnly.visibility = View.GONE
@@ -381,15 +380,14 @@ class RestaurantActivity : AppCompatActivity() {
 //            } else {
         binding.textPickupOnly.text = "Pick up only"
         binding.textPickupOnly.visibility = View.VISIBLE
-//            }
-//        } else {
-//            cartSnackBar.dismiss()
-//            closedSnackBar.setText("Not taking orders")
-//            closedSnackBar.duration = Snackbar.LENGTH_LONG
-//            closedSnackBar.show()
-        //binding.textPickupOnly.text = "Not taking orders"
-        //binding.textPickupOnly.visibility = View.VISIBLE
-//        }
+            } else {
+            cartSnackBar.dismiss()
+            closedSnackBar.setText("Not taking orders")
+            closedSnackBar.duration = Snackbar.LENGTH_LONG
+            closedSnackBar.show()
+        binding.textPickupOnly.text = "Not taking orders"
+        binding.textPickupOnly.visibility = View.VISIBLE
+        }
     }
 
     override fun onResume() {
