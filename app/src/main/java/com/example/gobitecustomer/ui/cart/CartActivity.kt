@@ -183,8 +183,8 @@ class CartActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateShopUI() {
-        Picasso.get().load(shop?.coverurl).placeholder(R.drawable.ic_shop).into(binding.layoutShop.imageShop)
-        Picasso.get().load(shop?.icon).placeholder(R.drawable.shop_placeholder).into(binding.imageExpanded)
+        Picasso.get().load(shop?.icon).placeholder(R.drawable.ic_shop).into(binding.layoutShop.imageShop)
+        Picasso.get().load(shop?.coverurl).placeholder(R.drawable.shop_placeholder).into(binding.imageExpanded)
         binding.layoutShop.textShopName.text = shop?.name
 //        binding.layoutShop.textShopRating.text = shop?.ratingModel?.rating.toString()
         if (!preferencesHelper.cartShopInfo.isNullOrEmpty()) {

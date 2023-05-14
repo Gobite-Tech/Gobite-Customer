@@ -113,12 +113,6 @@ class ShopAdapter(
                 val filter = ColorMatrixColorFilter(colorMatrix)
                 binding.imageShop.colorFilter = filter
             }
-
-//            if(shop.ratingModel.rating==0.0){
-//                binding.textShopRating.text = "No ratings yet"
-//            }else {
-//                binding.textShopRating.text = shop.ratingModel.rating.toString()+" ("+shop.ratingModel.userCount+")"
-//            }
             binding.layoutRoot.setOnClickListener { listener.onItemClick(shop, position) }
 
         }

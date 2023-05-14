@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_marginStart="16dp">
 
             <ImageView
                 android:layout_width="150dp"
@@ -27,7 +27,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_bold"
                 android:gravity="center|start"
                 android:paddingTop="3dp"
@@ -35,6 +34,14 @@
                 android:textAppearance="@style/AppbarTitle"
                 android:textColor="@android:color/black"
                 android:textSize="32sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="center|start"
+                android:text="Pre order food and Win reward with friends"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -45,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorAccent"
+        android:background="#FF4081"
         android:orientation="vertical"
         android:padding="16dp">
 

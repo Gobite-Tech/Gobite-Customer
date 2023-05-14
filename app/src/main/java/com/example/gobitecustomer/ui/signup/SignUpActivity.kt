@@ -173,6 +173,7 @@ class SignUpActivity : AppCompatActivity() {
             .setTitle("Cancel process?")
             .setMessage("Are you sure want to cancel the registration process?")
             .setPositiveButton("Yes") { dialog, which ->
+                preferencesHelper.oauthId = null
                 super.onBackPressed()
                 dialog.dismiss()
             }

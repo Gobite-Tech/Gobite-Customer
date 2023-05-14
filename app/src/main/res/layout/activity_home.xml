@@ -35,7 +35,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorAccent"
+                        android:background="@drawable/gradient_homr"
                         android:orientation="vertical"
                         android:padding="10dp">
 
@@ -67,14 +67,14 @@
                                 android:layout_weight="2" />
                             <ImageView
                                 android:id="@+id/image_menu"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="34dp"
+                                android:layout_height="34dp"
                                 android:layout_gravity="center"
                                 android:layout_marginEnd="16dp"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/ic_drawer_user"
                                 android:visibility="visible"
-                                app:tint="@android:color/white" />
+                                app:tint="#252424" />
 
 
                         </LinearLayout>
@@ -87,7 +87,7 @@
                             android:gravity="center|start"
                             android:paddingTop="3dp"
                             android:textAppearance="@style/AppbarTitle"
-                            android:textColor="@android:color/white"
+                            android:textColor="#131313"
                             tools:text="Hey,\nPranjal" />
 
 
@@ -100,23 +100,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:background="#F3F0F0"
                     android:padding="8dp">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:gravity="center|start"
-                        android:text="@string/label_outlets"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
                         android:id="@+id/text_search"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="8dp"
