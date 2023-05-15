@@ -20,7 +20,6 @@
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:contentScrim="?attr/colorPrimary"
                 app:expandedTitleGravity="top"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
@@ -119,6 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:background="@drawable/gradient_homr"
                 android:padding="16dp">
 
                 <com.google.android.material.card.MaterialCardView

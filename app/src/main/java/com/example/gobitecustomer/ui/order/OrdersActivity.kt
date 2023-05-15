@@ -64,7 +64,7 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
             isLastPage = false
             getOrders()
         }
-        subscribeToOrderStatus()
+//        subscribeToOrderStatus()
     }
 
     private fun initView() {
@@ -312,17 +312,17 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
     }
 
 
-    private fun subscribeToOrderStatus() {
-        val subscription = EventBus.asFlow<NotificationModel>()
-        CoroutineScope(Dispatchers.Main).launch {
-            subscription.collect{
-                println("Received order status event")
-                page = 1
-                isFirstTime = true
-                isLoading = false
-                isLastPage = false
-                getOrders()
-            }
-        }
-    }
+//    private fun subscribeToOrderStatus() {
+//        val subscription = EventBus.asFlow<NotificationModel>()
+//        CoroutineScope(Dispatchers.Main).launch {
+//            subscription.collect{
+//                println("Received order status event")
+//                page = 1
+//                isFirstTime = true
+//                isLoading = false
+//                isLastPage = false
+//                getOrders()
+//            }
+//        }
+//    }
 }

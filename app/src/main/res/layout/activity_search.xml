@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/layout_search"
-                android:background="@color/white20"
+                android:background="@drawable/gradient_homr"
                 android:padding="16dp">
 
                 <androidx.appcompat.widget.SearchView

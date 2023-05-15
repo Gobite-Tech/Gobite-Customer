@@ -7,12 +7,14 @@ import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.modelNew.Item
 import com.example.gobitecustomer.databinding.ItemFoodBinding
+import com.squareup.picasso.Picasso
 
 class FoodAdapter(private val context: Context, private val foodItemList: List<Item>, private val listener: OnItemClickListener,
                   private val isShopOpen: Boolean = true) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
@@ -39,10 +41,10 @@ class FoodAdapter(private val context: Context, private val foodItemList: List<I
             } else {
                 binding.textCategory.visibility = View.VISIBLE
             }
-//            Picasso.get().load(food.photoUrl).placeholder(R.drawable.ic_food).into(binding.imageFood)
             binding.textFoodName.text = food.name
             binding.textFoodDesc.text = food.category
             binding.textFoodPrice.text = "₹" + food.variants[0].price.toString()
+            Picasso.get().load(food.icon).placeholder(R.drawable.ic_food).into(binding.imageFood)
             binding.layoutRoot.setOnClickListener { listener.onItemClick(food, position) }
 //            if (food.isVeg == 1) {
 //                binding.imageVeg.setImageDrawable(binding.root.context.getDrawable(R.drawable.ic_veg))

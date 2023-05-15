@@ -9,6 +9,7 @@ import android.os.Handler
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -251,6 +252,7 @@ class RestaurantActivity : AppCompatActivity() {
         }
 
     private fun updateShopUI() {
+        Picasso.get().load(shop?.coverurl).placeholder(R.drawable.gobite_rescover).into(binding.imageRes)
         binding.toolbarLayout.title = shop?.name
         //TODO - implement Rating Model
         binding.textShopRating.text = "4.5"

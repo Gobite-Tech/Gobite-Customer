@@ -47,6 +47,7 @@ class ShopAdapter(
             Picasso.get().load(shop.icon).placeholder(R.drawable.ic_shop).into(binding.imageShop)
             binding.textShopName.text = shop.name
             var isShopOpen = shop.open_now
+            binding.tvTimeShop.text = shop.avg_serve_time.toString() + " mins"
 //            var sdf = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
 //            var sdf2 = SimpleDateFormat("hh:mm a", Locale.getDefault())
 //            var openingTimeString = sdf2.format(sdf.parse(shop.name))
