@@ -12,6 +12,7 @@ import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.LoginRequestNew
 import com.example.gobitecustomer.data.modelNew.OTPRequest
 import com.example.gobitecustomer.databinding.ActivityLoginBinding
+import com.example.gobitecustomer.ui.home.HomeActivity
 import com.example.gobitecustomer.ui.signup.SignUpActivity
 import org.koin.android.ext.android.inject
 import java.lang.NullPointerException
@@ -31,10 +32,10 @@ class LoginActivity : AppCompatActivity() {
         initView()
         setListener()
         setObservers()
-//        if (!preferencesHelper.oauthId.isNullOrEmpty() && preferencesHelper.userId != -1) {
-//            startActivity(Intent(applicationContext, HomeActivity::class.java))
-//            finish()
-//        }
+        if (!preferencesHelper.oauthId.isNullOrEmpty()) {
+            startActivity(Intent(applicationContext, HomeActivity::class.java))
+            finish()
+        }
     }
 
     private fun initView() {
@@ -178,8 +179,8 @@ class LoginActivity : AppCompatActivity() {
                             preferencesHelper.jwtToken = loginresult.data.token
 
                             Toast.makeText(applicationContext,"Welcome!!",Toast.LENGTH_SHORT).show()
-//                            startActivity(Intent(applicationContext, HomeActivity::class.java))
-//                            finish()
+                            startActivity(Intent(applicationContext, HomeActivity::class.java))
+                            finish()
 
                             progressDialog.dismiss()
 

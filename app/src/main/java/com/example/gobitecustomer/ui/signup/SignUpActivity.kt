@@ -6,10 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
-import com.example.gobitecustomer.data.model.PlaceModel
 import com.example.gobitecustomer.data.modelNew.SignUpRequestNew
 import com.example.gobitecustomer.databinding.ActivitySignUpBinding
 import com.example.gobitecustomer.ui.login.LoginActivity
@@ -23,8 +21,6 @@ class SignUpActivity : AppCompatActivity() {
     private val viewModel by viewModel<SignUpViewModel>()
     private val preferencesHelper: PreferencesHelper by inject()
     private lateinit var progressDialog: ProgressDialog
-    private var places: ArrayList<PlaceModel> = ArrayList()
-    private var selectedPlace: PlaceModel? = null
     private var number: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,6 +129,7 @@ class SignUpActivity : AppCompatActivity() {
                         progressDialog.dismiss()
                         if (resource.data != null) {
                             Toast.makeText(applicationContext, "Registration Successful! Login Now", Toast.LENGTH_SHORT).show()
+                            preferencesHelper.oauthId = null
                             startActivity(Intent(applicationContext, LoginActivity::class.java))
                             finish()
                         } else {
@@ -152,7 +149,7 @@ class SignUpActivity : AppCompatActivity() {
                         }
                     }
                     Resource.Status.LOADING -> {
-                        progressDialog.setMessage("Logging in...")
+                        progressDialog.setMessage("Registering...")
                         progressDialog.show()
                     }
 
@@ -176,6 +173,7 @@ class SignUpActivity : AppCompatActivity() {
             .setTitle("Cancel process?")
             .setMessage("Are you sure want to cancel the registration process?")
             .setPositiveButton("Yes") { dialog, which ->
+                preferencesHelper.oauthId = null
                 super.onBackPressed()
                 dialog.dismiss()
             }
