@@ -29,6 +29,7 @@ import com.example.gobitecustomer.utils.StatusHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -95,6 +96,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
             preferencesHelper.getShopList()?.forEach { shop ->
                 if (shop.id == order.shop_id) {
                     binding.textShopName.text = shop.name
+                    Picasso.get().load(shop.icon).placeholder(R.drawable.ic_shop).into(binding.imageShop)
                 }
             }
         }

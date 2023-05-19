@@ -110,7 +110,11 @@ class CartActivity : AppCompatActivity() {
             if (cart.isEmpty()) {
                 Toast.makeText(applicationContext, "Cart is empty", Toast.LENGTH_SHORT).show()
             } else {
-                showOrderConfirmation()
+                if(shop?.open_now == true){
+                    showOrderConfirmation()
+                }else{
+                    Toast.makeText(applicationContext, "Not taking orders", Toast.LENGTH_SHORT).show()
+                }
             }
         }
         errorSnackBar.setAction("Try again") {

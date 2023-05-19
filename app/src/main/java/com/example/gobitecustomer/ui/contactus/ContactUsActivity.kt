@@ -35,13 +35,13 @@ class ContactUsActivity : AppCompatActivity() {
 
         binding.callUs.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse("tel:6378228784")
+            intent.data = Uri.parse("tel:9131527933")
             startActivity(intent)
         }
 
         binding.mailUs.setOnClickListener{
             val intent = Intent(Intent.ACTION_SENDTO)
-            intent.data = Uri.parse("mailto:ashishgaur77@gmail.com")
+            intent.data = Uri.parse("mailto:ashishgour773@gmail.com")
             startActivity(intent)
         }
 

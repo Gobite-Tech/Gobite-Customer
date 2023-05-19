@@ -101,7 +101,7 @@
             android:text="@string/label_register"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:backgroundTint="#FF4081" />
+            app:backgroundTint="#E1245B" />
 
 
     </LinearLayout>

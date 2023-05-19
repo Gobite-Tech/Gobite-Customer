@@ -44,7 +44,8 @@ class RestaurantActivity : AppCompatActivity() {
     var foodItemList: ArrayList<Item> = ArrayList()
     var cartList: ArrayList<Item> = ArrayList()
     var shop: shops? = null
-//    var itemId = -1
+
+    //    var itemId = -1
     private lateinit var cartSnackBar: Snackbar
     private lateinit var errorSnackBar: Snackbar
     private lateinit var closedSnackBar: Snackbar
@@ -57,12 +58,14 @@ class RestaurantActivity : AppCompatActivity() {
         initView()
         setObservers()
         cartSnackBar.setAction("View Cart") {
+
             startActivity(
                 Intent(
                     applicationContext,
                     CartActivity::class.java
                 )
             )
+
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
@@ -86,6 +89,7 @@ class RestaurantActivity : AppCompatActivity() {
         shop = Gson().fromJson(temp, shops::class.java)
 //        itemId = intent.getIntExtra(AppConstants.ITEM_ID, -1)
     }
+
     var isShopOpen = true
 
     private fun initView() {
@@ -94,12 +98,14 @@ class RestaurantActivity : AppCompatActivity() {
         cartSnackBar = Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
         cartSnackBar.setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.green))
         errorSnackBar = Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
-        val snackButton: Button = errorSnackBar.view.findViewById(com.mikepenz.materialize.R.id.snackbar_action)
+        val snackButton: Button =
+            errorSnackBar.view.findViewById(com.mikepenz.materialize.R.id.snackbar_action)
         snackButton.setCompoundDrawables(null, null, null, null)
         snackButton.background = null
         snackButton.setTextColor(ContextCompat.getColor(applicationContext, R.color.accent))
         closedSnackBar = Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
-        val closedSnackButton: Button = closedSnackBar.view.findViewById(com.mikepenz.materialize.R.id.snackbar_action)
+        val closedSnackButton: Button =
+            closedSnackBar.view.findViewById(com.mikepenz.materialize.R.id.snackbar_action)
         closedSnackButton.setCompoundDrawables(null, null, null, null)
         closedSnackButton.background = null
         closedSnackButton.setTextColor(ContextCompat.getColor(applicationContext, R.color.accent))
@@ -166,6 +172,7 @@ class RestaurantActivity : AppCompatActivity() {
                     }
                     errorSnackBar.dismiss()
                 }
+
                 Resource.Status.SUCCESS -> {
                     binding.swipeRefreshLayout.isRefreshing = false
                     cartList.clear()
@@ -202,6 +209,7 @@ class RestaurantActivity : AppCompatActivity() {
                     errorSnackBar.dismiss()
 //                    highlightRedirectedItem()
                 }
+
                 Resource.Status.EMPTY -> {
                     binding.swipeRefreshLayout.isRefreshing = false
                     binding.layoutStates.visibility = View.GONE
@@ -215,6 +223,7 @@ class RestaurantActivity : AppCompatActivity() {
                     errorSnackBar.setText("No food items available in this shop")
                     Handler().postDelayed({ errorSnackBar.show() }, 500)
                 }
+
                 Resource.Status.OFFLINE_ERROR -> {
                     binding.swipeRefreshLayout.isRefreshing = false
                     binding.layoutStates.visibility = View.GONE
@@ -226,6 +235,7 @@ class RestaurantActivity : AppCompatActivity() {
                     errorSnackBar.setText("No Internet Connection")
                     Handler().postDelayed({ errorSnackBar.show() }, 500)
                 }
+
                 Resource.Status.ERROR -> {
                     binding.swipeRefreshLayout.isRefreshing = false
                     binding.layoutStates.visibility = View.GONE
@@ -252,7 +262,8 @@ class RestaurantActivity : AppCompatActivity() {
         }
 
     private fun updateShopUI() {
-        Picasso.get().load(shop?.coverurl).placeholder(R.drawable.gobite_rescover).into(binding.imageRes)
+//        Picasso.get().load(shop?.coverurl).placeholder(R.drawable.gobite_rescover)
+//            .into(binding.imageRes)
         binding.toolbarLayout.title = shop?.name
         //TODO - implement Rating Model
         binding.textShopRating.text = "4.5"
@@ -366,7 +377,7 @@ class RestaurantActivity : AppCompatActivity() {
                 cartSnackBar.setText("₹$total | $totalItems items")
             }
 //            if (shop?.configurationModel?.isOrderTaken == 1)   //Code Commented Due to unavailable fields in response
-                cartSnackBar.show()
+            cartSnackBar.show()
         } else {
             preferencesHelper.clearCartPreferences()
             cartSnackBar.dismiss()
@@ -380,15 +391,15 @@ class RestaurantActivity : AppCompatActivity() {
 //                //binding.textPickupOnly.visibility = View.GONE
 //                closedSnackBar.dismiss()
 //            } else {
-        binding.textPickupOnly.text = "Pick up only"
-        binding.textPickupOnly.visibility = View.VISIBLE
-            } else {
+            binding.textPickupOnly.text = "Pick up only"
+            binding.textPickupOnly.visibility = View.VISIBLE
+        } else {
             cartSnackBar.dismiss()
             closedSnackBar.setText("Not taking orders")
             closedSnackBar.duration = Snackbar.LENGTH_LONG
             closedSnackBar.show()
-        binding.textPickupOnly.text = "Not taking orders"
-        binding.textPickupOnly.visibility = View.VISIBLE
+            binding.textPickupOnly.text = "Not taking orders"
+            binding.textPickupOnly.visibility = View.VISIBLE
         }
     }
 
@@ -408,6 +419,7 @@ class RestaurantActivity : AppCompatActivity() {
                 onBackPressed()
                 true
             }
+
             else -> {
                 super.onOptionsItemSelected(item)
             }

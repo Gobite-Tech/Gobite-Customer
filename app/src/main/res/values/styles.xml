@@ -9,6 +9,7 @@
 		<item name="snackbarStyle">@style/snackbar_style</item>
 		<item name="snackbarButtonStyle">@style/snackbar_button</item>
 		<item name="snackbarTextViewStyle">@style/snackbar_text</item>
+		<item name="android:statusBarColor">@color/colorPrimaryDark</item>
 		<item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
 	</style>
 
@@ -17,6 +18,7 @@
 		<item name="colorPrimary">@color/colorPrimary</item>
 		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 		<item name="colorAccent">@color/colorAccent</item>
+		<item name="android:statusBarColor">@color/colorPrimaryDark</item>
 		<item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
 	</style>
 
@@ -25,6 +27,7 @@
 		<item name="fontFamily">@font/poppins_semibold</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:color">#000000</item>
+		<item name="android:statusBarColor">@color/colorPrimaryDark</item>
 		<item name="android:textSize">24sp</item>
 	</style>
 
@@ -32,6 +35,7 @@
 		<item name="fontFamily">@font/poppins_semibold</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:color">#ffffff</item>
+		<item name="android:statusBarColor">@color/colorPrimaryDark</item>
 		<item name="android:textSize">24sp</item>
 	</style>
 
@@ -39,6 +43,7 @@
 		<item name="fontFamily">@font/poppins_semibold</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:color">#000000</item>
+		<item name="android:statusBarColor">@color/colorPrimaryDark</item>
 		<item name="android:textSize">20sp</item>
 	</style>
 

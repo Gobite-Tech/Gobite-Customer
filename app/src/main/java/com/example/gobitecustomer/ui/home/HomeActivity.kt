@@ -72,7 +72,9 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         setupMaterialDrawer()
         setObservers()
         viewModel.getShops()
-        cartSnackBar.setAction("View Cart") { startActivity(Intent(applicationContext, CartActivity::class.java)) }
+        cartSnackBar.setAction("View Cart") {
+            startActivity(Intent(applicationContext, CartActivity::class.java))
+        }
         errorSnackbar.setAction("Try again") {
             viewModel.getShops()
         }
@@ -145,7 +147,13 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         progressDialog.dismiss()
                         errorSnackbar.dismiss()
                         shopList.clear()
-                        it.data?.let { it1 -> shopList = it1.data.shops }
+                        it.data?.let { it1 ->
+                            for (shop in it1.data.shops){
+                                if(shop.name.isNotEmpty() && shop.opening_time.isNotEmpty()){
+                                    shopList.add(shop)
+                                }
+                            }
+                        }
                         setupShopRecyclerView()
                         preferencesHelper.shopList = Gson().toJson(shopList)
                         updateCartUI()
@@ -357,9 +365,9 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         val timeOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         var message = ""
         when (timeOfDay) {
-            in 0..11 -> message = "hey,\n"
-            in 12..15 -> message = "hey,\n"
-            in 16..23 -> message = "hey,\n"
+            in 0..11 -> message = "Hey,\n"
+            in 12..15 -> message = "Hey,\n"
+            in 16..23 -> message = "Hey,\n"
         }
         var temp = preferencesHelper.name
         if(temp==null){
