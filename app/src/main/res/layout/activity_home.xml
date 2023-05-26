@@ -48,18 +48,18 @@
                                 android:layout_height="40dp"
                                 android:layout_weight="0.3"
                                 android:src="@drawable/ic_location"
-                                app:tint="@android:color/white" />
+                                app:tint="#252424" />
+
                             <TextView
                                 android:id="@+id/place"
-                                android:text="IIT Kanpur"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:textColor="#252424"
-                                android:textStyle="bold"
-                                android:textSize="20sp"
                                 android:layout_gravity="center"
-                                />
+                                android:gravity="center"
+                                android:text="IIT Kanpur"
+                                android:textColor="#252424"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
 
                             <View
                                 android:layout_width="0dp"
@@ -87,7 +87,7 @@
                             android:gravity="center|start"
                             android:paddingTop="3dp"
                             android:textAppearance="@style/AppbarTitle"
-                            android:textColor="#131313"
+                            android:textColor="#F4F2F2"
                             tools:text="Hey,\nPranjal" />
 
 

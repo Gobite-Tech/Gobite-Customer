@@ -2,8 +2,6 @@ package com.example.gobitecustomer.utils
 
 object AppConstants {
 
-    const val BASE_URL = "http://192.168.0.102/"
-
     //SHARED PREFERENCE NAMES
     const val LOGIN_PREFS = "login_prefs"
     const val CUSTOMER_PREFS = "customer_prefs"
@@ -67,6 +65,5 @@ object AppConstants {
     const val ORDER_STATUS_BEING_PREPARED = "being_prepared"
     const val ORDER_STATUS_PREPARED = "prepared"
     const val ORDER_STATUS_COMPLETED = "completed"
-
 
 }

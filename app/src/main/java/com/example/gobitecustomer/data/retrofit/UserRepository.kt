@@ -13,4 +13,5 @@ class UserRepository(retrofit: Retrofit) {
     suspend fun registerUser(signUpRequestNew: SignUpRequestNew) = services.registerUser(signUpRequestNew)
 
     suspend fun updateUser(userRequest: UpdateUserRequest) = services.updateUser(userRequest)
+    suspend fun updateUser(token : String ,userRequest: UpdateUserRequest) = services.updateUser(token ,userRequest)
 }

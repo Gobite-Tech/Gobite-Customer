@@ -19,6 +19,9 @@ interface CustomApi {
     @PUT("/v2/user_profile/modify")
     suspend fun updateUser(@Body userRequest: UpdateUserRequest) : Response<UserUpdateResponse>
 
+    @PUT("/v2/user_profile/modify")
+    suspend fun updateUser(@Header("Authorization") token : String ,@Body userRequest: UpdateUserRequest) : Response<UserUpdateResponse>
+
 
     // SHOP REPO
     @GET("/v2/shop/list")

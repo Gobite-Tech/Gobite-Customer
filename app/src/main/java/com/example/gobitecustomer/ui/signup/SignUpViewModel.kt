@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.SignUpRequestNew
 import com.example.gobitecustomer.data.modelNew.SignupResult
+import com.example.gobitecustomer.data.modelNew.UpdateUserRequest
+import com.example.gobitecustomer.data.modelNew.UserUpdateResponse
 import com.example.gobitecustomer.data.retrofit.UserRepository
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
@@ -115,6 +117,35 @@ class SignUpViewModel(private val userRepository: UserRepository
                     performSignUp.value = Resource.offlineError()
                 } else {
                     performSignUp.value = Resource.error(e)
+                }
+            }
+        }
+    }
+
+    private val performUpdate = MutableLiveData<Resource<UserUpdateResponse>>()
+    val performUpdateStatus: MutableLiveData<Resource<UserUpdateResponse>>
+        get() = performUpdate
+
+    fun updateUserDetails(token : String ,updateUserRequest: UpdateUserRequest) {
+        viewModelScope.launch {
+            try {
+                performUpdate.value = Resource.loading()
+                val response = userRepository.updateUser(token ,updateUserRequest)
+                if(response.isSuccessful) {
+                    if (response.body()!=null) {
+                        performUpdate.value = Resource.success(response.body()!!)
+                    } else {
+                        performUpdate.value = Resource.error(null, message = "Something went wrong")
+                    }
+                }else{
+                    performUpdate.value = Resource.error(null, message = response.body()?.message)
+                }
+            } catch (e: Exception) {
+                println("update user details failed ${e.message}")
+                if (e is UnknownHostException) {
+                    performUpdate.value = Resource.offlineError()
+                } else {
+                    performUpdate.value = Resource.error(e)
                 }
             }
         }

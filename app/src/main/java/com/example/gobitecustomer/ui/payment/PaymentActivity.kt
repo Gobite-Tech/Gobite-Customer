@@ -34,6 +34,11 @@ class PaymentActivity : AppCompatActivity(),View.OnClickListener {
         setObservers()
         setupPaymentModes()
 
+        val intent = Intent(applicationContext, PlaceOrderActivity::class.java)
+        intent.putExtra(AppConstants.ORDER_ID,orderId)
+        startActivity(intent)
+        finish()
+
     }
 
     private fun getArgs() {

@@ -5,7 +5,7 @@ import com.example.gobitecustomer.data.local.PreferencesHelper
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AuthInterceptor(val context: Context, val preferences: PreferencesHelper) :
+class   AuthInterceptor(val context: Context, val preferences: PreferencesHelper) :
     Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {

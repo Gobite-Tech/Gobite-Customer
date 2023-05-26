@@ -52,7 +52,6 @@ class SearchActivity : AppCompatActivity() ,View.OnClickListener {
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 adapterList.clear()
-                Toast.makeText(applicationContext , "Submitted Text : $query", Toast.LENGTH_SHORT).show()
                 if (query != null) {
                     Log.e("SF req send" , "SF")
                     searchOutlets(query)

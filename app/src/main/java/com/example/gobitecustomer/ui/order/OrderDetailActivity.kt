@@ -119,7 +119,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
 //        binding.textOrderId.text = "#" + order.transactionModel.orderModel.id
 //        binding.textTransactionId.text = "#" + order.transactionModel.transactionId
         binding.textTotalPrice.text = "₹" + order.price.toInt().toString()
-        binding.textPaymentMode.text = "Paid"
+        binding.textPaymentMode.text = "To Be Paid"
 //        if (!order.transactionModel.orderModel.cookingInfo.isNullOrEmpty()) {
 //            binding.textInfo.text = order.transactionModel.orderModel.cookingInfo
 //        } else {

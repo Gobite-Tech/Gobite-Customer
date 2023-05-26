@@ -201,6 +201,7 @@ class RestaurantActivity : AppCompatActivity() {
                             }
                         }
                     }
+                    foodItemList.sortBy { it.category }
                     foodAdapter.notifyDataSetChanged()
                     binding.layoutStates.visibility = View.GONE
                     binding.animationView.visibility = View.GONE

@@ -149,11 +149,12 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         shopList.clear()
                         it.data?.let { it1 ->
                             for (shop in it1.data.shops){
-                                if(shop.name.isNotEmpty() && shop.opening_time.isNotEmpty()){
+                                if(shop.name != null && shop.opening_time != null){
                                     shopList.add(shop)
                                 }
                             }
                         }
+                        Log.e("All shops" , shopList.toString())
                         setupShopRecyclerView()
                         preferencesHelper.shopList = Gson().toJson(shopList)
                         updateCartUI()
