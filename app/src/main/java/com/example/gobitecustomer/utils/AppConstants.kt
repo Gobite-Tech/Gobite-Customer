@@ -2,6 +2,8 @@ package com.example.gobitecustomer.utils
 
 object AppConstants {
 
+    const val MESSAGE_URL = "https://api.enablex.io/sms/v1/messages/"
+
     //SHARED PREFERENCE NAMES
     const val LOGIN_PREFS = "login_prefs"
     const val CUSTOMER_PREFS = "customer_prefs"
@@ -19,6 +21,7 @@ object AppConstants {
     const val CUSTOMER_PLACE = "place"
     const val SHOP_LIST = "shop_list"
     const val CUSTOMER_MOBILE = "mobile"
+    const val CUSTOMER_OTP = "otp"
     const val CUSTOMER_ROLE = "role"
     const val CART = "cart"
     const val CART_SHOP = "cart_shop"

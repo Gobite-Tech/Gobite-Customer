@@ -23,6 +23,7 @@ val networkModule = module {
     single { PlaceRepository(get()) }
     single { OrderRepository(get()) }
     single { ItemRepository(get()) }
+//    single { provideRetrofitTwo() }
 }
 
 fun provideRetrofit(
@@ -50,3 +51,9 @@ fun provideOkHttpClient(
     }
     return builder.build()
 }
+
+//fun provideRetrofitTwo() : Retrofit {
+//    return Retrofit.Builder()
+//        .baseUrl(AppConstants.BASE_URL)
+//        .addConverterFactory(GsonConverterFactory.create()).build()
+//}

@@ -11,6 +11,8 @@ import com.example.gobitecustomer.data.modelNew.LoginResponse
 import com.example.gobitecustomer.data.retrofit.UserRepository
 import com.example.gobitecustomer.data.modelNew.OTP
 import com.example.gobitecustomer.data.modelNew.OTPRequest
+import com.example.gobitecustomer.data.modelNew.sendOtpModel
+import com.example.gobitecustomer.data.modelNew.sendOtpResult
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
@@ -83,5 +85,26 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
         }
     }
 
+    //Send OTP
+    private val performSendOTP = MutableLiveData<Resource<sendOtpResult>>()
+    val performSendOTPStatus: LiveData<Resource<sendOtpResult>>
+        get() = performSendOTP
+
+    fun sendOTP(sendOtpModel: sendOtpModel) {
+        viewModelScope.launch {
+            try {
+                performSendOTP.value = Resource.loading()
+                val response = userRepository.sendOTP(sendOtpModel)
+                performSendOTP.value = Resource.success(response.body()!!)
+            } catch (e: Exception) {
+                println("login failed ${e.message}")
+                if (e is UnknownHostException) {
+                    performSendOTP.value = Resource.offlineError()
+                } else {
+                    performSendOTP.value = Resource.error(e)
+                }
+            }
+        }
+    }
 
 }
