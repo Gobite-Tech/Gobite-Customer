@@ -19,6 +19,7 @@ interface AppPreferencesHelper {
     val tempMobile: String?
     val tempOauthId: String?
     val jwtToken : String?
+    val shopMobile : String?
 
     fun saveUser(userId: Int?, name: String?, email: String?, mobile: String?, role: String?, oauthId: String?, place: String?)
 

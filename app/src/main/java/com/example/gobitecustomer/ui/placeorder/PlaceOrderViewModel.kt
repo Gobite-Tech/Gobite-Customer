@@ -8,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.UpdateStatusModel
 import com.example.gobitecustomer.data.modelNew.VerifyOrderResponse
+import com.example.gobitecustomer.data.modelNew.sendOtpModel
+import com.example.gobitecustomer.data.retrofit.AuthInterceptor
 import com.example.gobitecustomer.data.retrofit.OrderRepository
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
-class PlaceOrderViewModel(private val orderRepository: OrderRepository) : ViewModel() {
+class PlaceOrderViewModel(private val orderRepository: OrderRepository, private var authInterceptor: AuthInterceptor) : ViewModel() {
 
     //place order
     private val placeOrder = MutableLiveData<Resource<VerifyOrderResponse>>()
@@ -40,6 +42,27 @@ class PlaceOrderViewModel(private val orderRepository: OrderRepository) : ViewMo
                 }
             }
         }
+    }
+
+    fun sendOTP(sendOtpModel: sendOtpModel) {
+        viewModelScope.launch {
+            try{
+                val response = orderRepository.sendOTP(sendOtpModel)
+                if(response.isSuccessful){
+                    Log.e("Seller Notified"," ${response.body()}")
+                }else{
+                    Log.e("Notification Failed"," ${response.message()}")
+                }
+            }catch (e: Exception){
+                Log.e("Notification Failed"," ${e.message}")
+            }
+
+            change(0)
+        }
+    }
+
+    fun change(num : Int){
+        authInterceptor.headerchange(num)
     }
 
 }

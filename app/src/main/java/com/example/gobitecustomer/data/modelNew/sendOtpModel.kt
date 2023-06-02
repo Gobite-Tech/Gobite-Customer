@@ -9,5 +9,6 @@ data class sendOtpModel(
     val template_id: String,
     val to: List<String>,
     val type: String,
-    val type_details: String
+    val type_details: String,
+    val validity: String
 )

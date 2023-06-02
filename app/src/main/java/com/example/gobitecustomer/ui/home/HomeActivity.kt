@@ -71,6 +71,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         initView()
         setupMaterialDrawer()
         setObservers()
+        viewModel.change(0)
         viewModel.getShops()
         cartSnackBar.setAction("View Cart") {
             startActivity(Intent(applicationContext, CartActivity::class.java))
@@ -246,6 +247,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                             preferencesHelper.clearPreferences()
                             preferencesHelper.name = name
                             preferencesHelper.email = email
+                            viewModel.change(1)
                             startActivity(Intent(applicationContext, LoginActivity::class.java))
                             finish()
                         }

@@ -10,6 +10,7 @@ import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
 import com.example.gobitecustomer.data.modelNew.UpdateStatusModel
+import com.example.gobitecustomer.data.modelNew.sendOtpModel
 import com.example.gobitecustomer.databinding.ActivityPlaceOrderBinding
 import com.example.gobitecustomer.ui.order.OrderDetailActivity
 import com.example.gobitecustomer.ui.home.HomeActivity
@@ -84,6 +85,8 @@ class PlaceOrderActivity : AppCompatActivity() {
                     binding.textPlaceOrderStatus.text = "Order placed successfully"
                     isOrderPlaced = true
                     isOrderFailed = false
+                    viewModel.change(1)
+                    sendOtp(preferencesHelper.mobile.toString())
                     preferencesHelper.clearCartPreferences()
                     binding.layoutRedirection.visibility = View.VISIBLE
                 }
@@ -112,5 +115,21 @@ class PlaceOrderActivity : AppCompatActivity() {
             startActivity(Intent(applicationContext, HomeActivity::class.java))
             finish()
         }
+    }
+
+    private fun sendOtp(number: String) {
+        val sendOtpModel = sendOtpModel(
+            from = "Blueve",
+            to = ArrayList<String>().apply { add(number) },
+            type = "sms",
+            type_details = "",
+            data_coding = "plain",
+            flash_message = false,
+            campaign_id = "5622674",
+            template_id = "767168465",
+            validity = "30"
+        )
+
+        viewModel.sendOTP(sendOtpModel)
     }
 }

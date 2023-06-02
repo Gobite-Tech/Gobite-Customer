@@ -292,6 +292,7 @@ class CartActivity : AppCompatActivity() {
     private fun initiatePayment(orderId: String) {
         val intent = Intent(applicationContext, PaymentActivity::class.java)
         intent.putExtra(AppConstants.ORDER_ID, orderId)
+        preferencesHelper.shopMobile = shop?.mobile
         startActivity(intent)
         finish()
     }

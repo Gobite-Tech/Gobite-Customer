@@ -13,7 +13,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { HomeViewModel(get()) }
+    viewModel { HomeViewModel(get() , get()) }
     viewModel { LoginViewModel(get()) }
 //    viewModel { OtpViewModel(get()) }
     viewModel { RestaurantViewModel(get()) }
@@ -23,6 +23,6 @@ val viewModelModule = module {
     }
     viewModel { OrderViewModel(get()) }
     viewModel { CartViewModel(get()) }
-    viewModel { PlaceOrderViewModel(get()) }
+    viewModel { PlaceOrderViewModel(get(),get()) }
     viewModel { PaymentViewModel(get()) }
 }

@@ -22,7 +22,8 @@ interface CustomApi {
     @PUT("/v2/user_profile/modify")
     suspend fun updateUser(@Header("Authorization") token : String ,@Body userRequest: UpdateUserRequest) : Response<UserUpdateResponse>
 
-    suspend fun sendOTP(@Url url : String, @Body sendOtpModel: sendOtpModel) : Response<sendOtpResult>
+    @POST
+    suspend fun sendOTP(@Url url : String ,@Body sendOtpModel: sendOtpModel) : Response<sendOtpResult>
 
 
     // SHOP REPO

@@ -57,19 +57,16 @@
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
-            <TextView
+            <EditText
                 android:id="@+id/edit_otp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
-                android:cursorVisible="false"
-                android:digits="1234567890"
                 android:fontFamily="@font/poppins_semibold"
                 android:inputType="number"
                 android:maxLength="6"
                 android:textColor="@color/colorAccent"
-                android:textIsSelectable="false"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -86,7 +83,8 @@
                 android:paddingTop="3dp"
                 android:text="@string/label_resend_otp"
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:enabled="false"/>
 
 
             <com.google.android.material.button.MaterialButton

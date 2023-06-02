@@ -96,6 +96,7 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
             preferencesHelper.getShopList()?.forEach { shop ->
                 if (shop.id == order.shop_id) {
                     binding.textShopName.text = shop.name
+                    preferencesHelper.shopMobile = shop.mobile
                     Picasso.get().load(shop.icon).placeholder(R.drawable.ic_shop).into(binding.imageShop)
                 }
             }

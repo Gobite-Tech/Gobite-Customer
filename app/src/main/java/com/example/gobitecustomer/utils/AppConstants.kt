@@ -3,6 +3,8 @@ package com.example.gobitecustomer.utils
 object AppConstants {
 
     const val MESSAGE_URL = "https://api.enablex.io/sms/v1/messages/"
+    const val APP_ID = "647741de9ae9574fe2081258"
+    const val APP_KEY = "apaBeAuAenaEyza4ejuZaSuUujyhasy6aDeN"
 
     //SHARED PREFERENCE NAMES
     const val LOGIN_PREFS = "login_prefs"
@@ -35,6 +37,7 @@ object AppConstants {
     const val TEMP_MOBILE = "temp_mobile"
     const val TEMP_OAUTHID = "temp_oauthid"
     const val JWT_TOKEN = "Jwt_Token"
+    const val SHOP_MOBILE = "shop_mobile"
 
     //ORDER STATUS
 //    const val ORDER_STATUS_PENDING = "PENDING"

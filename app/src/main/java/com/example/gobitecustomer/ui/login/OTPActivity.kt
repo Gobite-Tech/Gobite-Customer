@@ -41,7 +41,6 @@ class OTPActivity : AppCompatActivity() {
     private lateinit var progressDialog: ProgressDialog
     private var number: String? = null
     private var otp = ""
-    private var storedVerificationId = ""
     lateinit var countDownTimer: CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +50,9 @@ class OTPActivity : AppCompatActivity() {
         initView()
         setListener()
         setObservers()
-        number?.let { sendOtp(it) }
+        number?.let {
+            countDownTimer.start()
+            sendOtp(it) }
     }
 
     private fun getArgs() {
@@ -75,7 +76,9 @@ class OTPActivity : AppCompatActivity() {
                     .isNotEmpty() && binding.editOtp.text.toString().length == 6
             ) {
                 if(binding.editOtp.text.toString() == otp){
-//                    viewModel.getOTP(OTPRequest(number!!))
+                    viewModel.getOTP(OTPRequest("LOGIN",preferencesHelper.mobile!!))
+                }else{
+                    Toast.makeText(this,"Invalid OTP",Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -83,7 +86,7 @@ class OTPActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        countDownTimer = object : CountDownTimer(10000, 1000) {
+        countDownTimer = object : CountDownTimer(30000, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
                 binding.textResendOtp.setText("Resend OTP (" + millisUntilFinished / 1000 + ")")
@@ -93,6 +96,12 @@ class OTPActivity : AppCompatActivity() {
                 binding.textResendOtp.setText("Resend OTP")
                 binding.textResendOtp.isEnabled = true
             }
+        }
+
+        binding.textResendOtp.setOnClickListener {
+            countDownTimer.start()
+            binding.textResendOtp.isEnabled = false
+            number?.let { it1 -> sendOtp(it1) }
         }
     }
 
@@ -105,7 +114,8 @@ class OTPActivity : AppCompatActivity() {
             data_coding = "plain",
             flash_message = false,
             campaign_id = "5622674",
-            template_id = "883641850"
+            template_id = "883641850",
+            validity = "30"
         )
 
         viewModel.sendOTP(sendOtpModel)
@@ -127,12 +137,12 @@ class OTPActivity : AppCompatActivity() {
 
 
         //sendOTP
-        viewModel.performGetOTPStatus.observe(this, Observer { resource ->
+        viewModel.performSendOTPStatus.observe(this, Observer { resource ->
             if (resource != null) {
                 when (resource.status) {
                     Resource.Status.SUCCESS -> {
                         progressDialog.dismiss()
-                        if (resource.data != null) {
+                        if (resource.data != null && resource.data.result == 0) {
                             Toast.makeText(this, "OTP send successfully", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(
@@ -282,7 +292,6 @@ class OTPActivity : AppCompatActivity() {
                             )
 
                             preferencesHelper.jwtToken = loginresult.data.token
-
                             Toast.makeText(applicationContext,"Welcome!!",Toast.LENGTH_SHORT).show()
                             startActivity(Intent(applicationContext, HomeActivity::class.java))
                             finish()
