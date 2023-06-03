@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gobitecustomer.data.local.Resource
+import com.example.gobitecustomer.data.modelNew.EnablexOTPModel
 import com.example.gobitecustomer.data.modelNew.LoginRequestNew
 import com.example.gobitecustomer.data.modelNew.LoginResponse
 import com.example.gobitecustomer.data.retrofit.UserRepository
@@ -93,7 +94,7 @@ class LoginViewModel(private val userRepository: UserRepository ) : ViewModel() 
     val performSendOTPStatus: LiveData<Resource<sendOtpResult>>
         get() = performSendOTP
 
-    fun sendOTP(sendOtpModel: sendOtpModel) {
+    fun sendOTP(sendOtpModel: EnablexOTPModel) {
         viewModelScope.launch {
             try {
                 performSendOTP.value = Resource.loading()

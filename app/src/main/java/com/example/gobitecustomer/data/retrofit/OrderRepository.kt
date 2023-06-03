@@ -16,5 +16,5 @@ class OrderRepository(retrofit: Retrofit) {
 
     suspend fun cancelOrder(orderId: String) = services.cancelOrder(orderId)
 
-    suspend fun sendOTP(sendOtpModel: sendOtpModel) = services.sendOTP(AppConstants.MESSAGE_URL, sendOtpModel)
+    suspend fun sendOTP(sendOtpModel: sendOtpModel) = services.sendSellerOTP(AppConstants.MESSAGE_URL, sendOtpModel)
 }

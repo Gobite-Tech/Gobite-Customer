@@ -4,6 +4,7 @@ import android.animation.LayoutTransition
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.example.gobitecustomer.R
@@ -86,7 +87,7 @@ class PlaceOrderActivity : AppCompatActivity() {
                     isOrderPlaced = true
                     isOrderFailed = false
                     viewModel.change(1)
-                    sendOtp(preferencesHelper.mobile.toString())
+                    sendOtp("+91"+preferencesHelper.shopMobile.toString())
                     preferencesHelper.clearCartPreferences()
                     binding.layoutRedirection.visibility = View.VISIBLE
                 }
@@ -118,18 +119,19 @@ class PlaceOrderActivity : AppCompatActivity() {
     }
 
     private fun sendOtp(number: String) {
+        val numb = ArrayList<String>()
+        numb.add(number)
+        numb.add("+916378228784")
         val sendOtpModel = sendOtpModel(
             from = "Blueve",
-            to = ArrayList<String>().apply { add(number) },
+            to = numb,
             type = "sms",
-            type_details = "",
-            data_coding = "plain",
-            flash_message = false,
+            data_coding = "auto",
             campaign_id = "5622674",
-            template_id = "767168465",
+            template_id = "832647617",
             validity = "30"
         )
-
+        Log.e("ye sms gaya seller ko" , sendOtpModel.toString())
         viewModel.sendOTP(sendOtpModel)
     }
 }

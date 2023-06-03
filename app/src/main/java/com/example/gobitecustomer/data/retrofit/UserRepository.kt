@@ -1,5 +1,6 @@
 package com.example.gobitecustomer.data.retrofit
 
+import com.example.gobitecustomer.data.modelNew.EnablexOTPModel
 import com.example.gobitecustomer.data.modelNew.LoginRequestNew
 import com.example.gobitecustomer.data.modelNew.OTPRequest
 import com.example.gobitecustomer.data.modelNew.SignUpRequestNew
@@ -18,5 +19,5 @@ class UserRepository(retrofit: Retrofit) {
     suspend fun updateUser(userRequest: UpdateUserRequest) = services.updateUser(userRequest)
     suspend fun updateUser(token : String ,userRequest: UpdateUserRequest) = services.updateUser(token ,userRequest)
 
-    suspend fun sendOTP(sendOtpModel: sendOtpModel) = services.sendOTP(AppConstants.MESSAGE_URL,sendOtpModel)
+    suspend fun sendOTP(sendOtpModel: EnablexOTPModel) = services.sendOTP(AppConstants.MESSAGE_URL,sendOtpModel)
 }

@@ -14,6 +14,8 @@ import com.daimajia.androidanimations.library.YoYo
 import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
+import com.example.gobitecustomer.data.modelNew.DataXXXX
+import com.example.gobitecustomer.data.modelNew.EnablexOTPModel
 import com.example.gobitecustomer.data.modelNew.LoginRequestNew
 import com.example.gobitecustomer.data.modelNew.OTPRequest
 import com.example.gobitecustomer.data.modelNew.sendOtpModel
@@ -106,19 +108,18 @@ class OTPActivity : AppCompatActivity() {
     }
 
     private fun sendOtp(number: String) {
-        val sendOtpModel = sendOtpModel(
+        val enablexotp = EnablexOTPModel(
             from = "Blueve",
             to = ArrayList<String>().apply { add(number) },
             type = "sms",
-            type_details = "",
             data_coding = "plain",
-            flash_message = false,
             campaign_id = "5622674",
-            template_id = "883641850",
-            validity = "30"
+            template_id = "499224922",
+            validity = "30",
+            data = DataXXXX(var1 = otp)
         )
 
-        viewModel.sendOTP(sendOtpModel)
+        viewModel.sendOTP(enablexotp)
     }
 
     override fun onBackPressed() {

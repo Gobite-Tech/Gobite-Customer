@@ -23,7 +23,7 @@ interface CustomApi {
     suspend fun updateUser(@Header("Authorization") token : String ,@Body userRequest: UpdateUserRequest) : Response<UserUpdateResponse>
 
     @POST
-    suspend fun sendOTP(@Url url : String ,@Body sendOtpModel: sendOtpModel) : Response<sendOtpResult>
+    suspend fun sendOTP(@Url url : String ,@Body sendOtpModel: EnablexOTPModel) : Response<sendOtpResult>
 
 
     // SHOP REPO
@@ -50,6 +50,9 @@ interface CustomApi {
 
     @DELETE("/v2/order/{orderId}")
     suspend fun cancelOrder(@Path("orderId") OrderId: String): Response<CancelOrderResponse>
+
+    @POST
+    suspend fun sendSellerOTP(@Url url : String ,@Body sendOtpModel: sendOtpModel) : Response<sendOtpResult>
 
 
 
