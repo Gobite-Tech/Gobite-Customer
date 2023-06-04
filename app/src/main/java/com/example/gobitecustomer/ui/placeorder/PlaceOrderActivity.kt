@@ -128,7 +128,7 @@ class PlaceOrderActivity : AppCompatActivity() {
             type = "sms",
             data_coding = "auto",
             campaign_id = "5622674",
-            template_id = "832647617",
+            template_id = "767168465",
             validity = "30"
         )
         Log.e("ye sms gaya seller ko" , sendOtpModel.toString())
