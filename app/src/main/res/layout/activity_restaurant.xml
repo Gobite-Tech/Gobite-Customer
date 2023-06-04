@@ -34,19 +34,18 @@
                     app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
                     app:title="Sathyasaaaaaaaaaaaaaaaaasasd">
 
-
-                    <ss.com.bannerslider.Slider
-                        android:id="@+id/cover_slider"
+                    <ImageView
+                        android:id="@+id/image_res"
                         android:layout_width="match_parent"
-                        app:slider_interval="5000"
-                        app:slider_hideIndicators="true"
-                        app:slider_loopSlides="true"
-                        android:layout_height="200dp" />
+                        android:layout_height="150dp"
+                        android:scaleType="centerCrop"
+                        app:layout_collapseMode="parallax"
+                        app:layout_collapseParallaxMultiplier="0.7" />
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:background="@color/colorAccentLight1" />
+                        android:layout_height="150dp"
+                        android:background="@color/colorAccent" />
 
                     <ImageView
                         android:id="@+id/image_call"
@@ -105,6 +104,7 @@
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
                     android:paddingEnd="16dp"
+                    android:visibility="gone"
                     android:paddingBottom="8dp">
 
                     <TextView
@@ -143,7 +143,7 @@
                     android:id="@+id/text_pickup_only"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
+                    android:background="@drawable/gradient_homr"
                     android:fontFamily="@font/poppins_semibold"
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
@@ -152,7 +152,7 @@
                     android:text="Pick up only"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
 
             </com.google.android.material.appbar.AppBarLayout>

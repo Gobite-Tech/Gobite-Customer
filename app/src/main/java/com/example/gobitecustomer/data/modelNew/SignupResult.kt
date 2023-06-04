@@ -4,7 +4,7 @@ import java.io.Serializable
 
 data class SignupResult(
 
-    val data : token,
+    val data : tokenX,
     val message : String,
     val success : Boolean
 ) : Serializable

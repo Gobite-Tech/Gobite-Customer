@@ -18,9 +18,18 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class ShopAdapter(private val context: Context, private val shopList: List<shops>, private val listener: OnItemClickListener) : RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
+class ShopAdapter(
+    private val context: Context,
+    private val shopList: List<shops>,
+    private val listener: OnItemClickListener
+) : RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {
-        val binding: ItemShopBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_shop, parent, false)
+        val binding: ItemShopBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.item_shop,
+            parent,
+            false
+        )
         return ShopViewHolder(binding)
     }
 
@@ -32,57 +41,79 @@ class ShopAdapter(private val context: Context, private val shopList: List<shops
         return shopList.size
     }
 
-    class ShopViewHolder(var binding: ItemShopBinding) : RecyclerView.ViewHolder(binding.root){
+    class ShopViewHolder(var binding: ItemShopBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(shop: shops, position: Int, listener: OnItemClickListener){
+        fun bind(shop: shops, position: Int, listener: OnItemClickListener) {
             Picasso.get().load(shop.icon).placeholder(R.drawable.ic_shop).into(binding.imageShop)
             binding.textShopName.text = shop.name
-            var isShopOpen = true
-            var sdf = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-            var sdf2 = SimpleDateFormat("hh:mm a", Locale.getDefault())
-            //            var openingTimeString = sdf2.format(sdf.parse(shop.name))
+            var isShopOpen = shop.open_now
+            binding.tvTimeShop.text = shop.avg_serve_time.toString() + " mins"
+//            var sdf = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+//            var sdf2 = SimpleDateFormat("hh:mm a", Locale.getDefault())
+//            var openingTimeString = sdf2.format(sdf.parse(shop.name))
 //            var closingTimeString = sdf2.format(sdf.parse(shop.name))
 //            var openingTime = getTime(shop.name)
 //            var closingTime = getTime(shop.name)
 //            val currentTime = Date()
 //            isShopOpen = currentTime.before(closingTime) && currentTime.after(openingTime)
-//            if(isShopOpen) {
-//                if (shop.configurationModel.isOrderTaken == 1) {
-//                    binding.textShopName.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.black))
-//                    binding.textShopDesc.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.tab_indicator_text))
-//                    binding.textShopRating.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.tab_indicator_text))
-//                    binding.textShopRating.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star, 0, 0, 0)
-//                    binding.imageShop.clearColorFilter( //binding.textShopDesc.text = "Closes at "+shop.shopModel.closingTime.substring(0,5)+" (Delivery not available)"
-//                    binding.textShopDesc.text = "Pick up only"
-//                } else {
-//                    //binding.textShopDesc.text = "Opens at "+shop.shopModel.openingTime.substring(0,5)
-//                    binding.textShopDesc.text = "Not taking orders"
-            binding.textShopName.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.black))
-            binding.textShopDesc.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.tab_indicator_text))
-            binding.textShopRating.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.tab_indicator_text))
-            binding.textShopRating.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star_disabled, 0, 0, 0)
-            val colorMatrix = ColorMatrix()
-            colorMatrix.setSaturation(0f)
-            val filter = ColorMatrixColorFilter(colorMatrix)
-            binding.imageShop.colorFilter = filter
-//                }
-//            }else{
-//                binding.textShopDesc.text = "Opens at "+openingTimeString
-//                binding.textShopName.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
-//                binding.textShopDesc.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
-//                binding.textShopRating.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
-//                binding.textShopRating.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star_disabled, 0, 0, 0)
-//                val colorMatrix = ColorMatrix()
-//                colorMatrix.setSaturation(0f)
-//                val filter = ColorMatrixColorFilter(colorMatrix)
-//                binding.imageShop.colorFilter = filter
-//            }
-
-//            if(shop.ratingModel.rating==0.0){
-//                binding.textShopRating.text = "No ratings yet"
-//            }else {
-//                binding.textShopRating.text = shop.ratingModel.rating.toString()+" ("+shop.ratingModel.userCount+")"
-//            }
+            if (isShopOpen) {
+                binding.textShopName.setTextColor(
+                    ContextCompat.getColor(
+                        binding.layoutRoot.context,
+                        android.R.color.black
+                    )
+                )
+                binding.textShopDesc.setTextColor(
+                    ContextCompat.getColor(
+                        binding.layoutRoot.context,
+                        android.R.color.tab_indicator_text
+                    )
+                )
+                binding.textShopRating.setTextColor(
+                    ContextCompat.getColor(
+                        binding.layoutRoot.context,
+                        android.R.color.tab_indicator_text
+                    )
+                )
+                binding.textShopRating.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_star,
+                    0,
+                    0,
+                    0
+                )
+//                binding.imageShop.clearColorFilter( binding.textShopDesc.text = "Closes at "+shop.closing_time)
+                    binding.textShopDesc.text = "Pick up only"
+            } else {
+                binding.textShopDesc.text = "Opens at " + shop.opening_time
+                binding.textShopName.setTextColor(
+                    ContextCompat.getColor(
+                        binding.layoutRoot.context,
+                        R.color.disabledColor
+                    )
+                )
+                binding.textShopDesc.setTextColor(
+                    ContextCompat.getColor(
+                        binding.layoutRoot.context,
+                        R.color.disabledColor
+                    )
+                )
+                binding.textShopRating.setTextColor(
+                    ContextCompat.getColor(
+                        binding.layoutRoot.context,
+                        R.color.disabledColor
+                    )
+                )
+                binding.textShopRating.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_star_disabled,
+                    0,
+                    0,
+                    0
+                )
+                val colorMatrix = ColorMatrix()
+                colorMatrix.setSaturation(0f)
+                val filter = ColorMatrixColorFilter(colorMatrix)
+                binding.imageShop.colorFilter = filter
+            }
             binding.layoutRoot.setOnClickListener { listener.onItemClick(shop, position) }
 
         }
@@ -101,6 +132,7 @@ class ShopAdapter(private val context: Context, private val shopList: List<shops
 
 
     }
+
     interface OnItemClickListener {
         fun onItemClick(item: shops, position: Int)
     }

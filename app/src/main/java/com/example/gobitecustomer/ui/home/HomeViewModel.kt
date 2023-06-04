@@ -10,8 +10,9 @@ import com.example.gobitecustomer.data.retrofit.ShopRepository
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 import androidx.lifecycle.*
+import com.example.gobitecustomer.data.retrofit.AuthInterceptor
 
-class HomeViewModel(private val shopRepository: ShopRepository):ViewModel() {
+class HomeViewModel(private val shopRepository: ShopRepository, private val authInterceptor: AuthInterceptor):ViewModel() {
 
     private val performFetchShops = MutableLiveData<Resource<shopsList>>()
     val performFetchShopsStatus: LiveData<Resource<shopsList>>
@@ -37,5 +38,9 @@ class HomeViewModel(private val shopRepository: ShopRepository):ViewModel() {
                 }
             }
         }
+    }
+
+    fun change(num : Int){
+        authInterceptor.headerchange(num)
     }
 }

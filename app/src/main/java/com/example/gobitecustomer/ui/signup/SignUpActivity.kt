@@ -6,11 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
-import com.example.gobitecustomer.data.model.PlaceModel
 import com.example.gobitecustomer.data.modelNew.SignUpRequestNew
+import com.example.gobitecustomer.data.modelNew.UpdateUserRequest
 import com.example.gobitecustomer.databinding.ActivitySignUpBinding
 import com.example.gobitecustomer.ui.login.LoginActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -23,8 +22,6 @@ class SignUpActivity : AppCompatActivity() {
     private val viewModel by viewModel<SignUpViewModel>()
     private val preferencesHelper: PreferencesHelper by inject()
     private lateinit var progressDialog: ProgressDialog
-    private var places: ArrayList<PlaceModel> = ArrayList()
-    private var selectedPlace: PlaceModel? = null
     private var number: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,8 +130,15 @@ class SignUpActivity : AppCompatActivity() {
                         progressDialog.dismiss()
                         if (resource.data != null) {
                             Toast.makeText(applicationContext, "Registration Successful! Login Now", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(applicationContext, LoginActivity::class.java))
-                            finish()
+                            preferencesHelper.oauthId = null
+
+                            viewModel.updateUserDetails( "Bearer ${resource.data.data.token}",
+                                UpdateUserRequest(
+                                    binding.editName.text.toString(),
+                                    preferencesHelper.mobile.toString()
+                                )
+                            )
+
                         } else {
                             Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
                         }
@@ -152,7 +156,46 @@ class SignUpActivity : AppCompatActivity() {
                         }
                     }
                     Resource.Status.LOADING -> {
-                        progressDialog.setMessage("Logging in...")
+                        progressDialog.setMessage("Registering...")
+                        progressDialog.show()
+                    }
+
+                    else -> {}
+                }
+            }
+        })
+
+
+
+        viewModel.performUpdateStatus.observe(this, Observer { resource ->
+            if (resource != null) {
+                when (resource.status) {
+                    Resource.Status.SUCCESS -> {
+                        preferencesHelper.name = binding.editName.text.toString()
+                        progressDialog.dismiss()
+                        if (resource.data != null) {
+                            Toast.makeText(applicationContext, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                            preferencesHelper.clearCartPreferences()
+                            startActivity(Intent(applicationContext, LoginActivity::class.java))
+                            finish()
+                        } else {
+                            Toast.makeText(applicationContext, "Please Update your Profile", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    Resource.Status.OFFLINE_ERROR -> {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, "No Internet Connection", Toast.LENGTH_SHORT).show()
+                    }
+                    Resource.Status.ERROR -> {
+                        progressDialog.dismiss()
+                        resource.message?.let {
+                            Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                        } ?: run {
+                            Toast.makeText(applicationContext, "Please Update your Profile", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    Resource.Status.LOADING -> {
+                        progressDialog.setMessage("Updating profile...")
                         progressDialog.show()
                     }
 
@@ -176,6 +219,7 @@ class SignUpActivity : AppCompatActivity() {
             .setTitle("Cancel process?")
             .setMessage("Are you sure want to cancel the registration process?")
             .setPositiveButton("Yes") { dialog, which ->
+                preferencesHelper.oauthId = null
                 super.onBackPressed()
                 dialog.dismiss()
             }

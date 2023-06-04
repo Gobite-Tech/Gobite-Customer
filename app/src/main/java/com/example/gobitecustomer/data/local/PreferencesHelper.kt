@@ -3,10 +3,9 @@ package com.example.gobitecustomer.data.local
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import com.example.gobitecustomer.data.model.MenuItemModel
-import com.example.gobitecustomer.data.model.PlaceModel
-import com.example.gobitecustomer.data.model.ShopConfigurationModel
-import com.example.gobitecustomer.data.model.UserModel
+import com.example.gobitecustomer.data.modelNew.Item
+import com.example.gobitecustomer.data.modelNew.allShops
+import com.example.gobitecustomer.data.modelNew.shops
 import com.example.gobitecustomer.utils.AppConstants
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -88,6 +87,10 @@ class PreferencesHelper(context: Context) : AppPreferencesHelper {
         get() = customerPreferences.getString(AppConstants.TEMP_OAUTHID, null)
         set(value) = customerPreferences.edit().putString(AppConstants.TEMP_OAUTHID, value).apply()
 
+    override var shopMobile: String?
+        get() = cartPreferences.getString(AppConstants.SHOP_MOBILE, null)
+        set(value) = cartPreferences.edit().putString(AppConstants.SHOP_MOBILE, value!!).apply()
+
     override fun saveUser(userId: Int?, name: String?, email: String?, mobile: String?, role: String?, oauthId: String?, place: String?) {
         customerPreferences.edit().putString(AppConstants.CUSTOMER_NAME, name).apply()
         customerPreferences.edit().putString(AppConstants.CUSTOMER_EMAIL, email).apply()
@@ -108,26 +111,26 @@ class PreferencesHelper(context: Context) : AppPreferencesHelper {
         cartPreferences.edit().clear().apply()
     }
 
-    fun getPlace(): PlaceModel? {
-        return Gson().fromJson(place, PlaceModel::class.java)
-    }
+//    fun getPlace(): PlaceModel? {
+//        return Gson().fromJson(place, PlaceModel::class.java)
+//    }
 
-    fun getUser(): UserModel? {
-        return UserModel(userId, email, mobile, name, oauthId, role)
-    }
+//    fun getUser(): UserModel? {
+//        return UserModel(userId, email, mobile, name, oauthId, role)
+//    }
 
-    fun getCart(): List<MenuItemModel>? {
-        val listType = object : TypeToken<List<MenuItemModel?>?>() {}.type
+    fun getCart(): List<Item>? {
+        val listType = object : TypeToken<List<Item?>?>() {}.type
         return Gson().fromJson(cart, listType)
     }
 
-    fun getShopList(): List<ShopConfigurationModel>? {
-        val listType = object : TypeToken<List<ShopConfigurationModel?>?>() {}.type
+    fun getShopList(): List<shops>? {
+        val listType = object : TypeToken<List<shops>?>() {}.type
         return Gson().fromJson(shopList, listType)
     }
 
-    fun getCartShop(): ShopConfigurationModel? {
-        return Gson().fromJson(cartShop, ShopConfigurationModel::class.java)
+    fun getCartShop(): shops? {
+        return Gson().fromJson(cartShop, shops::class.java)
     }
 
 }
