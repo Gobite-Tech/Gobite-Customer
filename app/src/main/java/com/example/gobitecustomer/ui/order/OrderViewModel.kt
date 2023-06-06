@@ -45,18 +45,18 @@ class OrderViewModel(private val orderRepository: OrderRepository) : ViewModel()
     }
 
     //fetch orders
-    private val performFetchOrders = MutableLiveData<Resource<List<OrderX>>>()
-    val performFetchOrdersStatus: LiveData<Resource<List<OrderX>>>
+    private val performFetchOrders = MutableLiveData<Resource<OrderItemListModel>>()
+    val performFetchOrdersStatus: LiveData<Resource<OrderItemListModel>>
         get() = performFetchOrders
 
-    fun getOrders() {
+    fun getOrders(page_size : Int = 5 ,sort_order : String = "DESC" , nextPageToken: String?="") {
         viewModelScope.launch {
             try {
                 performFetchOrders.value = Resource.loading()
-                val response = orderRepository.getOrder()
+                val response = orderRepository.getOrder(page_size,sort_order,nextPageToken!!)
                 if (response.isSuccessful) {
                     if (response.body()?.data?.orders?.size!! > 0) {
-                        performFetchOrders.value = Resource.success(response.body()?.data?.orders!!)
+                        performFetchOrders.value = Resource.success(response.body()!!)
                     } else {
                         performFetchOrders.value = Resource.empty()
                     }
@@ -73,34 +73,6 @@ class OrderViewModel(private val orderRepository: OrderRepository) : ViewModel()
             }
         }
     }
-
-    //rate order
-//    private val rateOrder = MutableLiveData<Resource<Responsesd<String>>>()
-//    val rateOrderStatus: LiveData<Resource<Responsesd<String>>>
-//        get() = rateOrder
-//
-//    fun rateOrder(ratingRequest: RatingRequest) {
-//        viewModelScope.launch {
-//            try {
-//                rateOrder.value = Resource.loading()
-//                val response = orderRepository.rateOrder(ratingRequest)
-//                if (response != null) {
-//                    if (response.data != null) {
-//                        rateOrder.value = Resource.success(response)
-//                    } else {
-//                        rateOrder.value = Resource.error(null, response.message)
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                println("rate order failed ${e.message}")
-//                if (e is UnknownHostException) {
-//                    rateOrder.value = Resource.offlineError()
-//                } else {
-//                    rateOrder.value = Resource.error(e)
-//                }
-//            }
-//        }
-//    }
 
     //cancel order
     private val cancelOrder = MutableLiveData<Resource<String>>()

@@ -10,7 +10,7 @@ class OrderRepository(retrofit: Retrofit) {
     private val services = retrofit.create(CustomApi::class.java)
     suspend fun insertOrder(placeOrderRequest: PlaceOrderRequest) = services.insertOrder(placeOrderRequest)
     suspend fun placeOrder(orderId: String , updateStatusModel: UpdateStatusModel) = services.placeOrder(orderId , updateStatusModel)
-    suspend fun getOrder() = services.getOrder()
+    suspend fun getOrder(page_size : Int ,sort_order : String , nextPageToken : String) = services.getOrder(page_size,sort_order,nextPageToken)
 
     suspend fun getOrderById(id: String) = services.getOrderById(id)
 

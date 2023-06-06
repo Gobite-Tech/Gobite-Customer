@@ -46,7 +46,7 @@ interface CustomApi {
     suspend fun placeOrder(@Path("orderId") orderId: String , @Body updateStatusModel: UpdateStatusModel): Response<VerifyOrderResponse>
 
     @GET("/v2/order")
-    suspend fun getOrder() : Response<OrderItemListModel>
+    suspend fun getOrder(@Query("page_size") page_size:Int, @Query("sort_order") sort_order:String, @Query("next_page_token") next_page_token : String ) : Response<OrderItemListModel>
 
     @GET("/v2/order/{orderId}")
     suspend fun getOrderById(@Path("orderId") orderId: String): Response<OrderItemByIDModel>

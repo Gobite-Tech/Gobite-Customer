@@ -36,7 +36,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Timer
 import java.util.TimerTask
 
-class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
+class OrdersActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityOrdersBinding
     private val viewModel by viewModel<OrderViewModel>()
@@ -46,6 +46,8 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
     private var orderList: ArrayList<OrderX> = ArrayList()
     private lateinit var errorSnackBar: Snackbar
     private var timer: Timer? = null
+    private var nextAuthToken: String? = null
+    private val pgcnt = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,11 +74,13 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
         binding.imageClose.setOnClickListener(this)
         progressDialog = ProgressDialog(this)
         errorSnackBar = Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
-        val snackButton: Button = errorSnackBar.view.findViewById(com.mikepenz.materialize.R.id.snackbar_action)
+        val snackButton: Button =
+            errorSnackBar.view.findViewById(com.mikepenz.materialize.R.id.snackbar_action)
         snackButton.setCompoundDrawables(null, null, null, null)
         snackButton.background = null
         snackButton.setTextColor(ContextCompat.getColor(applicationContext, R.color.accent))
-        val text = "<font color=#000000>Manage and track<br>your </font> <font color=#FF4141>orders</font>"
+        val text =
+            "<font color=#000000>Manage and track<br>your </font> <font color=#FF4141>orders</font>"
         binding.titleOrders.text = Html.fromHtml(text)
         //binding.layoutSearch.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         setupShopRecyclerView()
@@ -118,17 +122,18 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
                         if (isFirstTime) {
                             binding.layoutStates.visibility = View.VISIBLE
                             binding.animationView.visibility = View.GONE
-                        }else{
+                        } else {
                             binding.progressBar.visibility = View.VISIBLE
                         }
                         errorSnackBar.dismiss()
                     }
+
                     Resource.Status.EMPTY -> {
                         binding.swipeRefreshLayout.isRefreshing = false
                         isLoading = false
                         isLastPage = true
                         binding.progressBar.visibility = View.GONE
-                        if(isFirstTime) {
+                        if (isFirstTime) {
                             binding.layoutStates.visibility = View.GONE
                             binding.animationView.visibility = View.VISIBLE
                             binding.animationView.loop(true)
@@ -139,8 +144,9 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
                             errorSnackBar.setText("No orders found")
                             Handler().postDelayed({ errorSnackBar.show() }, 500)
                         }
-                        //binding.appBarLayout.setExpanded(true, true)
+                        binding.appBarLayout.setExpanded(true, true)
                     }
+
                     Resource.Status.SUCCESS -> {
                         binding.swipeRefreshLayout.isRefreshing = false
                         isLoading = false
@@ -149,37 +155,37 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
                         binding.animationView.visibility = View.GONE
                         binding.animationView.cancelAnimation()
                         errorSnackBar.dismiss()
-                        if(isFirstTime) {
+                        if (isFirstTime) {
                             orderList.clear()
                         }
-                        Log.e("size testing ", it.data?.size.toString())
-                        it.data?.let { it1 -> orderList.addAll(it1) }
-                        if (it.data.isNullOrEmpty()) {
+                        Log.e("size testing ", it.data?.data?.orders?.size.toString())
+                        it.data?.let { it1 -> orderList.addAll(it1.data.orders) }
+                        if (it.data?.data?.orders.isNullOrEmpty()) {
                             isLastPage = true
                         } else {
-                            isLastPage = it.data.size < 10
-                            if(!isLastPage) page += 1
+                            isLastPage = it.data?.data?.orders?.size!! < pgcnt
+                            if (!isLastPage) nextAuthToken = it.data.data.next_page_token
                         }
                         val list = preferencesHelper.getShopList()
-                        orderList.forEach {or ->
+                        orderList.forEach { or ->
                             if (list != null) {
-                                for (shop in list){
-                                    if(shop.id == or.shop_id){
+                                for (shop in list) {
+                                    if (shop.id == or.shop_id) {
                                         or.shop_name = shop.name
                                     }
                                 }
                             }
-                            }
-                        orderList.reverse()
+                        }
                         orderAdapter.notifyDataSetChanged()
                         isFirstTime = false
-                        //binding.appBarLayout.setExpanded(false, true)
+                        binding.appBarLayout.setExpanded(false, true)
                     }
+
                     Resource.Status.OFFLINE_ERROR -> {
                         binding.swipeRefreshLayout.isRefreshing = false
                         isLoading = false
                         binding.progressBar.visibility = View.GONE
-                        if(isFirstTime) {
+                        if (isFirstTime) {
                             binding.layoutStates.visibility = View.GONE
                             binding.animationView.visibility = View.VISIBLE
                             binding.animationView.loop(true)
@@ -188,14 +194,15 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
                             errorSnackBar.setText("No Internet Connection")
                             Handler().postDelayed({ errorSnackBar.show() }, 500)
                         }
-                        //binding.appBarLayout.setExpanded(true, true)
+                        binding.appBarLayout.setExpanded(true, true)
 
                     }
+
                     Resource.Status.ERROR -> {
                         binding.swipeRefreshLayout.isRefreshing = false
                         isLoading = false
                         binding.progressBar.visibility = View.GONE
-                        if(isFirstTime) {
+                        if (isFirstTime) {
                             binding.layoutStates.visibility = View.GONE
                             binding.animationView.visibility = View.VISIBLE
                             binding.animationView.loop(true)
@@ -204,42 +211,12 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
                             errorSnackBar.setText("Something went wrong")
                             Handler().postDelayed({ errorSnackBar.show() }, 500)
                         }
-                        //binding.appBarLayout.setExpanded(true, true)
                     }
 
                     else -> {}
                 }
             }
         })
-
-        //Rate Order
-//        viewModel.rateOrderStatus.observe(this, Observer {
-//            if (it != null) {
-//                when (it.status) {
-//                    Resource.Status.LOADING -> {
-//                        progressDialog.setMessage("Please wait...")
-//                        errorSnackBar.dismiss()
-//                        progressDialog.show()
-//                    }
-//                    Resource.Status.SUCCESS -> {
-//                        progressDialog.dismiss()
-//                        errorSnackBar.dismiss()
-//                        getOrders()
-//                    }
-//                    Resource.Status.OFFLINE_ERROR -> {
-//                        progressDialog.dismiss()
-//                        errorSnackBar.setText("No Internet Connection")
-//                        errorSnackBar.show()
-//
-//                    }
-//                    Resource.Status.ERROR -> {
-//                        progressDialog.dismiss()
-//                        errorSnackBar.setText("Something went wrong")
-//                        errorSnackBar.show()
-//                    }
-//                }
-//            }
-//        })
 
     }
 
@@ -258,7 +235,8 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
 //                showRatingDialog(item)
             }
         })
-        val layoutManager = LinearLayoutManager(this@OrdersActivity, LinearLayoutManager.VERTICAL, false)
+        val layoutManager =
+            LinearLayoutManager(this@OrdersActivity, LinearLayoutManager.VERTICAL, false)
         binding.recyclerShops.layoutManager = layoutManager
         binding.recyclerShops.adapter = AlphaInAnimationAdapter(orderAdapter)
 
@@ -272,11 +250,12 @@ class OrdersActivity : AppCompatActivity(), View.OnClickListener  {
                 val visibleItemCount: Int = layoutManager.childCount
                 val totalItemCount: Int = layoutManager.itemCount
                 val firstVisibleItemPosition: Int = layoutManager.findFirstVisibleItemPosition()
+                Log.e("next page token", nextAuthToken.toString() + " ${isLoading} ${isLastPage}")
                 if (!isLoading && !isLastPage) {
-                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0 && totalItemCount >= 10) {
-                        preferencesHelper.userId?.let {
-                            viewModel.getOrders()
-                        }
+                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0 && totalItemCount >= pgcnt) {
+                        Log.e("next page token", nextAuthToken.toString())
+                        viewModel.getOrders(pgcnt, "DESC", nextAuthToken)
+
                     }
                 }
             }
