@@ -65,6 +65,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_semibold"
             android:hint="Email"
+            android:visibility="gone"
             android:inputType="textEmailAddress" />
 
         <LinearLayout

@@ -22,6 +22,9 @@ interface CustomApi {
     @PUT("/v2/user_profile/modify")
     suspend fun updateUser(@Header("Authorization") token : String ,@Body userRequest: UpdateUserRequest) : Response<UserUpdateResponse>
 
+    @GET("/v2/user_profile")
+    suspend fun getUserDetails() : Response<UserUpdateResponse>
+
     @POST
     suspend fun sendOTP(@Url url : String ,@Body sendOtpModel: EnablexOTPModel) : Response<sendOtpResult>
 

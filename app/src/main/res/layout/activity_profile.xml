@@ -101,6 +101,7 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:gravity="center|start"
                 android:text="Email"
+                android:visibility="gone"
                 android:layout_marginTop="16dp"
                 android:textColor="@color/accent"
                 android:textSize="12sp" />
@@ -112,7 +113,8 @@
                 android:focusable="false"
                 android:text="shrikanthravi.me@gmail.com"
                 android:fontFamily="@font/poppins_semibold"
-                android:hint="Email" />
+                android:hint="Email"
+                android:visibility="gone"/>
 
             <TextView
                 android:layout_width="match_parent"

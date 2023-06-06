@@ -121,7 +121,7 @@ class PlaceOrderActivity : AppCompatActivity() {
     private fun sendOtp(number: String) {
         val numb = ArrayList<String>()
         numb.add(number)
-        numb.add("+916378228784")
+        numb.add("+919131527933")
         val sendOtpModel = sendOtpModel(
             from = "Blueve",
             to = numb,
