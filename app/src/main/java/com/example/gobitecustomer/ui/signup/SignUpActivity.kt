@@ -47,36 +47,13 @@ class SignUpActivity : AppCompatActivity() {
     private fun setListener() {
         binding.imageClose.setOnClickListener { onBackPressed() }
         binding.buttonRegister.setOnClickListener {
-            if(binding.editName.text.toString().isNotEmpty()){
-                //TODO email validation
                 if(binding.editEmail.text.toString().isNotEmpty()){
-                    /*if(selectedPlace!=null){
-                        var token = ""
-                        token = preferencesHelper.fcmToken.toString()
-                        val updateUserRequest = UpdateUserRequest(
-                                placeModel = selectedPlace!!,
-                                userModel = UserModel(
-                                        preferencesHelper.userId,
-                                        binding.editEmail.text.toString(),
-                                        number,
-                                        binding.editName.text.toString(),
-                                        preferencesHelper.oauthId
-                                )
-                        )
-                    }else{
-                        Toast.makeText(applicationContext,"Select a place",Toast.LENGTH_SHORT).show()
-                    }*/
-
                     val oathId = preferencesHelper.oauthId
                     val phoneNo = preferencesHelper.mobile
                     viewModel.registerUser(
                         SignUpRequestNew("PASSWORD",oathId!!,"456321",
                         phoneNo!!,"123456","123456")
                     )
-
-                }else{
-                    Toast.makeText(applicationContext,"Email is blank", Toast.LENGTH_SHORT).show()
-                }
             }else{
                 Toast.makeText(applicationContext,"Name is blank", Toast.LENGTH_SHORT).show()
             }

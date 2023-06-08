@@ -20,4 +20,6 @@ class UserRepository(retrofit: Retrofit) {
     suspend fun updateUser(token : String ,userRequest: UpdateUserRequest) = services.updateUser(token ,userRequest)
 
     suspend fun sendOTP(sendOtpModel: EnablexOTPModel) = services.sendOTP(AppConstants.MESSAGE_URL,sendOtpModel)
+
+    suspend fun getUserDetails() = services.getUserDetails()
 }

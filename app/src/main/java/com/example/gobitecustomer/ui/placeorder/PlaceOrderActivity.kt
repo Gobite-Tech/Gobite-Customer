@@ -121,14 +121,14 @@ class PlaceOrderActivity : AppCompatActivity() {
     private fun sendOtp(number: String) {
         val numb = ArrayList<String>()
         numb.add(number)
-        numb.add("+916378228784")
+        numb.add("+919131527933")
         val sendOtpModel = sendOtpModel(
             from = "Blueve",
             to = numb,
             type = "sms",
             data_coding = "auto",
             campaign_id = "5622674",
-            template_id = "832647617",
+            template_id = "767168465",
             validity = "30"
         )
         Log.e("ye sms gaya seller ko" , sendOtpModel.toString())

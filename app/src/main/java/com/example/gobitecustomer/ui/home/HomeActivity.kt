@@ -242,11 +242,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
 
                             //TODO FireBase Notifications
                             FcmUtils.unsubscribeFromTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
-                            val name = preferencesHelper.name
-                            val email = preferencesHelper.email
                             preferencesHelper.clearPreferences()
-                            preferencesHelper.name = name
-                            preferencesHelper.email = email
                             viewModel.change(1)
                             startActivity(Intent(applicationContext, LoginActivity::class.java))
                             finish()

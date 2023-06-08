@@ -12,6 +12,7 @@ import com.example.gobitecustomer.data.modelNew.LoginResponse
 import com.example.gobitecustomer.data.retrofit.UserRepository
 import com.example.gobitecustomer.data.modelNew.OTP
 import com.example.gobitecustomer.data.modelNew.OTPRequest
+import com.example.gobitecustomer.data.modelNew.UserUpdateResponse
 import com.example.gobitecustomer.data.modelNew.sendOtpModel
 import com.example.gobitecustomer.data.modelNew.sendOtpResult
 import com.example.gobitecustomer.data.retrofit.AuthInterceptor
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 import okhttp3.Credentials
 import java.net.UnknownHostException
 
-class LoginViewModel(private val userRepository: UserRepository ) : ViewModel() {
+class LoginViewModel(private val userRepository: UserRepository, private val authInterceptor: AuthInterceptor) : ViewModel() {
 
     //GET OTP
     private val performGetOTP = MutableLiveData<Resource<OTP>>()
@@ -110,6 +111,34 @@ class LoginViewModel(private val userRepository: UserRepository ) : ViewModel() 
                 }
             }
         }
+    }
+
+    //GET USER DETAILS
+    private val performGetUserDetails = MutableLiveData<Resource<UserUpdateResponse>>()
+    val performGetUserDetailsStatus: LiveData<Resource<UserUpdateResponse>>
+        get() = performGetUserDetails
+
+    fun getUserDetails() {
+        viewModelScope.launch {
+            try {
+                performGetUserDetails.value = Resource.loading()
+                val response = userRepository.getUserDetails()
+                Log.e("details fetched" , " ${response.body()!!}")
+                performGetUserDetails.value = Resource.success(response.body()!!)
+            } catch (e: Exception) {
+                println("login failed ${e.message}")
+                if (e is UnknownHostException) {
+                    performGetUserDetails.value = Resource.offlineError()
+                } else {
+                    performGetUserDetails.value = Resource.error(e)
+                }
+            }
+        }
+    }
+
+    //AuthUser Cred Change
+    fun change(num : Int){
+        authInterceptor.headerchange(num)
     }
 
 }

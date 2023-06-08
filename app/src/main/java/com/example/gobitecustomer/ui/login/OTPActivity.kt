@@ -293,9 +293,8 @@ class OTPActivity : AppCompatActivity() {
                             )
 
                             preferencesHelper.jwtToken = loginresult.data.token
-                            Toast.makeText(applicationContext,"Welcome!!",Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(applicationContext, HomeActivity::class.java))
-                            finish()
+                            viewModel.change(0)
+                            viewModel.getUserDetails()
 
                             progressDialog.dismiss()
 
@@ -303,6 +302,51 @@ class OTPActivity : AppCompatActivity() {
                             Toast.makeText(
                                 applicationContext,
                                 "Something went wrong",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                    Resource.Status.OFFLINE_ERROR -> {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            "No Internet Connection",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    Resource.Status.ERROR -> {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
+                    }
+                    Resource.Status.LOADING -> {
+                        progressDialog.setMessage("Logging in...")
+                        progressDialog.show()
+                    }
+                    else -> {}
+                }
+            }
+        })
+
+
+        //Get User Details
+        viewModel.performGetUserDetailsStatus.observe(this, Observer { resource ->
+            if (resource != null) {
+                when (resource.status) {
+                    Resource.Status.SUCCESS -> {
+                        Log.e("resource", " ${resource.data}")
+                        if (resource.data != null) {
+                            val userDetails = resource.data
+                            preferencesHelper.name = userDetails.data.profile.name
+                            progressDialog.dismiss()
+
+                            Toast.makeText(applicationContext,"Welcome!!",Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(applicationContext, HomeActivity::class.java))
+                            finish()
+
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                "Something went wrong(Profile Fetch)",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
