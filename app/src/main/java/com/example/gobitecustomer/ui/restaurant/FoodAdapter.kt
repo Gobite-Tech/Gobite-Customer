@@ -57,20 +57,20 @@ class FoodAdapter(private val context: Context, private val foodItemList: List<I
 
             binding.layoutQuantityControl.imageAdd.setOnClickListener { listener.onQuantityAdd(position) }
             binding.layoutQuantityControl.imageSub.setOnClickListener { listener.onQuantitySub(position) }
-//            if (food.variants[0].availability==0) {
-//                binding.textFoodName.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
-//                binding.textFoodPrice.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
-//                binding.layoutQuantityControl.root.visibility = View.GONE
-//                val colorMatrix = ColorMatrix()
-//                colorMatrix.setSaturation(0f)
-//                val filter = ColorMatrixColorFilter(colorMatrix)
-//                binding.imageFood.colorFilter = filter
-//            }else{
+            if (food.status=="active") {
+                binding.textFoodName.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
+                binding.textFoodPrice.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
+                binding.layoutQuantityControl.root.visibility = View.GONE
+                val colorMatrix = ColorMatrix()
+                colorMatrix.setSaturation(0f)
+                val filter = ColorMatrixColorFilter(colorMatrix)
+                binding.imageFood.colorFilter = filter
+            }else{
                 binding.textFoodName.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.black))
                 binding.textFoodPrice.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, android.R.color.black))
                 binding.layoutQuantityControl.root.visibility = View.VISIBLE
                 binding.imageFood.clearColorFilter()
-//            }
+            }
         }
 
         init {
