@@ -47,7 +47,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun setListener() {
         binding.imageClose.setOnClickListener { onBackPressed() }
         binding.buttonRegister.setOnClickListener {
-                if(binding.editEmail.text.toString().isNotEmpty()){
+                if(binding.editName.text.toString().isNotEmpty()){
                     val oathId = preferencesHelper.oauthId
                     val phoneNo = preferencesHelper.mobile
                     viewModel.registerUser(

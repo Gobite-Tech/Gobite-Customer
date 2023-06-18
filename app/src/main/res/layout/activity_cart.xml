@@ -142,6 +142,64 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#f2f2f2" />
+                
+                <LinearLayout
+                    android:id="@+id/discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/discount_image"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:background="@android:color/white"
+                        android:src="@drawable/discount"
+                        app:tint="@color/colorAccent" />
+
+                    <TextView
+                        android:id="@+id/discount_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:gravity="center|start"
+                        android:text="On First Order"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <include
+                        android:id="@+id/layoutQuantityCntrol"
+                        layout="@layout/inc_dec_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="14dp"
+                        android:visibility="invisible" />
+
+
+                    <TextView
+                        android:id="@+id/discount_amt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="6dp"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:gravity="center|end"
+                        android:minWidth="60dp"
+                        android:text="₹50"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+                
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -195,7 +253,7 @@
                         android:minWidth="60dp"
                         android:text="₹50"
                         android:textColor="@color/colorAccent"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>

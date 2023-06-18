@@ -38,6 +38,7 @@ object AppConstants {
     const val TEMP_OAUTHID = "temp_oauthid"
     const val JWT_TOKEN = "Jwt_Token"
     const val SHOP_MOBILE = "shop_mobile"
+    const val DISCOUNT_TAKEN = "discount_taken"
 
     //ORDER STATUS
 //    const val ORDER_STATUS_PENDING = "PENDING"

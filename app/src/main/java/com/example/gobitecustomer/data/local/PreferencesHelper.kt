@@ -91,6 +91,11 @@ class PreferencesHelper(context: Context) : AppPreferencesHelper {
         get() = cartPreferences.getString(AppConstants.SHOP_MOBILE, null)
         set(value) = cartPreferences.edit().putString(AppConstants.SHOP_MOBILE, value!!).apply()
 
+    override var discount_taken: Int?
+        get() = cartPreferences.getInt(AppConstants.DISCOUNT_TAKEN, 0)
+        set(value) = cartPreferences.edit().putInt(AppConstants.DISCOUNT_TAKEN, value!!).apply()
+
+
     override fun saveUser(userId: Int?, name: String?, email: String?, mobile: String?, role: String?, oauthId: String?, place: String?) {
         customerPreferences.edit().putString(AppConstants.CUSTOMER_NAME, name).apply()
         customerPreferences.edit().putString(AppConstants.CUSTOMER_EMAIL, email).apply()
