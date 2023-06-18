@@ -346,7 +346,7 @@ class OTPActivity : AppCompatActivity() {
                         } else {
                             Toast.makeText(
                                 applicationContext,
-                                "Something went wrong(Profile Fetch)",
+                                "Something went wrong",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

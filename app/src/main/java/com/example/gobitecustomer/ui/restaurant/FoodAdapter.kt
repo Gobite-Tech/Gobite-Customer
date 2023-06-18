@@ -57,7 +57,7 @@ class FoodAdapter(private val context: Context, private val foodItemList: List<I
 
             binding.layoutQuantityControl.imageAdd.setOnClickListener { listener.onQuantityAdd(position) }
             binding.layoutQuantityControl.imageSub.setOnClickListener { listener.onQuantitySub(position) }
-            if (food.status=="active") {
+            if (food.status!="active") {
                 binding.textFoodName.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
                 binding.textFoodPrice.setTextColor(ContextCompat.getColor(binding.layoutRoot.context, R.color.disabledColor))
                 binding.layoutQuantityControl.root.visibility = View.GONE

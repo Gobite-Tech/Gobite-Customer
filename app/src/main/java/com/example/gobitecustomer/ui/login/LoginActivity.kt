@@ -61,8 +61,6 @@ class LoginActivity : AppCompatActivity() {
                 } catch (e: NoSuchAlgorithmException) {
                     e.printStackTrace()
                 }
-                Toast.makeText(this, "Otp is ${otp}", Toast.LENGTH_SHORT).show()
-                Log.e("otp","Otp is ${otp}")
                 val intent = Intent(this,OTPActivity::class.java)
                 intent.putExtra(AppConstants.CUSTOMER_OTP,otp.toString())
                 intent.putExtra(AppConstants.CUSTOMER_MOBILE,"+91$phoneNo")

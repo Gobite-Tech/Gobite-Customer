@@ -172,11 +172,7 @@ class CartActivity : AppCompatActivity() {
 
                 Resource.Status.ERROR -> {
                     progressDialog.dismiss()
-                    if (!it.message.isNullOrEmpty()) {
-                        errorSnackBar.setText(it.message.toString())
-                    } else {
-                        errorSnackBar.setText("Cart verify failed")
-                    }
+                    errorSnackBar.setText("Cart verification failed")
                     errorSnackBar.show()
                 }
 
@@ -257,6 +253,24 @@ class CartActivity : AppCompatActivity() {
 //                total += deliveryPrice.toInt()
 //                preferencesHelper.cartDeliveryPref = "delivery"
 //            }
+
+            Log.e("Cart Activity", "discount taken ${preferencesHelper.discount_taken}")
+            if(preferencesHelper.discount_taken == 0){
+                binding.discount.visibility = View.VISIBLE
+                var discount = total*0.6
+                discount = if(discount > 20){
+                    20.0
+                }else{
+                    total*0.6
+                }
+                binding.discountAmt.text = "$total - $discount = ${total - discount}"
+                total -= discount
+                Log.e("discount", "discount taken")
+            }else{
+                Log.e("discount", "discount not taken")
+                binding.discount.visibility = View.GONE
+            }
+
             binding.textTotal.text = "₹$total"
             if (totalItems == 1) {
                 snackBar.setText("₹$total | $totalItems item")

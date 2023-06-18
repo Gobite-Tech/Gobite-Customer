@@ -29,6 +29,7 @@ import com.example.gobitecustomer.databinding.HeaderLayoutBinding
 import com.example.gobitecustomer.ui.cart.CartActivity
 import com.example.gobitecustomer.ui.contactus.ContactUsActivity
 import com.example.gobitecustomer.ui.login.LoginActivity
+import com.example.gobitecustomer.ui.order.OrderViewModel
 import com.example.gobitecustomer.ui.order.OrdersActivity
 import com.example.gobitecustomer.ui.profile.ProfileActivity
 import com.example.gobitecustomer.ui.profile.ProfileViewModel
@@ -52,7 +53,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityHomeBinding
     private val viewModel:HomeViewModel by viewModel()
-    private val profileViewModel: ProfileViewModel by viewModel()
+    private val orderViewModel: OrderViewModel by viewModel()
     private val preferencesHelper: PreferencesHelper by inject()
     private lateinit var headerLayout: HeaderLayoutBinding
     private lateinit var drawer: Drawer
@@ -73,11 +74,13 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         setObservers()
         viewModel.change(0)
         viewModel.getShops()
+
         cartSnackBar.setAction("View Cart") {
             startActivity(Intent(applicationContext, CartActivity::class.java))
         }
         errorSnackbar.setAction("Try again") {
             viewModel.getShops()
+
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
                 viewModel.getShops()
@@ -85,28 +88,6 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
 
         FcmUtils.subscribeToTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
     }
-
-//    private fun getFCMToken() {
-//        FirebaseMessaging.getInstance().token
-//            .addOnCompleteListener(OnCompleteListener { task ->
-//                if (!task.isSuccessful) {
-//                    Log.w("FCM", "getInstanceId failed", task.exception)
-//                    return@OnCompleteListener
-//                }
-//                // Get new Instance ID token
-//                val token = task.result
-//                if(preferencesHelper.fcmToken!=token){
-//                    preferencesHelper.fcmToken = token
-//                    preferencesHelper.fcmToken?.let {
-//                        profileViewModel.updateFcmToken(NotificationTokenUpdate(it,preferencesHelper.userId.toString()))
-//                    }
-//                }else{
-//                    //FCM token is same. No need to update
-//                }
-//                val msg = "FCM TOKEN "+token
-//                Log.d("FCM", msg)
-//            })
-//    }
 
     private fun setObservers() {
 
@@ -159,6 +140,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         setupShopRecyclerView()
                         preferencesHelper.shopList = Gson().toJson(shopList)
                         updateCartUI()
+                        orderViewModel.getOrders()
                     }
 
                     Resource.Status.OFFLINE_ERROR -> {
@@ -189,6 +171,44 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         shopList.clear()
                         shopAdapter.notifyDataSetChanged()
                         Handler().postDelayed({ errorSnackbar.show() }, 500)
+                    }
+                }
+            }
+        })
+
+        orderViewModel.performFetchOrdersStatus.observe(this, Observer {
+            if (it != null) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        progressDialog.setMessage("Updating")
+                        progressDialog.show()
+                    }
+
+                    Resource.Status.EMPTY -> {
+                        progressDialog.dismiss()
+                        preferencesHelper.discount_taken = 0
+                        Log.e("Discount taken empty", preferencesHelper.discount_taken.toString())
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        progressDialog.dismiss()
+                        val k =  it.data?.data?.orders?.size!! > 0
+                        if(k){
+                            preferencesHelper.discount_taken = 1
+                        }else{
+                            preferencesHelper.discount_taken = 0
+                        }
+                        Log.e("Discount taken type", preferencesHelper.discount_taken.toString())
+                    }
+
+                    Resource.Status.OFFLINE_ERROR -> {
+                        progressDialog.dismiss()
+                        preferencesHelper.discount_taken = 1
+                    }
+
+                    Resource.Status.ERROR -> {
+                        progressDialog.dismiss()
+                        preferencesHelper.discount_taken = 1
                     }
                 }
             }
@@ -266,14 +286,6 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         snackButton.setCompoundDrawables(null, null, null, null)
         snackButton.background = null
         snackButton.setTextColor(ContextCompat.getColor(applicationContext, R.color.accent))
-
-//        val spinner: Spinner=binding.spinner
-//        val items = resources.getStringArray(R.array.campus)
-
-//        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        spinner.adapter = adapter
-
 
         binding.imageMenu.setOnClickListener(this)
         binding.textSearch.setOnClickListener(this)
