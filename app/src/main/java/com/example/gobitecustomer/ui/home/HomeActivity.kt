@@ -1,7 +1,9 @@
 package com.example.gobitecustomer.ui.home
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
@@ -13,12 +15,29 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amulyakhare.textdrawable.TextDrawable
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.graphics.Color
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.provider.Settings
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.util.Log.e
+import android.widget.Toast
 import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
@@ -48,6 +67,7 @@ import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar
+import java.util.Locale
 
 class HomeActivity: AppCompatActivity(), View.OnClickListener {
 
@@ -65,6 +85,13 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
     private lateinit var errorSnackbar: Snackbar
     private var placeId = ""
     var isError = false
+    private lateinit var locationManager: LocationManager
+    private lateinit var geocoder: Geocoder
+    private lateinit var locationListener: LocationListener
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
+    private val LOCATION_SETTINGS_REQUEST_CODE = 2
+    private var isKanpur=false
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,21 +99,169 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         initView()
         setupMaterialDrawer()
         setObservers()
-        viewModel.change(0)
-        viewModel.getShops()
+
+
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        geocoder = Geocoder(this, Locale.getDefault())
+
+        locationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                getCurrentLocationAddress(location)
+                locationManager.removeUpdates(this)
+            }
+            override fun onProviderDisabled(provider: String) {}
+            override fun onProviderEnabled(provider: String) {
+                getCurrentLocation()
+            }
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+        }
+
+        getCurrentLocation()
 
         cartSnackBar.setAction("View Cart") {
             startActivity(Intent(applicationContext, CartActivity::class.java))
         }
         errorSnackbar.setAction("Try again") {
             viewModel.getShops()
-
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
                 viewModel.getShops()
         }
 
         FcmUtils.subscribeToTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
+    }
+
+    private fun getCurrentLocation() {
+        if (isLocationPermissionGranted()) {
+            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                val providers = locationManager.getProviders(true)
+                for (provider in providers) {
+                    if (ActivityCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        Toast.makeText(this, "please grant location permissions in your setting", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                    locationManager.requestLocationUpdates(provider, 1000, 0f, locationListener)
+                }
+            }else{
+                val alertDialogBuilder = AlertDialog.Builder(this)
+                alertDialogBuilder.setTitle("Location Disabled")
+
+                val redColorSpan = ForegroundColorSpan(Color.RED)
+                val ok = SpannableString("OK")
+                ok.setSpan(redColorSpan, 0, ok.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                alertDialogBuilder.setMessage("Please enable location to continue")
+                alertDialogBuilder.setPositiveButton(ok) { dialog: DialogInterface, _: Int ->
+                    dialog.dismiss()
+                    val intent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivityForResult(intent, LOCATION_SETTINGS_REQUEST_CODE)
+                }
+                alertDialogBuilder.setCancelable(false)
+                alertDialogBuilder.show()
+            }
+
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    private fun getCurrentLocationAddress(location: Location) {
+        try {
+            val addresses: List<Address> =
+                geocoder.getFromLocation(location.latitude, location.longitude, 1) as List<Address>
+            if (addresses.isNotEmpty()) {
+                val address: Address = addresses[0]
+                val fullAddress = address.getAddressLine(0)
+                e("Current Location ", fullAddress)
+                if(fullAddress.contains("Kanpur") || fullAddress.contains("kanpur") || fullAddress.contains("KANPUR") || fullAddress.contains("Jaipur") || fullAddress.contains("Patna")){
+                    //patna jaipur for testing only
+                    isKanpur=true
+                    viewModel.change(0)
+                    viewModel.getShops()
+                }else {
+                    isKanpur = false
+
+                    isError = true
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    binding.layoutStates.visibility = View.GONE
+                    binding.animationView.visibility = View.VISIBLE
+                    binding.animationView.loop(true)
+                    binding.animationView.setAnimation("empty_animation.json")
+                    binding.animationView.playAnimation()
+                    progressDialog.dismiss()
+                    shopList.clear()
+                    shopAdapter.notifyDataSetChanged()
+                    errorSnackbar.setText("No outlets in your area")
+                    Handler().postDelayed({ errorSnackbar.show() }, 500)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun isLocationPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation()
+            } else {
+                println("Location permission denied")
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == LOCATION_SETTINGS_REQUEST_CODE) {
+            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                getCurrentLocation()
+            } else {
+                println("Location services are disabled")
+                val alertDialogBuilder = AlertDialog.Builder(this)
+                alertDialogBuilder.setTitle("Location Disabled")
+
+                val redColorSpan = ForegroundColorSpan(Color.RED)
+                val ok = SpannableString("OK")
+                ok.setSpan(redColorSpan, 0, ok.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                alertDialogBuilder.setMessage("Please enable location to continue")
+                alertDialogBuilder.setPositiveButton(ok) { dialog: DialogInterface, _: Int ->
+                    dialog.dismiss()
+                    val intent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivityForResult(intent, LOCATION_SETTINGS_REQUEST_CODE)
+                }
+                alertDialogBuilder.setCancelable(false)
+                alertDialogBuilder.show()
+            }
+        }
     }
 
     private fun setObservers() {
@@ -353,7 +528,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         super.onResume()
         updateGreetingMessage()
         //Checking whether user has changed their place and refreshing shops accordingly
-        viewModel.getShops()
+       if(isKanpur) viewModel.getShops()
         cartList.clear()
         cartList.addAll(getCart())
         updateCartUI()
