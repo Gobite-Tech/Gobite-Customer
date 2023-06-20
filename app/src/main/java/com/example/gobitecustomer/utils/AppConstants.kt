@@ -5,6 +5,7 @@ object AppConstants {
     const val MESSAGE_URL = "https://api.enablex.io/sms/v1/messages/"
     const val APP_ID = "647741de9ae9574fe2081258"
     const val APP_KEY = "apaBeAuAenaEyza4ejuZaSuUujyhasy6aDeN"
+    const val CUSTOM_BASE_URL = "http://65.2.132.216/"
 
     //SHARED PREFERENCE NAMES
     const val LOGIN_PREFS = "login_prefs"

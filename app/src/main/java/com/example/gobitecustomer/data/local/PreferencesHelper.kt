@@ -92,7 +92,7 @@ class PreferencesHelper(context: Context) : AppPreferencesHelper {
         set(value) = cartPreferences.edit().putString(AppConstants.SHOP_MOBILE, value!!).apply()
 
     override var discount_taken: Int?
-        get() = cartPreferences.getInt(AppConstants.DISCOUNT_TAKEN, 0)
+        get() = cartPreferences.getInt(AppConstants.DISCOUNT_TAKEN, 1)
         set(value) = cartPreferences.edit().putInt(AppConstants.DISCOUNT_TAKEN, value!!).apply()
 
 

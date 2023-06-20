@@ -9,7 +9,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.gobitecustomer"
+        applicationId "com.bluevelvet.gobitecustomer"
         minSdk 22
         targetSdk 33
         versionCode 1

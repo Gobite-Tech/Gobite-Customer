@@ -1,6 +1,5 @@
 package com.example.gobitecustomer.di
 
-import com.example.gobitecustomer.BuildConfig
 import com.example.gobitecustomer.data.retrofit.AuthInterceptor
 import com.example.gobitecustomer.data.retrofit.BasicInterceptor
 import com.example.gobitecustomer.data.retrofit.ItemRepository
@@ -32,7 +31,7 @@ fun provideRetrofit(
     BasicInterceptor: BasicInterceptor
 ): Retrofit {
     return Retrofit.Builder()
-        .baseUrl(BuildConfig.CUSTOM_BASE_URL)
+        .baseUrl(AppConstants.CUSTOM_BASE_URL)
         .client(provideOkHttpClient(authInterceptor,BasicInterceptor))
         .addConverterFactory(GsonConverterFactory.create()).build()
 }
@@ -49,9 +48,7 @@ fun provideOkHttpClient(
         .addInterceptor(authInterceptor)
         .addInterceptor(BasicInterceptor)
 
-    if (BuildConfig.DEBUG) {
         val requestInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-        builder.addNetworkInterceptor(requestInterceptor)
-    }
+
     return builder.build()
 }

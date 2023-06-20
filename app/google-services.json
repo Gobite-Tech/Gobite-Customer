@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:79740679171:android:ac98ff3fc84b1cf2d8ca36",
         "android_client_info": {
-          "package_name": "com.example.gobitecustomer"
+          "package_name": "com.bluevelvet.gobitecustomer"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "79740679171-n8hpdpdgl2bcr150i7tpfmd70fcvg7mp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.gobitecustomer",
+            "package_name": "com.bluevelvet.gobitecustomer",
             "certificate_hash": "7943b4487abde470364d0b538d598b0c2ebba604"
           }
         },
