@@ -236,6 +236,7 @@ class CartActivity : AppCompatActivity() {
 
     private var deliveryPrice = 0.0
     private var cartTotalPrice = 0.0
+    val discont_value = 40.0
 
     @SuppressLint("SetTextI18n")
     private fun updateCartUI() {
@@ -258,8 +259,8 @@ class CartActivity : AppCompatActivity() {
             if(preferencesHelper.discount_taken == 0){
                 binding.discount.visibility = View.VISIBLE
                 var discount = total*0.6
-                discount = if(discount > 20){
-                    20.0
+                discount = if(discount > discont_value){
+                    discont_value
                 }else{
                     total*0.6
                 }
