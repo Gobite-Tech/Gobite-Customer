@@ -67,7 +67,6 @@ class OTPActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_otpactivity)
         progressDialog = ProgressDialog(this)
         progressDialog.setCancelable(false)
-        auth = FirebaseAuth.getInstance()
         binding.textOtpSent.text =
             "Enter the six digit OTP which has been sent to your mobile number: $number"
     }

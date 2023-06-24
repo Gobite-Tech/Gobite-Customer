@@ -45,9 +45,7 @@ class SearchActivity : AppCompatActivity() ,View.OnClickListener {
         initView()
 
         shopList = preferencesHelper.getShopList() as ArrayList<shops>
-//        adapterList = shopList.shops
 
-        var textChangeVar = 0
         binding.editSearch.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

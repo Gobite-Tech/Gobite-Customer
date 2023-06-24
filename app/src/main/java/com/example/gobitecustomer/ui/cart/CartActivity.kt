@@ -24,6 +24,7 @@ import com.example.gobitecustomer.data.modelNew.cartItem
 import com.example.gobitecustomer.data.modelNew.shops
 import com.example.gobitecustomer.databinding.ActivityCartBinding
 import com.example.gobitecustomer.databinding.BottomSheetShopInfoBinding
+import com.example.gobitecustomer.ui.order.OrderViewModel
 import com.example.gobitecustomer.ui.payment.PaymentActivity
 import com.example.gobitecustomer.utils.AppConstants
 import com.google.android.material.appbar.AppBarLayout
@@ -42,7 +43,7 @@ class CartActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<CartViewModel>()
     private val preferencesHelper: PreferencesHelper by inject()
-
+    private val orderViewModel: OrderViewModel by viewModel()
     private lateinit var cartAdapter: CartAdapter
     private lateinit var progressDialog: ProgressDialog
     private var cartList: MutableList<Item> = ArrayList()
@@ -60,6 +61,7 @@ class CartActivity : AppCompatActivity() {
         initView()
         setListeners()
         setObservers()
+        orderViewModel.getOrders()
     }
 
     private fun getArgs() {
@@ -147,6 +149,46 @@ class CartActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
+        orderViewModel.performFetchOrdersStatus.observe(this, Observer {
+            if (it != null) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        progressDialog.setMessage("Updating")
+                        progressDialog.show()
+                    }
+
+                    Resource.Status.EMPTY -> {
+                        progressDialog.dismiss()
+                        preferencesHelper.discount_taken = 0
+                        Log.e("Discount taken empty", preferencesHelper.discount_taken.toString())
+                        updateCartUI()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        progressDialog.dismiss()
+                        val k =  it.data?.data?.orders?.size!! > 0
+                        if(k){
+                            preferencesHelper.discount_taken = 1
+                        }else{
+                            preferencesHelper.discount_taken = 0
+                        }
+                        Log.e("Discount taken type", preferencesHelper.discount_taken.toString())
+
+                    }
+
+                    Resource.Status.OFFLINE_ERROR -> {
+                        progressDialog.dismiss()
+                        preferencesHelper.discount_taken = 1
+                    }
+
+                    Resource.Status.ERROR -> {
+                        progressDialog.dismiss()
+                        preferencesHelper.discount_taken = 1
+                    }
+                }
+            }
+        })
+
         viewModel.insertOrderStatus.observe(this, Observer {
             when (it.status) {
                 Resource.Status.LOADING -> {

@@ -73,7 +73,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityHomeBinding
     private val viewModel:HomeViewModel by viewModel()
-    private val orderViewModel: OrderViewModel by viewModel()
+
     private val preferencesHelper: PreferencesHelper by inject()
     private lateinit var headerLayout: HeaderLayoutBinding
     private lateinit var drawer: Drawer
@@ -91,8 +91,6 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private val LOCATION_SETTINGS_REQUEST_CODE = 2
     private var isKanpur=false
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,7 +126,6 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                 viewModel.getShops()
         }
 
-        FcmUtils.subscribeToTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
     }
 
     private fun getCurrentLocation() {
@@ -315,7 +312,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         setupShopRecyclerView()
                         preferencesHelper.shopList = Gson().toJson(shopList)
                         updateCartUI()
-                        orderViewModel.getOrders()
+
                     }
 
                     Resource.Status.OFFLINE_ERROR -> {
@@ -351,43 +348,6 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
             }
         })
 
-        orderViewModel.performFetchOrdersStatus.observe(this, Observer {
-            if (it != null) {
-                when (it.status) {
-                    Resource.Status.LOADING -> {
-                        progressDialog.setMessage("Updating")
-                        progressDialog.show()
-                    }
-
-                    Resource.Status.EMPTY -> {
-                        progressDialog.dismiss()
-                        preferencesHelper.discount_taken = 0
-                        Log.e("Discount taken empty", preferencesHelper.discount_taken.toString())
-                    }
-
-                    Resource.Status.SUCCESS -> {
-                        progressDialog.dismiss()
-                        val k =  it.data?.data?.orders?.size!! > 0
-                        if(k){
-                            preferencesHelper.discount_taken = 1
-                        }else{
-                            preferencesHelper.discount_taken = 0
-                        }
-                        Log.e("Discount taken type", preferencesHelper.discount_taken.toString())
-                    }
-
-                    Resource.Status.OFFLINE_ERROR -> {
-                        progressDialog.dismiss()
-                        preferencesHelper.discount_taken = 1
-                    }
-
-                    Resource.Status.ERROR -> {
-                        progressDialog.dismiss()
-                        preferencesHelper.discount_taken = 1
-                    }
-                }
-            }
-        })
 
     }
 
@@ -436,7 +396,6 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                         .setPositiveButton("Yes") { _, _ ->
 
                             //TODO FireBase Notifications
-                            FcmUtils.unsubscribeFromTopic(AppConstants.NOTIFICATION_TOPIC_GLOBAL)
                             preferencesHelper.clearPreferences()
                             viewModel.change(1)
                             startActivity(Intent(applicationContext, LoginActivity::class.java))

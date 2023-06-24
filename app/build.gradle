@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id  'kotlin-kapt'
-    id 'com.google.gms.google-services'
 }
 
 android {
@@ -12,8 +11,8 @@ android {
         applicationId "com.bluevelvet.gobitecustomer"
         minSdk 22
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 //        compileSdkPreview = "UpsideDownCake"
     }
@@ -84,9 +83,6 @@ dependencies {
     //Material
     implementation 'com.google.android.material:material:1.9.0'
 
-    //gms
-    implementation 'com.google.gms:google-services:4.3.15'
-
     //Koin
     implementation "io.insert-koin:koin-android:3.4.0"
 
@@ -117,10 +113,5 @@ dependencies {
     //Banner
     implementation 'com.ss.bannerslider:bannerslider:2.0.0'
 
-    //Firebase
-    implementation 'com.google.firebase:firebase-analytics:21.2.2'
-    implementation 'com.google.firebase:firebase-messaging:23.1.2'
-    implementation 'com.google.firebase:firebase-core:21.1.1'
-    implementation 'com.google.firebase:firebase-storage:20.2.0'
 
 }
