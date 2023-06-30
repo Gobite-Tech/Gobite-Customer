@@ -120,10 +120,10 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(applicationContext, CartActivity::class.java))
         }
         errorSnackbar.setAction("Try again") {
-            viewModel.getShops()
+            if(isKanpur) viewModel.getShops()
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
-                viewModel.getShops()
+               if(isKanpur) viewModel.getShops()
         }
 
     }
@@ -181,7 +181,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
                 val address: Address = addresses[0]
                 val fullAddress = address.getAddressLine(0)
                 e("Current Location ", fullAddress)
-                if(fullAddress.contains("Kanpur") || fullAddress.contains("kanpur") || fullAddress.contains("KANPUR")|| fullAddress.contains("Jaipur")  || fullAddress.contains("Patna")){
+                if(fullAddress.contains("Kanpur") || fullAddress.contains("kanpur") || fullAddress.contains("KANPUR") || fullAddress.contains("Jaipur") || fullAddress.contains("Patna")){
                     //patna jaipur for testing only
                     isKanpur=true
                     viewModel.change(0)
