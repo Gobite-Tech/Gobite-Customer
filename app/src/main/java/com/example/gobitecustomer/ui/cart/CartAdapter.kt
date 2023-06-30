@@ -29,7 +29,7 @@ class CartAdapter(private val context: Context, private val foodItemList: List<I
     class CartItemViewHolder(var binding: ItemCartProductBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(food: Item, position: Int, listener: OnItemClickListener) {
             binding.textFoodName.text = food.quantity.toString()+" x "+food.name
-            binding.textFoodPrice.text = "₹" + food.variants[0].price * food.quantity
+            binding.textFoodPrice.text = "₹" + food.variants[food.variants.size -1 ].price * food.quantity
             binding.layoutRoot.setOnClickListener { listener.onItemClick(food, position) }
             if (food.quantity == 0) {
                 binding.layoutQuantityControl.imageSub.visibility = View.GONE

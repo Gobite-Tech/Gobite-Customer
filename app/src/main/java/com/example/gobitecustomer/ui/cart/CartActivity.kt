@@ -108,7 +108,7 @@ class CartActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun setListeners() {
-        snackBar.setAction("Place Order") {
+        snackBar.setAction("Pay Now") {
             if (cart.isEmpty()) {
                 Toast.makeText(applicationContext, "Cart is empty", Toast.LENGTH_SHORT).show()
             } else {
@@ -277,7 +277,7 @@ class CartActivity : AppCompatActivity() {
     }
 
     private var deliveryPrice = 0.0
-    private var cartTotalPrice = 0.0
+    private var cartTotalPrice = 1000.0
     val discont_value = 40.0
 
     @SuppressLint("SetTextI18n")
@@ -289,7 +289,7 @@ class CartActivity : AppCompatActivity() {
             binding.layoutContent.visibility = View.VISIBLE
             binding.layoutEmpty.visibility = View.GONE
             for (i in cartList.indices) {
-                total += cartList[i].variants[0].price * cartList[i].quantity
+                total += cartList[i].variants[cartList[i].variants.size - 1].price * cartList[i].quantity
                 totalItems += 1
             }
 //            if(!isPickup) {
@@ -349,6 +349,7 @@ class CartActivity : AppCompatActivity() {
     private fun initiatePayment(orderId: String) {
         val intent = Intent(applicationContext, PaymentActivity::class.java)
         intent.putExtra(AppConstants.ORDER_ID, orderId)
+        intent.putExtra(AppConstants.DISCOUNTED_AMOUNT, cartTotalPrice)
         preferencesHelper.shopMobile = shop?.mobile
         startActivity(intent)
         finish()
@@ -369,7 +370,7 @@ class CartActivity : AppCompatActivity() {
             Log.e("cart", i.toString())
         }
         cart.forEach {
-            listCartOrderItems.add(cartItem(it.id, it.variants[0].id, it.quantity))
+            listCartOrderItems.add(cartItem(it.id, it.variants[it.variants.size-1].id, it.quantity))
         }
         placeOrderRequest = PlaceOrderRequest(listCartOrderItems)
         viewModel.verifyOrder(placeOrderRequest)
@@ -394,6 +395,7 @@ class CartActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        orderViewModel.getOrders()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

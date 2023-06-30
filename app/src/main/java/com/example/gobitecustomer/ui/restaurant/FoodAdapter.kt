@@ -43,7 +43,7 @@ class FoodAdapter(private val context: Context, private val foodItemList: List<I
             }
             binding.textFoodName.text = food.name
             binding.textFoodDesc.text = food.category
-            binding.textFoodPrice.text = "₹" + food.variants[0].price.toString()
+            binding.textFoodPrice.text = "₹" + food.variants[food.variants.size-1].price.toString()
             Picasso.get().load(food.icon).placeholder(R.drawable.ic_food).into(binding.imageFood)
             binding.layoutRoot.setOnClickListener { listener.onItemClick(food, position) }
 //            if (food.isVeg == 1) {

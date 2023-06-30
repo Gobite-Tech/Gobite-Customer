@@ -369,7 +369,7 @@ class RestaurantActivity : AppCompatActivity() {
         var totalItems = 0
         if (cartList.size > 0) {
             for (i in cartList.indices) {
-                total += cartList[i].variants[0].price * cartList[i].quantity
+                total += cartList[i].variants[cartList[i].variants.size - 1].price * cartList[i].quantity
                 totalItems += 1
             }
             if (totalItems == 1) {

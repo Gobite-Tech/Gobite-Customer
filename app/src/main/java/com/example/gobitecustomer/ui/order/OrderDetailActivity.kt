@@ -288,6 +288,8 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
         binding.textPay.setOnClickListener {
             val intent = Intent(this, PaymentActivity::class.java)
             intent.putExtra("order_id", order.id)
+            intent.putExtra(AppConstants.DISCOUNTED_AMOUNT, order.price)
+            Log.e("OrderDetailActivity", "order price: ${order.price}")
             startActivity(intent)
         }
     }
