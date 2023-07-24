@@ -2,6 +2,7 @@ package com.example.gobitecustomer.ui.order
 
 import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -290,6 +291,12 @@ class OrderDetailActivity : AppCompatActivity() ,  View.OnClickListener  {
             intent.putExtra("order_id", order.id)
             intent.putExtra(AppConstants.DISCOUNTED_AMOUNT, order.price)
             Log.e("OrderDetailActivity", "order price: ${order.price}")
+            startActivity(intent)
+        }
+
+        binding.imageCall.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:${preferencesHelper.shopMobile}")
             startActivity(intent)
         }
     }

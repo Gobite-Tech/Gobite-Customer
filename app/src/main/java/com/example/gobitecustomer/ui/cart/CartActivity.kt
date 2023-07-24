@@ -277,8 +277,8 @@ class CartActivity : AppCompatActivity() {
     }
 
     private var deliveryPrice = 0.0
-    private var cartTotalPrice = 1000.0
-    val discont_value = 40.0
+    private var cartTotalPrice = 1000.00
+    val discont_value = 40.00
 
     @SuppressLint("SetTextI18n")
     private fun updateCartUI() {
@@ -306,6 +306,9 @@ class CartActivity : AppCompatActivity() {
                 }else{
                     total*0.6
                 }
+
+                discount = String.format("%.3f", discount).toDouble()
+
                 binding.discountAmt.text = "$total - $discount = ${total - discount}"
                 total -= discount
                 Log.e("discount", "discount taken")

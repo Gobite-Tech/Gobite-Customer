@@ -95,7 +95,7 @@
                                 android:layout_height="40dp"
                                 android:layout_gravity="center"
                                 android:padding="8dp"
-                                android:visibility="gone"
+                                android:visibility="visible"
                                 android:src="@drawable/ic_call_white" />
 
 
