@@ -99,167 +99,170 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         setObservers()
 
 
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        geocoder = Geocoder(this, Locale.getDefault())
+//        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//        geocoder = Geocoder(this, Locale.getDefault())
+//
+//        locationListener = object : LocationListener {
+//            override fun onLocationChanged(location: Location) {
+//                getCurrentLocationAddress(location)
+//                locationManager.removeUpdates(this)
+//            }
+//            override fun onProviderDisabled(provider: String) {}
+//            override fun onProviderEnabled(provider: String) {
+//                getCurrentLocation()
+//            }
+//            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+//        }
 
-        locationListener = object : LocationListener {
-            override fun onLocationChanged(location: Location) {
-                getCurrentLocationAddress(location)
-                locationManager.removeUpdates(this)
-            }
-            override fun onProviderDisabled(provider: String) {}
-            override fun onProviderEnabled(provider: String) {
-                getCurrentLocation()
-            }
-            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-        }
+//        getCurrentLocation()
 
-        getCurrentLocation()
+        viewModel.change(0)
+        viewModel.getShops()
 
         cartSnackBar.setAction("View Cart") {
             startActivity(Intent(applicationContext, CartActivity::class.java))
         }
         errorSnackbar.setAction("Try again") {
-            if(isKanpur) viewModel.getShops()
+             viewModel.getShops()
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
-               if(isKanpur) viewModel.getShops()
+               viewModel.getShops()
         }
 
     }
 
-    private fun getCurrentLocation() {
-        if (isLocationPermissionGranted()) {
-            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                val providers = locationManager.getProviders(true)
-                for (provider in providers) {
-                    if (ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        Toast.makeText(this, "please grant location permissions in your setting", Toast.LENGTH_SHORT).show()
-                        return
-                    }
-                    locationManager.requestLocationUpdates(provider, 1000, 0f, locationListener)
-                }
-            }else{
-                val alertDialogBuilder = AlertDialog.Builder(this)
-                alertDialogBuilder.setTitle("Location Disabled")
-
-                val redColorSpan = ForegroundColorSpan(Color.RED)
-                val ok = SpannableString("OK")
-                ok.setSpan(redColorSpan, 0, ok.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                alertDialogBuilder.setMessage("Please enable location to continue")
-                alertDialogBuilder.setPositiveButton(ok) { dialog: DialogInterface, _: Int ->
-                    dialog.dismiss()
-                    val intent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                    startActivityForResult(intent, LOCATION_SETTINGS_REQUEST_CODE)
-                }
-                alertDialogBuilder.setCancelable(false)
-                alertDialogBuilder.show()
-            }
-
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-        }
-    }
-
-    private fun getCurrentLocationAddress(location: Location) {
-        try {
-            val addresses: List<Address> =
-                geocoder.getFromLocation(location.latitude, location.longitude, 1) as List<Address>
-            if (addresses.isNotEmpty()) {
-                val address: Address = addresses[0]
-                val fullAddress = address.getAddressLine(0)
-                e("Current Location ", fullAddress)
-                if(fullAddress.contains("Kanpur") || fullAddress.contains("kanpur") || fullAddress.contains("KANPUR") || fullAddress.contains("Jaipur") ){
-                    //patna jaipur for testing only
-                    isKanpur=true
-                    viewModel.change(0)
-                    viewModel.getShops()
-                }else {
-                    isKanpur = false
-
-                    isError = true
-                    binding.swipeRefreshLayout.isRefreshing = false
-                    binding.layoutStates.visibility = View.GONE
-                    binding.animationView.visibility = View.VISIBLE
-                    binding.animationView.loop(true)
-                    binding.animationView.setAnimation("empty_animation.json")
-                    binding.animationView.playAnimation()
-                    progressDialog.dismiss()
-                    shopList.clear()
-                    shopAdapter.notifyDataSetChanged()
-                    errorSnackbar.setText("No outlets in your area")
-                    Handler().postDelayed({ errorSnackbar.show() }, 500)
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun isLocationPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation()
-            } else {
-                println("Location permission denied")
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == LOCATION_SETTINGS_REQUEST_CODE) {
-            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                getCurrentLocation()
-            } else {
-                println("Location services are disabled")
-                val alertDialogBuilder = AlertDialog.Builder(this)
-                alertDialogBuilder.setTitle("Location Disabled")
-
-                val redColorSpan = ForegroundColorSpan(Color.RED)
-                val ok = SpannableString("OK")
-                ok.setSpan(redColorSpan, 0, ok.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                alertDialogBuilder.setMessage("Please enable location to continue")
-                alertDialogBuilder.setPositiveButton(ok) { dialog: DialogInterface, _: Int ->
-                    dialog.dismiss()
-                    val intent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                    startActivityForResult(intent, LOCATION_SETTINGS_REQUEST_CODE)
-                }
-                alertDialogBuilder.setCancelable(false)
-                alertDialogBuilder.show()
-            }
-        }
-    }
+//    private fun getCurrentLocation() {
+//        if (isLocationPermissionGranted()) {
+//            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+//                val providers = locationManager.getProviders(true)
+//                for (provider in providers) {
+//                    if (ActivityCompat.checkSelfPermission(
+//                            this,
+//                            Manifest.permission.ACCESS_FINE_LOCATION
+//                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                            this,
+//                            Manifest.permission.ACCESS_COARSE_LOCATION
+//                        ) != PackageManager.PERMISSION_GRANTED
+//                    ) {
+//                        Toast.makeText(this, "please grant location permissions in your setting", Toast.LENGTH_SHORT).show()
+//                        return
+//                    }
+//                    locationManager.requestLocationUpdates(provider, 1000, 0f, locationListener)
+//                }
+//            }else{
+//                val alertDialogBuilder = AlertDialog.Builder(this)
+//                alertDialogBuilder.setTitle("Location Disabled")
+//
+//                val redColorSpan = ForegroundColorSpan(Color.RED)
+//                val ok = SpannableString("OK")
+//                ok.setSpan(redColorSpan, 0, ok.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+//
+//                alertDialogBuilder.setMessage("Please enable location to continue")
+//                alertDialogBuilder.setPositiveButton(ok) { dialog: DialogInterface, _: Int ->
+//                    dialog.dismiss()
+//                    val intent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+//                    startActivityForResult(intent, LOCATION_SETTINGS_REQUEST_CODE)
+//                }
+//                alertDialogBuilder.setCancelable(false)
+//                alertDialogBuilder.show()
+//            }
+//
+//        } else {
+//            ActivityCompat.requestPermissions(
+//                this,
+//                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+//                LOCATION_PERMISSION_REQUEST_CODE
+//            )
+//        }
+//    }
+//
+//    private fun getCurrentLocationAddress(location: Location) {
+//        try {
+//            val addresses: List<Address> =
+//                geocoder.getFromLocation(location.latitude, location.longitude, 1) as List<Address>
+//            if (addresses.isNotEmpty()) {
+//                val address: Address = addresses[0]
+//                val fullAddress = address.getAddressLine(0)
+//                e("Current Location ", fullAddress)
+//                if(fullAddress.contains("Kanpur") || fullAddress.contains("kanpur") || fullAddress.contains("KANPUR") || fullAddress.contains("Jaipur") ){
+//                    //patna jaipur for testing only
+//                    isKanpur=true
+//                    viewModel.change(0)
+//                    viewModel.getShops()
+//                }else {
+//                    isKanpur = false
+//
+//                    isError = true
+//                    binding.swipeRefreshLayout.isRefreshing = false
+//                    binding.layoutStates.visibility = View.GONE
+//                    binding.animationView.visibility = View.VISIBLE
+//                    binding.animationView.loop(true)
+//                    binding.animationView.setAnimation("empty_animation.json")
+//                    binding.animationView.playAnimation()
+//                    progressDialog.dismiss()
+//                    shopList.clear()
+//                    shopAdapter.notifyDataSetChanged()
+//                    errorSnackbar.setText("No outlets in your area")
+//                    Handler().postDelayed({ errorSnackbar.show() }, 500)
+//                }
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//    }
+//
+//    private fun isLocationPermissionGranted(): Boolean {
+//        return ContextCompat.checkSelfPermission(
+//            this,
+//            Manifest.permission.ACCESS_FINE_LOCATION
+//        ) == PackageManager.PERMISSION_GRANTED &&
+//                ContextCompat.checkSelfPermission(
+//                    this,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION
+//                ) == PackageManager.PERMISSION_GRANTED
+//    }
+//
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                getCurrentLocation()
+//            } else {
+//                println("Location permission denied")
+//            }
+//        }
+//    }
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == LOCATION_SETTINGS_REQUEST_CODE) {
+//            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//                getCurrentLocation()
+//            } else {
+//                println("Location services are disabled")
+//                val alertDialogBuilder = AlertDialog.Builder(this)
+//                alertDialogBuilder.setTitle("Location Disabled")
+//
+//                val redColorSpan = ForegroundColorSpan(Color.RED)
+//                val ok = SpannableString("OK")
+//                ok.setSpan(redColorSpan, 0, ok.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+//
+//                alertDialogBuilder.setMessage("Please enable location to continue")
+//                alertDialogBuilder.setPositiveButton(ok) { dialog: DialogInterface, _: Int ->
+//                    dialog.dismiss()
+//                    val intent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+//                    startActivityForResult(intent, LOCATION_SETTINGS_REQUEST_CODE)
+//                }
+//                alertDialogBuilder.setCancelable(false)
+//                alertDialogBuilder.show()
+//            }
+//        }
+//    }
 
     private fun setObservers() {
 
@@ -487,7 +490,7 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         super.onResume()
         updateGreetingMessage()
         //Checking whether user has changed their place and refreshing shops accordingly
-       if(isKanpur) viewModel.getShops()
+        viewModel.getShops()
         cartList.clear()
         cartList.addAll(getCart())
         updateCartUI()
