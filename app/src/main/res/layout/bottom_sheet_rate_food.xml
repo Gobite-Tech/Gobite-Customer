@@ -32,13 +32,6 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <com.hsalf.smileyrating.SmileyRating
-                android:id="@+id/smiley_rating"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_feedback"
                 android:layout_width="match_parent"

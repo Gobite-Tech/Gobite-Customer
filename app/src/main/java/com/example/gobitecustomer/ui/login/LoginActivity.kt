@@ -49,7 +49,11 @@ class LoginActivity : AppCompatActivity() {
             preferencesHelper.mobile = phoneNo
             if (phoneNo.isNotEmpty() && phoneNo.length == 10) {
                 Log.e("LoginAvt" , " - Request Login$phoneNo")
-                viewModel.getOTP(OTPRequest("LOGIN", phoneNo))
+                preferencesHelper.name = "Rishabh Gupta"
+                preferencesHelper.email = "rishugupta@gmail.com"
+                Toast.makeText(applicationContext,"Welcome!!",Toast.LENGTH_SHORT).show()
+                startActivity(Intent(applicationContext, HomeActivity::class.java))
+                finish()
             } else {
                 Toast.makeText(applicationContext, "Invalid Phone Number!", Toast.LENGTH_SHORT)
                     .show()

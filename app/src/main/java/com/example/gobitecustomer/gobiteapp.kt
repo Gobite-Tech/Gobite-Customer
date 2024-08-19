@@ -7,7 +7,6 @@ import com.example.gobitecustomer.di.viewModelModule
 import com.example.gobitecustomer.utils.PicassoImageLoadingService
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import ss.com.bannerslider.Slider
 
 class gobiteapp : Application() {
 
@@ -17,7 +16,7 @@ class gobiteapp : Application() {
             androidContext(this@gobiteapp)
             modules(listOf(appModule, networkModule, viewModelModule))
         }
-        Slider.init(PicassoImageLoadingService(this))
+//        Slider.init(PicassoImageLoadingService(this))
     }
 
 }

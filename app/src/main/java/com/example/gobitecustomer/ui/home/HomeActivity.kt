@@ -18,7 +18,6 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.amulyakhare.textdrawable.TextDrawable
 import com.example.gobitecustomer.R
 import com.example.gobitecustomer.data.local.PreferencesHelper
 import com.example.gobitecustomer.data.local.Resource
@@ -405,8 +404,8 @@ class HomeActivity: AppCompatActivity(), View.OnClickListener {
         headerLayout.textCustomerName.text = preferencesHelper.name
         headerLayout.textEmail.text = preferencesHelper.email
         val letter = preferencesHelper.name?.get(0).toString()
-        val textDrawable = TextDrawable.builder()
-            .buildRound(letter, ContextCompat.getColor(this, R.color.accent))
-        headerLayout.imageProfilePic.setImageDrawable(textDrawable)
+//        val textDrawable = TextDrawable.builder()
+//            .buildRound(letter, ContextCompat.getColor(this, R.color.accent))
+//        headerLayout.imageProfilePic.setImageDrawable(textDrawable)
     }
 }
